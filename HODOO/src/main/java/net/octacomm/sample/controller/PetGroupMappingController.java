@@ -20,11 +20,9 @@ public class PetGroupMappingController {
 	@Autowired
 	private PetGroupMappingMapper petGroupMappingMapper;
 	
-	
 	@ResponseBody
 	@RequestMapping(value = "/my/pet/list", method = RequestMethod.POST)
 	public List<PetGroupMapping> myPetList(@RequestParam("groupId") int groupId) {
 		return petGroupMappingMapper.getMyPetList(groupId);
 	}
-	
 }
