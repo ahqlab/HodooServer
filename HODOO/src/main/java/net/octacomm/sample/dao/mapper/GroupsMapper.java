@@ -15,19 +15,19 @@ import net.octacomm.sample.domain.StandardHsv;
 
 public interface GroupsMapper extends CRUDMapper<Groups, DefaultParam, Integer>{
 	
-	public String INSERT_FIELDS = " ( userId, groupId, petId, seq )";
+	public String INSERT_FIELDS = " ( groupId )";
 	
-	public String INSERT_VALUES = " ( #{userId}, #{groupId}, #{petId}, (select COUNT(*) from groups a where userId = 1 and  groupId = 2) + 1)";
+	public String INSERT_VALUES = " ( #{groupId} )";
 	
 	public String TABLE_NAME = " groups ";
 	
-	public String UPDATE_VALUES = " userId = #{userId} ,  groupId = #{groupId}  ,  petId = #{petId} ";
+	public String UPDATE_VALUES = " groupId = #{groupId} ";
 	
-	public String SELECT_FIELDS = " id, userId, groupId, petId ";
+	public String SELECT_FIELDS = " id, groupId ";
 	
-	@Insert("INSERT INTO " + TABLE_NAME  + INSERT_FIELDS + " VALUES " + INSERT_VALUES)
+	/*@Insert("INSERT INTO " + TABLE_NAME  + INSERT_FIELDS + " VALUES " + INSERT_VALUES)
 	@Override
-	public int insert(Groups group);
+	public int insert(Groups group);*/
 	
 	@Delete("DELETE FROM " + TABLE_NAME + " WHERE id =  #{id}")
 	@Override

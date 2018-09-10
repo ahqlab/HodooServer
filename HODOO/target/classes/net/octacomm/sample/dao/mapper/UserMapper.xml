@@ -26,20 +26,11 @@
         LIMIT #{pageSize} OFFSET #{startRow}
     </select>   
 
-	<!-- <update id="update" parameterType="User">
-		UPDATE user
-		<set>
-			<if test="password != ''">
-				password = #{password},
-			</if>
-			<if test="name != ''">
-				name = #{name},
-			</if>
-			<if test="email != ''">
-				email = #{email},
-			</if>
-		</set>
-		WHERE id = #{id}		
-	</update> -->
+	<insert id="insert" parameterType="User" useGeneratedKeys="true"  keyProperty="id" >
+		INSERT INTO USER ( email, password, nickname, sex, user.from , create_date ) VALUES (  #{email}, #{password} , #{nickname} , #{sex} , #{from} , now() )
+		<selectKey keyProperty="id" resultType="Integer" order="AFTER">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+	</insert>
 
 </mapper>

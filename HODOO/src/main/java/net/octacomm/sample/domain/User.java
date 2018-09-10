@@ -21,7 +21,7 @@ public class User implements Domain{
 
     private String from;
 
-    private String groupId;
+    private int groupId;
 
     private String createDate;
 

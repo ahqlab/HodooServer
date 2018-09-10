@@ -34,9 +34,9 @@ public interface UserMapper extends CRUDMapper<User, DefaultParam, Integer>{
 	public String SELECT_FIELDS = "  id, email, password, nickname, sex, from , groupId, create_date  ";
 	
 	
-	@Insert("INSERT INTO " + TABLE_NAME + " " + INSERT_FIELDS + " VALUES " + INSERT_VALUES)
+	/*@Insert("INSERT INTO " + TABLE_NAME + " " + INSERT_FIELDS + " VALUES " + INSERT_VALUES)
 	@Override
-	int insert(User user);
+	int insert(User user);*/
 	
 	@Select("SELECT * FROM " + TABLE_NAME + " WHERE id =  #{id}")
 	@Override
@@ -60,7 +60,7 @@ public interface UserMapper extends CRUDMapper<User, DefaultParam, Integer>{
 	@Select("SELECT * FROM user WHERE id = #{id} AND password = #{password} ")
 	User getUserForAuth(User user);
 	
-	@Select("SELECT * FROM user WHERE email = #{email} AND password = #{password} ")
+	@Select("SELECT * FROM user_group_mapping join user on user_group_mapping.userId = user.id where user.email =  #{email} AND user.password = #{password} ")
 	User login(User user);
 	
 	@Select("SELECT * FROM user WHERE groupId = #{groupId}")
