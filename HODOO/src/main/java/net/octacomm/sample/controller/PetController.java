@@ -14,8 +14,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import net.octacomm.sample.dao.mapper.GroupsMapper;
 import net.octacomm.sample.dao.mapper.PetBasicInfoMapper;
 import net.octacomm.sample.dao.mapper.PetChronicDeseaseMapper;
+import net.octacomm.sample.dao.mapper.PetMapper;
 import net.octacomm.sample.dao.mapper.PetPhysicalInfoMapper;
 import net.octacomm.sample.dao.mapper.PetWeightInfoMapper;
+import net.octacomm.sample.domain.Pet;
 import net.octacomm.sample.domain.PetBasicInfo;
 
 @RequestMapping("/pet")
@@ -37,10 +39,13 @@ public class PetController {
 	@Autowired
 	private PetWeightInfoMapper petWeightInfoMapper;
 	
+	@Autowired
+	private PetMapper petMapper;
+	
 	
 	@ResponseBody
 	@RequestMapping(value = "/my/list", method = RequestMethod.POST)
-	public List<PetBasicInfo> login(HttpServletRequest request, @RequestParam("groupId") String groupId) {
+	public List<PetBasicInfo> myList(HttpServletRequest request, @RequestParam("groupId") int groupId) {
 		return  petBasicInfoMapper.getMyPetList(groupId);
 	}
 	
@@ -56,5 +61,11 @@ public class PetController {
 		PetBasicInfo result = petBasicInfoMapper.getBasicInfoForPetId(id);
 		return result;
 	}
-
+	
+	
+	@RequestMapping(value = "/my/pet/list", method = RequestMethod.POST)
+	public List<Pet> myPetList(@RequestParam("groupCode") String groupCode){
+		return petMapper.myPetList(groupCode);
+	}
+	
 }

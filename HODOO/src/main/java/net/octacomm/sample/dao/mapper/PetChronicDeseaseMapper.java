@@ -43,8 +43,8 @@ public interface PetChronicDeseaseMapper extends CRUDMapper<PetChronicDisease, D
 	public PetChronicDisease get(Integer id);
 	
 	
-	@Select("SELECT * FROM " + TABLE_NAME + " WHERE petId =  #{petId}")
-	public List<PetChronicDisease> list(int petId);
+	@Select("select pet_chronic_disease.* from pet_group_mapping join pet_chronic_disease on pet_group_mapping.petId = pet_chronic_disease.petId where pet_group_mapping.petId = #{groupId};")
+	public List<PetChronicDisease> list(int groupId);
 
 	
 	@Select("select pet_chronic_disease.* from pet_chronic_disease join groups on pet_chronic_disease.petId = groups.petId where groups.groupId  = #{groupId} and pet_chronic_disease.petId = #{petId}")

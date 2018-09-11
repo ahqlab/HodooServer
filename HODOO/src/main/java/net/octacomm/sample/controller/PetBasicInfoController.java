@@ -20,8 +20,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import net.octacomm.sample.dao.mapper.GroupsMapper;
 import net.octacomm.sample.dao.mapper.PetBasicInfoMapper;
+import net.octacomm.sample.dao.mapper.PetGroupMappingMapper;
 import net.octacomm.sample.domain.Groups;
 import net.octacomm.sample.domain.PetBasicInfo;
+import net.octacomm.sample.domain.PetGroupMapping;
 import net.octacomm.sample.domain.ResultMessage;
 import net.octacomm.sample.domain.ResultMessageGroup;
 import net.octacomm.sample.domain.User;
@@ -34,6 +36,8 @@ public class PetBasicInfoController {
 	private PetBasicInfoMapper petBasicInfoMapper;
 	
 	@Autowired private GroupsMapper groupMapper;
+	
+	@Autowired private PetGroupMappingMapper petGroupMappingMapper;
 	
 
 	@ResponseBody
@@ -79,25 +83,23 @@ public class PetBasicInfoController {
 		}
 		int result = petBasicInfoMapper.insert(basicInfo);
 		if(result != 0) {
-			Groups groupData = new Groups();
-			groupData.setUserId(basicInfo.getUserId());
-			groupData.setGroupId(basicInfo.getGroupId());
-			groupData.setPetId(basicInfo.getId());
-			
-			if(groupMapper.insert(groupData) != 0) {
+			PetGroupMapping petGroupMapping = new PetGroupMapping();
+			petGroupMapping.setPetId(basicInfo.getId());
+			petGroupMapping.setGroupId(basicInfo.getGroupId());
+			petGroupMapping.setDepth1(1);
+			if(petGroupMappingMapper.insert(petGroupMapping) != 0) {
 				group.setResultMessage(ResultMessage.SUCCESS);
-				group.setDomain(basicInfo.getId());
+				group.setDomain(petGroupMapping);
 			}else {
 				group.setResultMessage(ResultMessage.FAILED);
-				group.setDomain(basicInfo.getId());
+				group.setDomain(null);
 			}
 		}else {
 			group.setResultMessage(ResultMessage.FAILED);
-			group.setDomain(basicInfo.getId());
+			group.setDomain(null);
 		}
 		return group;
 	}
-	
 	
 	@ResponseBody
 	@RequestMapping(value = "/basic/update", method = RequestMethod.POST)

@@ -9,20 +9,18 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import net.octacomm.sample.dao.mapper.PetGroupMappingMapper;
-import net.octacomm.sample.domain.PetGroupMapping;
+import net.octacomm.sample.dao.mapper.DeviceMapper;
+import net.octacomm.sample.domain.Device;
 
-
-@RequestMapping("/pet/group/mapping")
+@RequestMapping("/device")
 @Controller
-public class PetGroupMappingController {
+public class DeviceController {
 	
-	@Autowired
-	private PetGroupMappingMapper petGroupMappingMapper;
-	
+	@Autowired private DeviceMapper deviceNapper;
+
 	@ResponseBody
-	@RequestMapping(value = "/my/pet/list", method = RequestMethod.POST)
-	public List<PetGroupMapping> myPetList(@RequestParam("groupId") int groupId) {
-		return petGroupMappingMapper.getMyPetList(groupId);
+	@RequestMapping(value = "/my/device/list", method = RequestMethod.POST)
+	public List<Device> myDeviceList(@RequestParam("groupCode") String groupCode) {
+		return deviceNapper.myDeviceList(groupCode);
 	}
 }

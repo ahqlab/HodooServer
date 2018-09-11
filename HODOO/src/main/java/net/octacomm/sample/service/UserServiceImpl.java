@@ -11,6 +11,7 @@ import net.octacomm.sample.utils.MathUtil;
 
 @Service
 public class UserServiceImpl implements UserService {
+	
 	public static final int SUCCESS = 1;
 
 	@Autowired

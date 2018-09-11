@@ -50,8 +50,10 @@ public interface PetBasicInfoMapper extends CRUDMapper<PetBasicInfo, DefaultPara
 	List<PetBasicInfo> getList();
 	
 	/*@Select("select petname from groups join pet_basic_info on groups.groupId = pet_basic_info.groupId where groups.groupId = #{groupId}")*/
-	@Select("select * from pet_basic_info where pet_basic_info.groupId = #{groupId}")
-	List<PetBasicInfo> getMyPetList(@Param("groupId") String groupId);
+	/*@Select("select * from pet_basic_info where pet_basic_info.groupId = #{groupId}")*/
+	
+	@Select("select pet_basic_info.* , pet_group_mapping.depth1,pet_group_mapping.depth2, pet_group_mapping.depth3, pet_group_mapping.depth4 from pet_group_mapping join pet_basic_info on pet_group_mapping.petId = pet_basic_info.id WHERE pet_group_mapping.groupId = #{groupId}")
+	List<PetBasicInfo> getMyPetList(@Param("groupId") int groupId);
 	
 	/*@Select("select distinct pet_basic_info.* from pet_basic_info "
 			+ "join pet_chronic_disease on pet_basic_info.id = pet_chronic_disease.petId "

@@ -41,13 +41,14 @@ public class UserController {
 	@ResponseBody
 	@RequestMapping(value = "/regist", method = RequestMethod.POST)
 	public ResultMessageGroup regist(@RequestBody User param) {
+		System.err.println("param : " + param);
+		System.err.println("param : " + param);
 		//그룹을 만든다 (그룹아이디를 가져온다)
-		Groups groups = groupsService.createGroups();
+		//Groups groups = groupsService.createGroups();
 		User user = userService.createGroups(param);
 		UserGroupMapping groupMapping = new UserGroupMapping();
-		groupMapping.setGroupId(groups.getId());
-		groupMapping.setUserId(user.getId());
-		
+		groupMapping.setUserIdx(user.getUserIdx());
+		groupMapping.setGroupCode(MathUtil.getGroupId());
 		int result = userGroupMappingMapper.insert(groupMapping);
 		ResultMessageGroup group = new ResultMessageGroup();
 		if(result != 0) {

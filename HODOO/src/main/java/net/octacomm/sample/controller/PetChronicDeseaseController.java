@@ -35,8 +35,8 @@ public class PetChronicDeseaseController {
 	
 	@ResponseBody
 	@RequestMapping(value = "/list" , method = RequestMethod.POST)
-	public List<PetChronicDisease> regist(@RequestParam("petId") int petId) {
-		return chronicDeseaseMapper.list(petId);
+	public List<PetChronicDisease> regist(@RequestParam("groupId") int groupId) {
+		return chronicDeseaseMapper.list(groupId);
 	}
 	
 	

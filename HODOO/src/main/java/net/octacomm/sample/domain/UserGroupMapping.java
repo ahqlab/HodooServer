@@ -6,9 +6,10 @@ import lombok.Data;
 public class UserGroupMapping implements Domain{
 	
 	private int id;
-	
-	private int groupId;
-	
-	private int userId;
 
+    private int userIdx;
+
+    private String groupCode;
+
+    private String createDate;
 }

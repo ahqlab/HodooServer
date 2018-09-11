@@ -9,22 +9,19 @@ import org.apache.ibatis.annotations.Update;
 
 import net.octacomm.sample.dao.CRUDMapper;
 import net.octacomm.sample.domain.DefaultParam;
-import net.octacomm.sample.domain.Groups;
-import net.octacomm.sample.domain.PetBasicInfo;
-import net.octacomm.sample.domain.StandardHsv;
 import net.octacomm.sample.domain.UserGroupMapping;
 
 public interface UserGroupMappingMapper extends CRUDMapper<UserGroupMapping, DefaultParam, Integer>{
 	
-	public String INSERT_FIELDS = " ( groupId, userId )";
+	public String INSERT_FIELDS = " ( id, userIdx, groupCode, createDate )";
 	
-	public String INSERT_VALUES = " ( #{groupId}, #{userId} )";
+	public String INSERT_VALUES = " ( #{id}, #{userIdx}, #{groupCode}, now() )";
 	
 	public String TABLE_NAME = " user_group_mapping ";
 	
-	public String UPDATE_VALUES = " groupId = #{groupId} , userId = #{userId} ";
+	public String UPDATE_VALUES = " userIdx = #{userIdx} , groupCode = #{groupCode}  , createDate = now() ";
 	
-	public String SELECT_FIELDS = " id, groupId, userId ";
+	public String SELECT_FIELDS = " id, userIdx, groupCode, createDate ";
 	
 	@Insert("INSERT INTO " + TABLE_NAME  + INSERT_FIELDS + " VALUES " + INSERT_VALUES)
 	@Override

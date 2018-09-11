@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 public class User implements Domain{
 
-    private int id;
+	private int userIdx;
 
     private String email;
 
@@ -21,8 +21,9 @@ public class User implements Domain{
 
     private String from;
 
-    private int groupId;
-
     private String createDate;
+    
+    //joinColumn
+    private String groupCode;
 
 }

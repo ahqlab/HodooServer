@@ -9,13 +9,14 @@ import org.apache.ibatis.annotations.Update;
 
 import net.octacomm.sample.dao.CRUDMapper;
 import net.octacomm.sample.domain.DefaultParam;
+import net.octacomm.sample.domain.PetBasicInfo;
 import net.octacomm.sample.domain.PetGroupMapping;
 
 public interface PetGroupMappingMapper extends CRUDMapper<PetGroupMapping, DefaultParam, Integer>{
 	
-	public String INSERT_FIELDS = " ( groupId, petId )";
+	public String INSERT_FIELDS = " ( groupId, petId , depth1, depth2, depth3, depth4 )";
 	
-	public String INSERT_VALUES = " ( #{groupId}, #{petId} )";
+	public String INSERT_VALUES = " ( #{groupId}, #{petId} , #{depth1}, #{depth2}, #{depth3}, #{depth4} )";
 	
 	public String TABLE_NAME = " pet_group_mapping ";
 	
@@ -42,5 +43,9 @@ public interface PetGroupMappingMapper extends CRUDMapper<PetGroupMapping, Defau
 	
 	@Select("SELECT * FROM " + TABLE_NAME + " WHERE groupId =  #{groupId}")
 	public List<PetGroupMapping> getMyPetList(int groupId);
+	
+	
+	@Select("select * from pet_group_mapping join pet_basic_info on pet_group_mapping.petId = pet_basic_info.id where pet_group_mapping.petId =  #{groupId}")
+	public PetBasicInfo isRegistedBasicInfo(int groupId);
 
 }

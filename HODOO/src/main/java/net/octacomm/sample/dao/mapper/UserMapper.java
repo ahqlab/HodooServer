@@ -23,30 +23,28 @@ import org.apache.ibatis.annotations.Update;
 @CacheNamespace
 public interface UserMapper extends CRUDMapper<User, DefaultParam, Integer>{
 	
-	public String INSERT_FIELDS = " ( id, email, password, nickname, sex, user.from , groupId, create_date )";
+	public String INSERT_FIELDS = " ( userIdx, email, password, nickname, sex, user.from , groupId, createDate )";
 	
 	public String INSERT_VALUES = " ( null, #{email}, #{password} , #{nickname} , #{sex} , #{from} , #{groupId},  now() )";
 	
-	public String TABLE_NAME = " user ";
+	public String TABLE_NAME = " USER ";
 	
-	public String UPDATE_VALUES = " email = #{email} , password = #{password} , nickname = #{nickname} , sex = #{sex} , from = #{from} , groupId = #{groupId} , create_date = now() ";
+	public String UPDATE_VALUES = " email = #{email} , password = #{password} , nickname = #{nickname} , sex = #{sex} , from = #{from} , groupId = #{groupId} , createDate = now() ";
 	
-	public String SELECT_FIELDS = "  id, email, password, nickname, sex, from , groupId, create_date  ";
+	public String SELECT_FIELDS = "  userIdx , email, password, nickname, sex, from , groupId, createDate  ";
 	
 	
-	/*@Insert("INSERT INTO " + TABLE_NAME + " " + INSERT_FIELDS + " VALUES " + INSERT_VALUES)
-	@Override
-	int insert(User user);*/
+	int insert(User user);
 	
-	@Select("SELECT * FROM " + TABLE_NAME + " WHERE id =  #{id}")
+	@Select("SELECT * FROM " + TABLE_NAME + " WHERE userIdx =  #{userIdx}")
 	@Override
 	User get(Integer id);
 	
-	@Update("UPDATE " + TABLE_NAME + " SET " + UPDATE_VALUES + " WHERE id =  #{id}")
+	@Update("UPDATE " + TABLE_NAME + " SET " + UPDATE_VALUES + " WHERE userIdx =  #{userIdx}")
 	@Override
 	int update(User user);
 	
-	@Delete("DELETE FROM " + TABLE_NAME + " WHERE id =  #{id}")
+	@Delete("DELETE FROM " + TABLE_NAME + " WHERE userIdx =  #{userIdx}")
 	@Override
 	int delete(Integer id);
 	
@@ -54,16 +52,16 @@ public interface UserMapper extends CRUDMapper<User, DefaultParam, Integer>{
 	@Override
 	List<User> getList();
 	
-	@Select("SELECT * FROM user WHERE id = #{id}")
+	@Select("SELECT * FROM " + TABLE_NAME + " WHERE userIdx = #{userIdx}")
 	User getUser(User user);
 
-	@Select("SELECT * FROM user WHERE id = #{id} AND password = #{password} ")
+	@Select("SELECT * FROM " + TABLE_NAME + "  WHERE userIdx = #{userIdx} AND password = #{password} ")
 	User getUserForAuth(User user);
 	
-	@Select("SELECT * FROM user_group_mapping join user on user_group_mapping.userId = user.id where user.email =  #{email} AND user.password = #{password} ")
+	@Select("SELECT * FROM " + TABLE_NAME + " join user_group_mapping on user_group_mapping.userIdx = user.userIdx where user.email =  #{email} AND user.password = #{password} ")
 	User login(User user);
 	
-	@Select("SELECT * FROM user WHERE groupId = #{groupId}")
+	@Select("SELECT * FROM " + TABLE_NAME + "  WHERE groupId = #{groupId}")
 	List<User> getGroupMemner(@Param("groupId") String groupId);
 
 }
