@@ -9,7 +9,7 @@ public class PetBasicInfo implements Domain{
 	
 	private int id;
 	
-	private int groupId;
+	private String groupCode;
 	
 	private MultipartFile profile;
 	

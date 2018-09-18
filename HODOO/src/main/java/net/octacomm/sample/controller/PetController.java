@@ -62,10 +62,11 @@ public class PetController {
 		return result;
 	}
 	
-	
+	@ResponseBody
 	@RequestMapping(value = "/my/pet/list", method = RequestMethod.POST)
 	public List<Pet> myPetList(@RequestParam("groupCode") String groupCode){
-		return petMapper.myPetList(groupCode);
+		List<Pet> result = petMapper.myPetList(groupCode);
+		return result;
 	}
 	
 }

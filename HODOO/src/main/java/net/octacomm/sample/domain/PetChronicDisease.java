@@ -7,7 +7,5 @@ public class PetChronicDisease implements Domain{
 
 	private int id;
 
-	private int petId;
-
-	private String diseaseName;
+    private String diseaseName;
 }

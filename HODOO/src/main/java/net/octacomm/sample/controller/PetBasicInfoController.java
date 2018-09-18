@@ -7,44 +7,41 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.UUID;
 
-import javax.print.DocFlavor.STRING;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import net.octacomm.sample.dao.mapper.GroupsMapper;
+import net.octacomm.sample.dao.mapper.GroupPetMappingMapper;
 import net.octacomm.sample.dao.mapper.PetBasicInfoMapper;
-import net.octacomm.sample.dao.mapper.PetGroupMappingMapper;
-import net.octacomm.sample.domain.Groups;
+import net.octacomm.sample.dao.mapper.PetMapper;
+import net.octacomm.sample.domain.GroupPetMapping;
+import net.octacomm.sample.domain.Pet;
 import net.octacomm.sample.domain.PetBasicInfo;
-import net.octacomm.sample.domain.PetGroupMapping;
 import net.octacomm.sample.domain.ResultMessage;
 import net.octacomm.sample.domain.ResultMessageGroup;
-import net.octacomm.sample.domain.User;
+import net.octacomm.sample.utils.MathUtil;
 
 @RequestMapping("/pet")
 @Controller
 public class PetBasicInfoController {
-	
+
 	@Autowired
 	private PetBasicInfoMapper petBasicInfoMapper;
-	
-	@Autowired private GroupsMapper groupMapper;
-	
-	@Autowired private PetGroupMappingMapper petGroupMappingMapper;
-	
+
+	@Autowired
+	private PetMapper petMapper;
 
 	@ResponseBody
 	@RequestMapping(value = "/basic/regist", method = RequestMethod.POST)
 	public ResultMessageGroup regist(HttpServletRequest request, PetBasicInfo basicInfo) {
-		//"/resources/upload/library/"
+		
 		ResultMessageGroup group = new ResultMessageGroup();
+		
 		String localPath = "/resources/upload/profile/";
 		String path = request.getSession().getServletContext().getRealPath(localPath);
 		System.err.println("path : " + path);
@@ -81,30 +78,30 @@ public class PetBasicInfoController {
 				}
 			}
 		}
-		int result = petBasicInfoMapper.insert(basicInfo);
+		
+		petBasicInfoMapper.insert(basicInfo);
+		Pet pet = new  Pet(); 
+		pet.setPetGroupCode(basicInfo.getGroupCode());
+		pet.setBasic(basicInfo.getId());
+		pet.setDisease(0);
+		pet.setPhysical(0);
+		pet.setWeight(0);
+		int result = petMapper.insert(pet); 
 		if(result != 0) {
-			PetGroupMapping petGroupMapping = new PetGroupMapping();
-			petGroupMapping.setPetId(basicInfo.getId());
-			petGroupMapping.setGroupId(basicInfo.getGroupId());
-			petGroupMapping.setDepth1(1);
-			if(petGroupMappingMapper.insert(petGroupMapping) != 0) {
-				group.setResultMessage(ResultMessage.SUCCESS);
-				group.setDomain(petGroupMapping);
-			}else {
-				group.setResultMessage(ResultMessage.FAILED);
-				group.setDomain(null);
-			}
+			group.setResultMessage(ResultMessage.SUCCESS);
+			group.setDomain(null);
 		}else {
 			group.setResultMessage(ResultMessage.FAILED);
 			group.setDomain(null);
 		}
 		return group;
 	}
+
 	
 	@ResponseBody
 	@RequestMapping(value = "/basic/update", method = RequestMethod.POST)
 	public ResultMessageGroup update(HttpServletRequest request, PetBasicInfo basicInfo) {
-		//"/resources/upload/library/"
+		
 		ResultMessageGroup group = new ResultMessageGroup();
 		String localPath = "/resources/upload/profile/";
 		String path = request.getSession().getServletContext().getRealPath(localPath);
@@ -120,9 +117,10 @@ public class PetBasicInfoController {
 				if (!realUploadDir.exists()) {
 					realUploadDir.mkdirs();
 				}
-				organizedfilePath = path + "/" +  randomeUUID + "_" + basicInfo.getProfile().getOriginalFilename();
+				organizedfilePath = path + "/" + randomeUUID + "_" + basicInfo.getProfile().getOriginalFilename();
 				System.err.println("organizedfilePath : " + organizedfilePath);
-				basicInfo.setProfileFilePath("/upload/profile/" + randomeUUID + "_"+ basicInfo.getProfile().getOriginalFilename());
+				basicInfo.setProfileFilePath(
+						"/upload/profile/" + randomeUUID + "_" + basicInfo.getProfile().getOriginalFilename());
 				basicInfo.setProfileFileName(basicInfo.getProfile().getOriginalFilename());
 				outputStream = new FileOutputStream(organizedfilePath);
 				int readByte = 0;
@@ -143,29 +141,20 @@ public class PetBasicInfoController {
 			}
 		}
 		int result = petBasicInfoMapper.update(basicInfo);
-		if(result != 0) {
+		if (result != 0) {
 			group.setResultMessage(ResultMessage.SUCCESS);
 			group.setDomain(basicInfo.getId());
-		}else {
+		} else {
 			group.setResultMessage(ResultMessage.FAILED);
 			group.setDomain(basicInfo.getId());
 		}
 		return group;
 	}
-	
+
 	@ResponseBody
 	@RequestMapping(value = "/basic/get", method = RequestMethod.POST)
-	public PetBasicInfo login(HttpServletRequest request, @RequestParam("userId") int userId) {
-		PetBasicInfo result = petBasicInfoMapper.get(userId);
-		return result;
+	public PetBasicInfo getBasicInformation(HttpServletRequest request, @RequestParam("groupCode") String groupCode, @RequestParam("petIdx") int petIdx) {
+		return petBasicInfoMapper.getBasicInformation(groupCode, petIdx);
 	}
-	
-	
-	@ResponseBody
-	@RequestMapping(value = "/basic/info/check", method = RequestMethod.POST)
-	public PetBasicInfo basicInfoCheck(@RequestParam("groupId") String groupId, @RequestParam("id") int id) {
-		return petBasicInfoMapper.basicInfoCheck(groupId, id);
-	}
-	
-	
+
 }

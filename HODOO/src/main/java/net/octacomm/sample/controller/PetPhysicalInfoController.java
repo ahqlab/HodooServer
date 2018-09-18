@@ -26,22 +26,23 @@ public class PetPhysicalInfoController {
 	@ResponseBody
 	@RequestMapping(value = "/regist" , method = RequestMethod.POST)
 	public int regist(@RequestBody PetPhysicalInfo petPhysicalInfo) {
-		System.err.println("XXXXXXXXXXXXXXXXXXXXXXXX");
+		/*System.err.println("XXXXXXXXXXXXXXXXXXXXXXXX");
 		petPhysicalInfoMapper.get(petPhysicalInfo.getPetId());
-		return petPhysicalInfoMapper.insert(petPhysicalInfo);
+		return petPhysicalInfoMapper.insert(petPhysicalInfo);*/
+		return 0;
 	}
 	
 	@ResponseBody
 	@RequestMapping(value = "/delete" , method = RequestMethod.POST)
-	public int delete(@RequestParam ("petId") int id) {
+	public int delete(@RequestParam ("id") int id) {
 		return petPhysicalInfoMapper.delete(id);
 	}
 	
 	
 	@ResponseBody
 	@RequestMapping(value = "/get" , method = RequestMethod.POST)
-	public PetPhysicalInfo get(@RequestParam ("petId") int petId) {
-		return petPhysicalInfoMapper.get(petId);
+	public PetPhysicalInfo getPetPhysicalInformation(@RequestParam("groupCode") String groupCode, @RequestParam("petIdx") int petIdx) {
+		return petPhysicalInfoMapper.getPetPhysicalInformation(groupCode, petIdx);
 	}
 	
 	

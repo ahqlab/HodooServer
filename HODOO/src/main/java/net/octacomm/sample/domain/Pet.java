@@ -1,6 +1,5 @@
 package net.octacomm.sample.domain;
 
-import org.springframework.web.multipart.MultipartFile;
 
 import lombok.Data;
 
@@ -9,7 +8,7 @@ public class Pet implements Domain {
 
 	private int petIdx;
 	
-	private String groupCode;
+	private String petGroupCode;
 	
 	private int basic;
 	

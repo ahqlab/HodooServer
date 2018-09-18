@@ -16,15 +16,15 @@ import net.octacomm.sample.domain.PetBasicInfo;
 @CacheNamespace
 public interface PetBasicInfoMapper extends CRUDMapper<PetBasicInfo, DefaultParam, Integer> {
 
-	public String INSERT_FIELDS = " ( id, userId, groupId, profileFilePath, profileFileName, petName, petBreed , birthday, neutralization, createDate )";
+	public String INSERT_FIELDS = " ( id, userId, groupId, profileFilePath, profileFileName, petName, sex, petBreed , birthday, neutralization, createDate )";
 
-	public String INSERT_VALUES = " ( null, #{userId}, #{groupId},  #{profileFilePath} , #{profileFileName} , #{petName} , #{petBreed} , #{birthday},  #{neutralization}, now() )";
+	public String INSERT_VALUES = " ( null, #{userId}, #{groupId},  #{profileFilePath} , #{profileFileName} , #{petName} , #{sex} , #{petBreed} , #{birthday},  #{neutralization}, now() )";
 
 	public String TABLE_NAME = " pet_basic_info ";
 
-	public String UPDATE_VALUES = " profileFilePath = #{profileFilePath} , profileFileName = #{profileFileName} , petName = #{petName} , petBreed = #{petBreed} , birthday = #{birthday} , neutralization = #{neutralization} , createDate = now() ";
+	public String UPDATE_VALUES = " profileFilePath = #{profileFilePath} , profileFileName = #{profileFileName} , petName = #{petName} , sex = #{sex} ,petBreed = #{petBreed} , birthday = #{birthday} , neutralization = #{neutralization} , createDate = now() ";
 
-	public String SELECT_FIELDS = "  id, userId, profileFilePath, profileFileName, petName, petBreed , birthday, neutralization, createDate  ";
+	public String SELECT_FIELDS = "  id, userId, profileFilePath, profileFileName, petName, sex, petBreed , birthday, neutralization, createDate  ";
 
 	/*@Insert("INSERT INTO " + TABLE_NAME + " " + INSERT_FIELDS + " VALUES " + INSERT_VALUES)
 	@Override
@@ -67,7 +67,17 @@ public interface PetBasicInfoMapper extends CRUDMapper<PetBasicInfo, DefaultPara
 	@Select("SELECT * FROM " + TABLE_NAME + " WHERE id =  #{id}")
 	PetBasicInfo getBasicInfoForPetId(Integer id);
 	
-	@Select("select pet_basic_info.* from pet_basic_info where groupId = #{groupId} and id = #{id}")
-	public PetBasicInfo basicInfoCheck(@Param("groupId") String groupId, @Param("id") int id);
+	/*@Select("select pet_basic_info.* from pet_basic_info where groupId = #{groupId} and id = #{id}")
+	public PetBasicInfo basicInfoCheck(@Param("groupId") String groupId, @Param("id") int id);*/
+	
+	@Select("SELECT pet_basic_info.* FROM pet " + 
+			"join group_pet_mapping on group_pet_mapping.petGroupCode = pet.petGroupCode " + 
+			"join pet_basic_info on pet.basic = pet_basic_info.id " + 
+			"WHERE group_pet_mapping.groupCode = #{groupCode} " + 
+			"and pet.petIdx = #{petIdx}")
+	public PetBasicInfo getBasicInformation(@Param("groupCode") String groupCode, @Param("petIdx") int petIdx);
+	
+	
+	
 	
 }

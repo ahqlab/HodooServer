@@ -16,7 +16,7 @@ public interface DeviceMapper extends CRUDMapper<Device, DefaultParam, Integer> 
 
 	public String INSERT_FIELDS = " ( deviceIdx , groupCode , serialNumber , createDate )";
 
-	public String INSERT_VALUES = " ( #{deviceIdx} , #{groupCode} , #{serialNumber} , #{createDate} )";
+	public String INSERT_VALUES = " ( null , #{groupCode} , #{serialNumber} , now() )";
 
 	public String TABLE_NAME = " device ";
 
