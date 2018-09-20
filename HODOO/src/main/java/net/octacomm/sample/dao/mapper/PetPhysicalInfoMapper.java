@@ -28,8 +28,6 @@ public interface PetPhysicalInfoMapper extends CRUDMapper<PetPhysicalInfo, Defau
 	
 	public String SELECT_FIELDS = " id, width, height, weight, createDate ";
 	
-	@Insert("INSERT INTO " + TABLE_NAME  + INSERT_FIELDS + " VALUES " + INSERT_VALUES)
-	@Override
 	public int insert(PetPhysicalInfo petPhysicalInfo);
 	
 	@Delete("DELETE FROM " + TABLE_NAME + " WHERE id =  #{id}")

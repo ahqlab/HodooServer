@@ -18,6 +18,7 @@ import net.octacomm.sample.dao.mapper.PetMapper;
 import net.octacomm.sample.dao.mapper.PetPhysicalInfoMapper;
 import net.octacomm.sample.dao.mapper.PetWeightInfoMapper;
 import net.octacomm.sample.domain.Pet;
+import net.octacomm.sample.domain.PetAllInfos;
 import net.octacomm.sample.domain.PetBasicInfo;
 
 @RequestMapping("/pet")
@@ -65,8 +66,13 @@ public class PetController {
 	@ResponseBody
 	@RequestMapping(value = "/my/pet/list", method = RequestMethod.POST)
 	public List<Pet> myPetList(@RequestParam("groupCode") String groupCode){
-		List<Pet> result = petMapper.myPetList(groupCode);
-		return result;
+		return petMapper.myPetList(groupCode);
 	}
 	
+	/*@ResponseBody
+	@RequestMapping(value = "/all/infos", method = RequestMethod.GET)
+	public void petAllInfos(){
+		PetAllInfos allInfos = petMapper.getPetAllInfos();
+		System.err.println(allInfos);
+	}*/
 }

@@ -41,10 +41,7 @@ public class UserController {
 	@ResponseBody
 	@RequestMapping(value = "/regist", method = RequestMethod.POST)
 	public ResultMessageGroup regist(@RequestBody User param) {
-		System.err.println("param : " + param);
-		System.err.println("param : " + param);
 		//그룹을 만든다 (그룹아이디를 가져온다)
-		//Groups groups = groupsService.createGroups();
 		User user = userService.createGroups(param);
 		UserGroupMapping groupMapping = new UserGroupMapping();
 		groupMapping.setUserIdx(user.getUserIdx());

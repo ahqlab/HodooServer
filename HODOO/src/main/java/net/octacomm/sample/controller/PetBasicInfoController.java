@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.List;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,6 +22,7 @@ import net.octacomm.sample.dao.mapper.PetBasicInfoMapper;
 import net.octacomm.sample.dao.mapper.PetMapper;
 import net.octacomm.sample.domain.GroupPetMapping;
 import net.octacomm.sample.domain.Pet;
+import net.octacomm.sample.domain.PetAllInfos;
 import net.octacomm.sample.domain.PetBasicInfo;
 import net.octacomm.sample.domain.ResultMessage;
 import net.octacomm.sample.domain.ResultMessageGroup;
@@ -89,7 +91,7 @@ public class PetBasicInfoController {
 		int result = petMapper.insert(pet); 
 		if(result != 0) {
 			group.setResultMessage(ResultMessage.SUCCESS);
-			group.setDomain(null);
+			group.setDomain(pet);
 		}else {
 			group.setResultMessage(ResultMessage.FAILED);
 			group.setDomain(null);
@@ -155,6 +157,16 @@ public class PetBasicInfoController {
 	@RequestMapping(value = "/basic/get", method = RequestMethod.POST)
 	public PetBasicInfo getBasicInformation(HttpServletRequest request, @RequestParam("groupCode") String groupCode, @RequestParam("petIdx") int petIdx) {
 		return petBasicInfoMapper.getBasicInformation(groupCode, petIdx);
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/about/my/pet/list", method = RequestMethod.POST)
+	public List<PetAllInfos> aboutMyPetList(@RequestParam("groupCode") String groupCode){
+		List<PetAllInfos> list = petMapper.aboutMyPetList(groupCode);
+/*		for (PetAllInfos petAllInfos : list) {
+			System.err.println("petAllInfos : " + petAllInfos);
+		}
+*/		return list;
 	}
 
 }

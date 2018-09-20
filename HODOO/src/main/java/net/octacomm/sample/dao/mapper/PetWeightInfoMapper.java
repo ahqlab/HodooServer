@@ -14,21 +14,20 @@ import net.octacomm.sample.domain.PetWeightInfo;
 
 public interface PetWeightInfoMapper extends CRUDMapper<PetWeightInfo, DefaultParam, Integer> {
 
-	public String INSERT_FIELDS = " ( petId, bcs, createDate )";
+	public String INSERT_FIELDS = " ( id, bcs, createDate )";
 
-	public String INSERT_VALUES = " ( #{petId}, #{bcs}, now() )";
+	public String INSERT_VALUES = " ( null, #{bcs}, now() )";
 
 	public String TABLE_NAME = " pet_weight_info ";
 
 	public String UPDATE_VALUES = " bcs = #{bcs} ";
 
-	public String SELECT_FIELDS = " id, petId, bcs, createDate ";
+	public String SELECT_FIELDS = " id, bcs, createDate ";
+	
 
-	@Insert("INSERT INTO " + TABLE_NAME + INSERT_FIELDS + " VALUES " + INSERT_VALUES)
-	@Override
 	public int insert(PetWeightInfo petWeightInfo);
 
-	@Delete("DELETE FROM " + TABLE_NAME + " WHERE petId =  #{petId}")
+	@Delete("DELETE FROM " + TABLE_NAME + " WHERE id =  #{id}")
 	@Override
 	public int delete(Integer petId);
 
@@ -36,16 +35,26 @@ public interface PetWeightInfoMapper extends CRUDMapper<PetWeightInfo, DefaultPa
 	@Override
 	public int update(PetWeightInfo petWeightInfo);
 
-	@Select("SELECT * FROM " + TABLE_NAME + " WHERE petId =  #{petId}")
+	@Select("SELECT * FROM " + TABLE_NAME + " WHERE id =  #{id}")
 	@Override
 	public PetWeightInfo get(Integer petId);
 	
-	@Select("select bcs from groups join pet_weight_info on groups.petId = pet_weight_info.petId where groups.groupId = #{groupId} and pet_weight_info.petId = #{petId}")
-	public String getMyBcs(@Param("groupId") String groupId, @Param("petId") int petId);
+	@Select("select pet_weight_info.* from pet_basic_info " + 
+			"join pet on pet.basic = pet_basic_info.id " + 
+			"join pet_weight_info on pet_weight_info.id = pet.weight " + 
+			"where pet_basic_info.id = #{basicIdx} ")
+	public PetWeightInfo getBcs(@Param("basicIdx") int basicIdx);
 	
 	
 	@Select("select pet_weight_info.* from pet_weight_info join groups on pet_weight_info.petId = groups.petId where groups.groupId = #{groupId} and pet_weight_info.petId = #{petId}")
 	public PetPhysicalInfo InfoCheck(String groupId, int petId);
+	
+	@Select("SELECT pet_weight_info.* FROM pet " + 
+			"join group_pet_mapping on group_pet_mapping.petGroupCode = pet.petGroupCode " + 
+			"join pet_weight_info on pet.weight = pet_weight_info.id " + 
+			"WHERE group_pet_mapping.groupCode = #{groupCode} " + 
+			"and pet.petIdx = #{petIdx}")
+	public PetWeightInfo getPetWeightInformation(@Param("groupCode") String groupCode, @Param("petIdx") int petIdx);
 	
 	
 }

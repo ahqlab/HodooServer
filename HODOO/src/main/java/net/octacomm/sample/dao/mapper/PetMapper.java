@@ -5,12 +5,17 @@ import java.util.List;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Result;
+import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
+import org.springframework.web.bind.annotation.Mapping;
 
 import net.octacomm.sample.dao.CRUDMapper;
 import net.octacomm.sample.domain.DefaultParam;
 import net.octacomm.sample.domain.Pet;
+import net.octacomm.sample.domain.PetAllInfos;
+import net.octacomm.sample.domain.PetBasicInfo;
 
 public interface PetMapper extends CRUDMapper<Pet, DefaultParam, Integer> {
 
@@ -24,9 +29,9 @@ public interface PetMapper extends CRUDMapper<Pet, DefaultParam, Integer> {
 
 	public String SELECT_FIELDS = " deviceIdx , petGroupCode , basic , disease, physical, weight, createDate ";
 
-	@Insert("INSERT INTO " + TABLE_NAME  + INSERT_FIELDS + " VALUES ( null , (select petGroupCode FROM group_pet_mapping where groupCode = #{petGroupCode}) ,  #{basic} , #{disease} , #{physical} , #{weight} , now() ) ")
+	/*@Insert("INSERT INTO " + TABLE_NAME  + INSERT_FIELDS + " VALUES ( null , (select petGroupCode FROM group_pet_mapping where groupCode = #{petGroupCode}) ,  #{basic} , #{disease} , #{physical} , #{weight} , now() ) ")
 	@Override
-	public int insert(Pet pet);
+	public int insert(Pet pet);*/
 
 	@Delete("DELETE FROM " + TABLE_NAME + " WHERE petIdx =  #{petIdx}")
 	@Override
@@ -47,9 +52,57 @@ public interface PetMapper extends CRUDMapper<Pet, DefaultParam, Integer> {
 	@Update("UPDATE " + TABLE_NAME + " SET disease = 0 WHERE petIdx =  #{petIdx} ")
 	public void resetDisease(int petIdx);
 	
+	@Update("UPDATE " + TABLE_NAME + " SET physical = 0 WHERE petIdx =  #{petIdx} ")
+	public void resetPhysical(int petIdx);
+	
+	@Update("UPDATE " + TABLE_NAME + " SET weight = 0 WHERE petIdx =  #{petIdx} ")
+	public void resetWeight(int petIdx);
+	
 	
 	@Update("UPDATE " + TABLE_NAME + " SET disease = #{disease} WHERE petIdx =  #{petIdx} ")
 	public int registDisease(@Param("disease") int disease, @Param("petIdx") int petIdx);
+	
+	@Update("UPDATE " + TABLE_NAME + " SET physical = #{physical} WHERE petIdx =  #{petIdx} ")
+	public int registPhysical(@Param("physical") int physical, @Param("petIdx") int petIdx);
+	
+	
+	@Update("UPDATE " + TABLE_NAME + " SET weight = #{weight} WHERE petIdx =  #{petIdx} ")
+	public int registWeight(@Param("weight") int weight, @Param("petIdx") int petIdx);
+	
+	
+	@Select("select * " + 
+			"from group_pet_mapping " + 
+			"join pet on  group_pet_mapping.petGroupCode = pet.petGroupCode " + 
+			"join pet_basic_info on pet_basic_info.id = pet.basic " + 
+			"join pet_chronic_disease on pet_chronic_disease.id = pet.disease " + 
+			"join pet_physical_info on pet_physical_info.id = pet.physical " + 
+			"join pet_weight_info on pet_weight_info.id = pet.weight " + 
+			"where group_pet_mapping.groupCode = #{groupCode} ")
+	@Results({
+		@Result(column="petIdx", property="pet.petIdx"),
+		@Result(column="petGroupCode", property="pet.petGroupCode"),
+		@Result(column="basic", property="pet.basic"),
+		@Result(column="disease", property="pet.disease"),
+		@Result(column="physical", property="pet.physical"),
+		@Result(column="weight", property="pet.weight"),
+		
+		@Result(column="profileFilePath", property="petBasicInfo.profileFilePath"),
+		@Result(column="profileFileName", property="petBasicInfo.profileFileName"),
+		@Result(column="petName", property="petBasicInfo.petName"),
+		@Result(column="petBreed", property="petBasicInfo.petBreed"),
+		@Result(column="sex", property="petBasicInfo.sex"),
+		@Result(column="birthday", property="petBasicInfo.birthday"),
+		@Result(column="neutralization", property="petBasicInfo.neutralization"),
+		
+		@Result(column="diseaseName", property="petChronicDisease.diseaseName"),
+		
+		@Result(column="width", property="petPhysicalInfo.width"),
+		@Result(column="height", property="petPhysicalInfo.height"),
+		@Result(column="weight", property="petPhysicalInfo.weight"),
+		
+		@Result(column="bcs", property="petWeightInfo.bcs"),
+	})
+	public List<PetAllInfos> aboutMyPetList(String groupCode);
 	
 	
 }
