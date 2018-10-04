@@ -60,6 +60,16 @@ public class UserController {
 	
 	
 	@ResponseBody
+	@RequestMapping(value = "/test", method = RequestMethod.GET)
+	public User test(@RequestParam("email") String email, @RequestParam("password") String password) {
+		User user = new User();
+		user.setEmail(email);
+		user.setPassword(password);
+		return user;
+	}
+	
+	
+	@ResponseBody
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public User login(@RequestBody User user) {
 		User result = userMapper.login(user);
@@ -73,4 +83,17 @@ public class UserController {
 		return userMapper.getGroupMemner(groupId);
 	}
 	
+	
+	@ResponseBody
+	@RequestMapping(value = "/get", method = RequestMethod.POST)
+	public User get(@RequestParam("userIdx") int userIdx) {
+		return userMapper.get(userIdx);
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/update/basic/info", method = RequestMethod.POST)
+	public Integer updateBasic(@RequestBody User user) {
+		System.err.println("user L " + user);
+		return userMapper.updateBasic(user);
+	}
 }

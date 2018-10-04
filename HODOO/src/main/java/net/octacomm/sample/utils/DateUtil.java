@@ -9,4 +9,12 @@ public class DateUtil {
         return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
     }
     
+    public static String getCurrentMonth() {
+        return new SimpleDateFormat("MM").format(Calendar.getInstance().getTime());
+    }
+    
+    public static String getCurrentYear() {
+        return new SimpleDateFormat("yyyy").format(Calendar.getInstance().getTime());
+    }
+    
 }

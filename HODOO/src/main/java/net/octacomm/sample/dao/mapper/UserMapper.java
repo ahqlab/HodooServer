@@ -31,6 +31,8 @@ public interface UserMapper extends CRUDMapper<User, DefaultParam, Integer>{
 	
 	public String UPDATE_VALUES = " email = #{email} , password = #{password} , nickname = #{nickname} , sex = #{sex} , from = #{from} , groupId = #{groupId} , createDate = now() ";
 	
+	public String BASIC_INFO_UPDATE_VALUES = "  nickname = #{nickname} , USER.from = #{from} ";
+	
 	public String SELECT_FIELDS = "  userIdx , email, password, nickname, sex, from , groupId, createDate  ";
 	
 	
@@ -63,5 +65,9 @@ public interface UserMapper extends CRUDMapper<User, DefaultParam, Integer>{
 	
 	@Select("SELECT * FROM " + TABLE_NAME + "  WHERE groupId = #{groupId}")
 	List<User> getGroupMemner(@Param("groupId") String groupId);
+	
+	
+	@Update("UPDATE " + TABLE_NAME + " SET " + BASIC_INFO_UPDATE_VALUES + " WHERE userIdx =  #{userIdx}")
+	Integer updateBasic(User user);
 
 }

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import net.octacomm.sample.dao.mapper.DeviceMapper;
 import net.octacomm.sample.dao.mapper.GroupPetMappingMapper;
+import net.octacomm.sample.domain.ArrayListDevice;
 import net.octacomm.sample.domain.Device;
 import net.octacomm.sample.domain.GroupPetMapping;
 import net.octacomm.sample.domain.PetChronicDisease;

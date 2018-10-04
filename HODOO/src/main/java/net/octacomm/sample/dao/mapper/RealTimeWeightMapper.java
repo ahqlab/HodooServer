@@ -1,5 +1,6 @@
 package net.octacomm.sample.dao.mapper;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Delete;
@@ -10,10 +11,12 @@ import org.apache.ibatis.annotations.Update;
 
 import net.octacomm.sample.dao.CRUDMapper;
 import net.octacomm.sample.domain.DefaultParam;
+import net.octacomm.sample.domain.Device;
 import net.octacomm.sample.domain.Groups;
 import net.octacomm.sample.domain.PetBasicInfo;
 import net.octacomm.sample.domain.RealTimeWeight;
 import net.octacomm.sample.domain.StandardHsv;
+import net.octacomm.sample.domain.Statistics;
 
 public interface RealTimeWeightMapper extends CRUDMapper<RealTimeWeight, DefaultParam, Integer>{
 	
@@ -50,6 +53,21 @@ public interface RealTimeWeightMapper extends CRUDMapper<RealTimeWeight, Default
 	
 	@Select("select value from " + TABLE_NAME  +" where mac = #{mac} order by createDate desc limit 4")
 	public List<Float> getRealTimeList(@Param("mac") String mac);
+	
+	
+	public RealTimeWeight getListofDeviceList(@Param("devices") List<Device> devices);
+	
+	public List<Statistics> getStatisticsOfTime(HashMap<String, Object> map);
+	
+	public List<Statistics> getStatisticsOfDay(HashMap<String, Object> map);
+	
+	public List<Statistics> getStatisticsOfWeek(HashMap<String, Object> map);
+	
+	public List<Statistics> getStatisticsOfMonth(HashMap<String, Object> map);
+	
+	public List<Statistics> getStatisticsOfMonth(@Param("devices") List<Device> devices, @Param("year") String year);
+	
+	public List<Statistics> getStatisticsOfYear(HashMap<String, Object> map);
 		
 	
 }
