@@ -55,7 +55,7 @@ public interface RealTimeWeightMapper extends CRUDMapper<RealTimeWeight, Default
 	public List<Float> getRealTimeList(@Param("mac") String mac);
 	
 	
-	public RealTimeWeight getListofDeviceList(@Param("devices") List<Device> devices);
+	public RealTimeWeight getListofDeviceList(@Param("date") String date, @Param("devices") List<Device> devices);
 	
 	public List<Statistics> getStatisticsOfTime(HashMap<String, Object> map);
 	

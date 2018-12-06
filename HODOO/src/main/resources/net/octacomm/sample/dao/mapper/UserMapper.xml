@@ -27,7 +27,7 @@
     </select>   
 
 	<insert id="insert" parameterType="User" useGeneratedKeys="true"  keyProperty="userIdx" >
-		INSERT INTO USER ( email, password, nickname, sex, user.from , createDate ) VALUES (  #{email}, #{password} , #{nickname} , #{sex} , #{from} , now() )
+		INSERT INTO USER ( email, password, nickname, sex, user.country , createDate ) VALUES (  #{email}, #{password} , #{nickname} , #{sex} , #{country} , now() )
 		<selectKey keyProperty="userIdx" resultType="Integer" order="AFTER">
 			SELECT LAST_INSERT_ID()
 		</selectKey>

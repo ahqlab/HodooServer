@@ -17,24 +17,23 @@ import org.apache.ibatis.annotations.Update;
 /**
  * The MyBatis Mapper of "user" table  
  * 
- * @author tykim
+ * @author tykim.
  * 
  */
 @CacheNamespace
 public interface UserMapper extends CRUDMapper<User, DefaultParam, Integer>{
 	
-	public String INSERT_FIELDS = " ( userIdx, email, password, nickname, sex, user.from , groupId, createDate )";
+	public String INSERT_FIELDS = " ( userIdx, email, password, nickname, sex, user.country , groupId,  createDate )";
 	
-	public String INSERT_VALUES = " ( null, #{email}, #{password} , #{nickname} , #{sex} , #{from} , #{groupId},  now() )";
+	public String INSERT_VALUES = " ( null, #{email}, #{password} , #{nickname} , #{sex} , #{country} , #{groupId},  now() )";
 	
 	public String TABLE_NAME = " USER ";
 	
-	public String UPDATE_VALUES = " email = #{email} , password = #{password} , nickname = #{nickname} , sex = #{sex} , from = #{from} , groupId = #{groupId} , createDate = now() ";
+	public String UPDATE_VALUES = " email = #{email} , password = #{password} , nickname = #{nickname} , sex = #{sex} , country = #{country} , groupId = #{groupId} , createDate = now() ";
 	
-	public String BASIC_INFO_UPDATE_VALUES = "  nickname = #{nickname} , USER.from = #{from} ";
+	public String BASIC_INFO_UPDATE_VALUES = "  nickname = #{nickname} , USER.country = #{country} ";
 	
-	public String SELECT_FIELDS = "  userIdx , email, password, nickname, sex, from , groupId, createDate  ";
-	
+	public String SELECT_FIELDS = "  user.userIdx , user.email, user.password, user.nickname, user.sex, user.country , user_group_mapping.groupCode , DATE_FORMAT(user.createDate, \"%Y-%l-%d\") AS createDate ";
 	
 	int insert(User user);
 	
@@ -54,10 +53,13 @@ public interface UserMapper extends CRUDMapper<User, DefaultParam, Integer>{
 	@Override
 	List<User> getList();
 	
-	@Select("SELECT * FROM " + TABLE_NAME + " WHERE userIdx = #{userIdx}")
+	@Select("SELECT * FROM " + TABLE_NAME + " WHERE email = #{email} ")
 	User getUser(User user);
+	
+	@Select("SELECT * FROM " + TABLE_NAME + " WHERE email = #{email} ")
+	List<User> getUserList(User user);
 
-	@Select("SELECT * FROM " + TABLE_NAME + "  WHERE userIdx = #{userIdx} AND password = #{password} ")
+	@Select("SELECT " + SELECT_FIELDS + " FROM " + TABLE_NAME + " join user_group_mapping on user_group_mapping.userIdx = user.userIdx where user.email =  #{email} AND user.password = #{password} ")
 	User getUserForAuth(User user);
 	
 	@Select("SELECT * FROM " + TABLE_NAME + " join user_group_mapping on user_group_mapping.userIdx = user.userIdx where user.email =  #{email} AND user.password = #{password} ")
@@ -65,7 +67,6 @@ public interface UserMapper extends CRUDMapper<User, DefaultParam, Integer>{
 	
 	@Select("SELECT * FROM " + TABLE_NAME + "  WHERE groupId = #{groupId}")
 	List<User> getGroupMemner(@Param("groupId") String groupId);
-	
 	
 	@Update("UPDATE " + TABLE_NAME + " SET " + BASIC_INFO_UPDATE_VALUES + " WHERE userIdx =  #{userIdx}")
 	Integer updateBasic(User user);

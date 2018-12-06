@@ -5,5 +5,5 @@ import net.octacomm.sample.domain.User;
 
 public interface UserService {
 	
-	User createGroups(User user);
+	User createUser(User user);
 }

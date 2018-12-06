@@ -14,15 +14,15 @@ import net.octacomm.sample.domain.Feed;
 
 public interface FeedMapper extends CRUDMapper<Feed, DefaultParam, Integer>{
 
-	public String INSERT_FIELDS = " ( id , animalType , name , manufacturer, age, calorie, calculationCalories,  crudeProtein, crudeFat, carbohydrate, crudeAsh, crudeFiber, taurine, moisture, calcium, phosphorus, omega3, omega6, mainIngredient )";
+	public String INSERT_FIELDS = " ( id , animalType , tag, name , manufacturer, age, calorie, calculationCalories,  crudeProtein, crudeFat, carbohydrate, crudeAsh, crudeFiber, taurine, moisture, calcium, phosphorus, omega3, omega6, mainIngredient )";
 
-	public String INSERT_VALUES = " ( null , #{animalType} , #{name} , #{manufacturer}, #{age}, #{calorie}, #{calculationCalories},  #{crudeProtein}, #{crudeFat}, #{carbohydrate}, #{crudeAsh}, #{crudeFiber}, #{taurine}, #{moisture}, #{calcium}, #{phosphorus}, #{omega3}, #{omega6} , #{mainIngredient} )";
+	public String INSERT_VALUES = " ( null , #{animalType} , #{tag}, #{name} , #{manufacturer}, #{age}, #{calorie}, #{calculationCalories},  #{crudeProtein}, #{crudeFat}, #{carbohydrate}, #{crudeAsh}, #{crudeFiber}, #{taurine}, #{moisture}, #{calcium}, #{phosphorus}, #{omega3}, #{omega6} , #{mainIngredient} )";
 
 	public String TABLE_NAME = " FEED ";
 
-	public String UPDATE_VALUES = " animalType = #{animalType} , name = #{name} , manufacturer = #{manufacturer} , age = #{age} , calorie = #{calorie} , calculationCalories = #{calculationCalories} , crudeProtein = #{crudeProtein} , crudeFat = #{crudeFat} , carbohydrate = #{carbohydrate} , crudeAsh = #{crudeAsh} , crudeFiber = #{crudeFiber} , taurine = #{taurine} , moisture = #{moisture} , calcium = #{calcium} , phosphorus = #{phosphorus} , omega3 = #{omega3} , omega6 = #{omega6} , mainIngredient = #{mainIngredient} ";
+	public String UPDATE_VALUES = " animalType = #{animalType} , tag = #{tag} , name = #{name} , manufacturer = #{manufacturer} , age = #{age} , calorie = #{calorie} , calculationCalories = #{calculationCalories} , crudeProtein = #{crudeProtein} , crudeFat = #{crudeFat} , carbohydrate = #{carbohydrate} , crudeAsh = #{crudeAsh} , crudeFiber = #{crudeFiber} , taurine = #{taurine} , moisture = #{moisture} , calcium = #{calcium} , phosphorus = #{phosphorus} , omega3 = #{omega3} , omega6 = #{omega6} , mainIngredient = #{mainIngredient} ";
 
-	public String SELECT_FIELDS = " id , animalType , name , manufacturer, age, calorie, calculationCalories,  crudeProtein, crudeFat, carbohydrate, crudeAsh, crudeFiber, taurine, moisture, calcium, phosphorus, omega3, omega6, mainIngredient ";
+	public String SELECT_FIELDS = " id , animalType , tag, name , manufacturer, age, calorie, calculationCalories,  crudeProtein, crudeFat, carbohydrate, crudeAsh, crudeFiber, taurine, moisture, calcium, phosphorus, omega3, omega6, mainIngredient ";
 
 	@Insert("INSERT INTO " + TABLE_NAME + INSERT_FIELDS + " VALUES " + INSERT_VALUES)
 	@Override
@@ -44,9 +44,14 @@ public interface FeedMapper extends CRUDMapper<Feed, DefaultParam, Integer>{
 	@Override
 	List<Feed> getList();
 	
-	
 	@Select("SELECT * FROM " + TABLE_NAME +  " WHERE NAME LIKE CONCAT('%', #{text}, '%')")
 	public List<Feed> getSearchList(@Param("text") String searchWord);
 	
+	@Select("SELECT * FROM " + TABLE_NAME +  " WHERE NAME LIKE CONCAT('%', #{text}, '%')")
+	public List<Feed> getFeedInfo(int id);
+	
+	
+	@Select("SELECT char_length(feed.crudeProtein) as id, sum(feed.crudeProtein) as crudeProtein, sum(feed.crudeFat) as crudeFat, sum(feed.crudeFiber) as crudeFiber, sum(feed.crudeAsh) as crudeAsh, sum(feed.carbohydrate) as carbohydrate FROM  mear_history  join feed on mear_history.feedIdx = feed.id WHERE petIdx =  #{petIdx} and substring(mear_history.createDate, 1,10) = #{date}")
+	public Feed getRadarChartData(@Param("date") String date, @Param("petIdx") int petIdx);
 	
 }

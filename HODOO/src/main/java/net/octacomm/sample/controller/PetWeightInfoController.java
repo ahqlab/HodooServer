@@ -1,6 +1,5 @@
 package net.octacomm.sample.controller;
 
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import net.octacomm.sample.dao.mapper.PetMapper;
-import net.octacomm.sample.dao.mapper.PetPhysicalInfoMapper;
 import net.octacomm.sample.dao.mapper.PetWeightInfoMapper;
 import net.octacomm.sample.domain.PetPhysicalInfo;
 import net.octacomm.sample.domain.PetWeightInfo;
@@ -62,6 +60,5 @@ public class PetWeightInfoController {
 		petMapper.resetWeight(petIdx);
 		return petWeightInfoMapper.delete(id);
 	}
-
 
 }

@@ -7,6 +7,7 @@ public class Feed implements Domain {
 
 	private int id;
 	private String animalType;
+	private String tag;
 	private String brand;
 	private String name;
 	private String manufacturer;

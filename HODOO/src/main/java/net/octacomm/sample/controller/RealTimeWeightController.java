@@ -48,9 +48,9 @@ public class RealTimeWeightController {
 
 	@ResponseBody
 	@RequestMapping(value = "/get/last/collection/data")
-	public RealTimeWeight getLastCollectionData(@RequestParam("groupCode") String groupCode) {
+	public RealTimeWeight getLastCollectionData(@RequestParam("date") String date, @RequestParam("groupCode") String groupCode) {
 		List<Device> deviceList = deviceMapper.myDeviceList(groupCode);
-		RealTimeWeight weights = RealTimeWeightMapper.getListofDeviceList(deviceList);
+		RealTimeWeight weights = RealTimeWeightMapper.getListofDeviceList(date, deviceList);
 		return weights;
 	}
 
@@ -89,7 +89,6 @@ public class RealTimeWeightController {
 	@RequestMapping(value = "/get/statistics/list/of/month")
 	public List<Statistics> getStatisticsOfMonth(@RequestParam("groupCode") String groupCode, @RequestParam("year") String year) {
 		/*HashMap<String, Object> map = new HashMap<String, Object>();
-		
 		map.put("deviceList", deviceList);
 		map.put("year", year);*/
 		List<Device> deviceList = deviceMapper.myDeviceList(groupCode);

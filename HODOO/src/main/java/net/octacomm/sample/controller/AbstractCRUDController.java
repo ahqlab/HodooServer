@@ -115,7 +115,6 @@ public abstract class AbstractCRUDController<M extends CRUDMapper<D, P, PK>, D e
 
 	@RequestMapping(value = URL_DELETE, method = RequestMethod.GET)
 	public String delete(@RequestParam PK id, RedirectAttributes redirectAttributes) {
-	
 		if (mapper.delete(id) == 1) {
 			return getRedirectUrl();
 		} else {

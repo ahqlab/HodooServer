@@ -24,8 +24,8 @@ import net.octacomm.sample.domain.GroupPetMapping;
 import net.octacomm.sample.domain.Pet;
 import net.octacomm.sample.domain.PetAllInfos;
 import net.octacomm.sample.domain.PetBasicInfo;
-import net.octacomm.sample.domain.ResultMessage;
 import net.octacomm.sample.domain.ResultMessageGroup;
+import net.octacomm.sample.message.ResultMessage;
 import net.octacomm.sample.utils.MathUtil;
 
 @RequestMapping("/pet")
@@ -41,9 +41,7 @@ public class PetBasicInfoController {
 	@ResponseBody
 	@RequestMapping(value = "/basic/regist", method = RequestMethod.POST)
 	public ResultMessageGroup regist(HttpServletRequest request, PetBasicInfo basicInfo) {
-		
 		ResultMessageGroup group = new ResultMessageGroup();
-		
 		String localPath = "/resources/upload/profile/";
 		String path = request.getSession().getServletContext().getRealPath(localPath);
 		System.err.println("path : " + path);
@@ -58,9 +56,10 @@ public class PetBasicInfoController {
 				if (!realUploadDir.exists()) {
 					realUploadDir.mkdirs();
 				}
-				organizedfilePath = path + "/" +  randomeUUID + "_" + basicInfo.getProfile().getOriginalFilename();
+				organizedfilePath = path + "/" + randomeUUID + "_" + basicInfo.getProfile().getOriginalFilename();
 				System.err.println("organizedfilePath : " + organizedfilePath);
-				basicInfo.setProfileFilePath("/upload/profile/" + randomeUUID + "_"+ basicInfo.getProfile().getOriginalFilename());
+				basicInfo.setProfileFilePath(
+						"/upload/profile/" + randomeUUID + "_" + basicInfo.getProfile().getOriginalFilename());
 				basicInfo.setProfileFileName(basicInfo.getProfile().getOriginalFilename());
 				outputStream = new FileOutputStream(organizedfilePath);
 				int readByte = 0;
@@ -80,30 +79,28 @@ public class PetBasicInfoController {
 				}
 			}
 		}
-		
+
 		petBasicInfoMapper.insert(basicInfo);
-		Pet pet = new  Pet(); 
+		Pet pet = new Pet();
 		pet.setPetGroupCode(basicInfo.getGroupCode());
 		pet.setBasic(basicInfo.getId());
 		pet.setDisease(0);
 		pet.setPhysical(0);
 		pet.setWeight(0);
-		int result = petMapper.insert(pet); 
-		if(result != 0) {
+		int result = petMapper.insert(pet);
+		if (result != 0) {
 			group.setResultMessage(ResultMessage.SUCCESS);
 			group.setDomain(pet);
-		}else {
+		} else {
 			group.setResultMessage(ResultMessage.FAILED);
 			group.setDomain(null);
 		}
 		return group;
 	}
 
-	
 	@ResponseBody
 	@RequestMapping(value = "/basic/update", method = RequestMethod.POST)
 	public ResultMessageGroup update(HttpServletRequest request, PetBasicInfo basicInfo) {
-		
 		ResultMessageGroup group = new ResultMessageGroup();
 		String localPath = "/resources/upload/profile/";
 		String path = request.getSession().getServletContext().getRealPath(localPath);
@@ -158,15 +155,11 @@ public class PetBasicInfoController {
 	public PetBasicInfo getBasicInformation(HttpServletRequest request, @RequestParam("groupCode") String groupCode, @RequestParam("petIdx") int petIdx) {
 		return petBasicInfoMapper.getBasicInformation(groupCode, petIdx);
 	}
-	
+
 	@ResponseBody
 	@RequestMapping(value = "/about/my/pet/list", method = RequestMethod.POST)
-	public List<PetAllInfos> aboutMyPetList(@RequestParam("groupCode") String groupCode){
-		List<PetAllInfos> list = petMapper.aboutMyPetList(groupCode);
-/*		for (PetAllInfos petAllInfos : list) {
-			System.err.println("petAllInfos : " + petAllInfos);
-		}
-*/		return list;
+	public List<PetAllInfos> aboutMyPetList(@RequestParam("groupCode") String groupCode) {
+		return petMapper.aboutMyPetList(groupCode);
 	}
 
 }

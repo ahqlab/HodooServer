@@ -9,3 +9,4 @@ public class Weight {
 	
 	private String value;
 }
+

@@ -24,9 +24,11 @@ import org.springframework.web.servlet.view.tiles2.TilesViewResolver;
 
 @Configuration
 @EnableWebMvc
-@ComponentScan(basePackages = "net.octacomm.sample.controller")
+@ComponentScan(basePackages = {"net.octacomm.sample.controller"})
 public class WebConfig extends WebMvcConfigurerAdapter {
-
+	
+	
+	
 	@Bean
 	public BeanPostProcessor loggerBeanPostProcessor() {
 		return new LoggerBeanPostProcessor();

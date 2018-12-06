@@ -4,7 +4,7 @@
 
 	<select id="getListofDeviceList" parameterType="java.util.List" resultType="net.octacomm.sample.domain.RealTimeWeight">
 		SELECT
-			*
+			 avg(value) as value
 		FROM
 			real_time_weight
 		WHERE
@@ -12,7 +12,9 @@
 		<foreach collection="devices" item="device" open="(" close=")" separator=",">
 			#{device.serialNumber}
 		</foreach>
-		order by real_time_weight.createDate desc limit 1
+		<!-- and date(real_time_weight.createDate) = date(now()) -->
+		and substring(real_time_weight.createDate, 1,10) = #{date}
+		order by real_time_weight.createDate desc
 	</select>
 	
 	

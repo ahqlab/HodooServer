@@ -2,6 +2,7 @@ package net.octacomm.sample.controller;
 
 import javax.servlet.http.HttpSession;
 
+import net.octacomm.sample.domain.ResultMessageGroup;
 import net.octacomm.sample.domain.User;
 import net.octacomm.sample.exceptions.InvalidPasswordException;
 import net.octacomm.sample.exceptions.NotFoundUserException;
@@ -13,6 +14,8 @@ import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+
+import com.google.appengine.api.appidentity.AppIdentityServicePb.AppIdentityServiceError.ErrorCode;
 
 @Controller
 public class LoginController {
@@ -34,11 +37,11 @@ public class LoginController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "/login", method = RequestMethod.GET)
+	/*@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public String login(Model model) {
 		model.addAttribute("adminUser", new User());
 		return LOGIN_URL;
-	}
+	}*/
 	/**
 	 * 로그인 진행
 	 * 
@@ -50,20 +53,25 @@ public class LoginController {
 	 */
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public String login(Model model, HttpSession session, User user, Errors errors) {
-		/*try {
-			loginService.login(user);
-			session.setAttribute("userId", user.getId());
-
-			String previousUrl = (String) session.getAttribute("PREVIOUS_URI");
-			if (previousUrl == null) {
-				previousUrl = DEFAULT_TARGET_URL;
+		/*ResultMessageGroup group = null;
+		try {
+			User result = loginService.login(user);
+			group = new ResultMessageGroup();
+			if(result != null) {
+				group.setResultMessage(ResultMessage.SUCCESS);
+				group.setDomain(user);
+			}else {
+				group.setResultMessage(ResultMessage.FAILED);
+				group.setDomain(user);
 			}
-
-			return "redirect:" + previousUrl;
 		} catch (NotFoundUserException nfe) {
-			errors.reject("test", "아이디가 존재하지 않습니다.");
+			group.setDomain(null);
+			group.setResultMessage(ResultMessage.NOT_FOUND_EMAIL);
+			//errors.reject("test", "아이디가 존재하지 않습니다.");
 		} catch (InvalidPasswordException ipe) {
-			errors.reject("test", "비밀번호가 일치하지 않습니다.");
+			group.setDomain(null);
+			group.setResultMessage(ResultMessage.PASSWORD_DO_NOT_MATCH);
+			//errors.reject("test", "비밀번호가 일치하지 않습니다.");
 		}*/
 		return LOGIN_URL;
 	}

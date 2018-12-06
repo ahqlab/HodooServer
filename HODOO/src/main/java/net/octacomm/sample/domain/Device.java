@@ -10,6 +10,8 @@ public class Device implements Domain{
 	private String groupCode;
 
 	private String serialNumber;
+	
+	private String connect;
 
 	private String createDate;
 

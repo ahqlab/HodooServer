@@ -59,8 +59,7 @@ public class PetController {
 	@ResponseBody
 	@RequestMapping(value = "/basic/info/get", method = RequestMethod.POST)
 	public PetBasicInfo login(HttpServletRequest request, @RequestParam("id") int id) {
-		PetBasicInfo result = petBasicInfoMapper.getBasicInfoForPetId(id);
-		return result;
+		return petBasicInfoMapper.getBasicInfoForPetId(id);
 	}
 	
 	@ResponseBody
@@ -69,10 +68,9 @@ public class PetController {
 		return petMapper.myPetList(groupCode);
 	}
 	
-	/*@ResponseBody
-	@RequestMapping(value = "/all/infos", method = RequestMethod.GET)
-	public void petAllInfos(){
-		PetAllInfos allInfos = petMapper.getPetAllInfos();
-		System.err.println(allInfos);
-	}*/
+	@ResponseBody
+	@RequestMapping(value = "/all/infos", method = RequestMethod.POST)
+	public PetAllInfos petAllInfos(@RequestParam("petIdx") int petIdx){
+		return petMapper.allInfoOnThePet(petIdx);
+	}
 }

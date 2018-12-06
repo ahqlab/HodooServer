@@ -22,7 +22,7 @@ public interface DeviceMapper extends CRUDMapper<Device, DefaultParam, Integer> 
 
 	public String UPDATE_VALUES = " groupCode = #{groupCode} , serialNumber = #{serialNumber} , createDate = now() ";
 
-	public String SELECT_FIELDS = " deviceIdx , groupCode , serialNumber , createDate ";
+	public String SELECT_FIELDS = " deviceIdx , groupCode , serialNumber , connect, createDate ";
 
 	@Insert("INSERT INTO " + TABLE_NAME + INSERT_FIELDS + " VALUES " + INSERT_VALUES)
 	@Override
@@ -43,5 +43,9 @@ public interface DeviceMapper extends CRUDMapper<Device, DefaultParam, Integer> 
 	
 	@Select("select device.* from user join user_group_mapping on user.userIdx = user_group_mapping.userIdx join device on user_group_mapping.groupCode = device.groupCode where user_group_mapping.groupCode = #{groupCode}")
 	public List<Device> myDeviceList(@Param("groupCode") String groupCode);
+	
+	
+	@Update("UPDATE " + TABLE_NAME + " SET  connect = '${connect == true ? 'ON' : 'OFF'}' WHERE deviceIdx =  #{deviceIdx}")
+	public int changeDeviceConnectStatus(@Param("deviceIdx") int deviceIdx,  @Param("connect") boolean connect);
 
 }

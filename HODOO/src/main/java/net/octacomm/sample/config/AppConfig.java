@@ -15,29 +15,36 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.env.Environment;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 
 @Configuration
 @ComponentScan(basePackages = "net.octacomm.sample.service")
 @EnableCaching
+@EnableScheduling
 @Import(MyBatisConfig.class)
 public class AppConfig {
+
+	@Scheduled(fixedRate = 1000)
+	public void mywork() {
+	}
 
 	@Bean
 	public BeanPostProcessor loggerBeanPostProcessor() {
 		return new LoggerBeanPostProcessor();
 	}
-	
+
 	@Bean
 	public CacheManager cacheManager() {
 		return new ConcurrentMapCacheManager();
 	}
-	
+
 	@Configuration
 	static class UsnServerConfig {
 
 		@Autowired
 		private Environment env;
-		
+
 		@Bean
 		public UsnServerHandler usnServerHandler() {
 			return new UsnServerHandler();
@@ -47,7 +54,7 @@ public class AppConfig {
 		public UsnServerPipelineFactory usnServerPipelineFactory() {
 			return new UsnServerPipelineFactory();
 		}
-		
+
 		@Bean(destroyMethod = "close")
 		public NioTcpServer usnTcpServer() {
 			NioTcpServer tcpServer = new NioTcpServer();

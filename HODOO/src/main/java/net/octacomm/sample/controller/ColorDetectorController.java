@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -23,7 +24,8 @@ public class ColorDetectorController {
 
 	@ResponseBody
 	@RequestMapping(value = "/detector", method = RequestMethod.POST)
-	public HsvValue detector(HsvValue hsv) {
+	public HsvValue detector(@RequestBody HsvValue hsv) {
+		System.err.println("hsv : " +hsv);
 		HsvValue result = new HsvValue();
 		StandardHsv SG = standardHsvMapper.get(1);
 		int sg = getFindNearH(SG, hsv.getSg());
@@ -61,11 +63,9 @@ public class ColorDetectorController {
 		int bil = getFindNearH(BIL, hsv.getBil());
 		result.setBil(String.valueOf(bil));
 		
-		
 		StandardHsv ERY = standardHsvMapper.get(10);
 		int ery = getFindNearV(ERY, hsv.getEry());
 		result.setEry(String.valueOf(ery));
-		
 		
 		StandardHsv HB = standardHsvMapper.get(11);
 		int hb = getFindNearH(HB, hsv.getHb());
@@ -89,7 +89,6 @@ public class ColorDetectorController {
 		int sg = getNear(colors, strSpriterOfV(value));
 		return getIndexOf(sg, colors);
 	}
-
 	public static int getIndexOf(int toSearch, int[] tab) {
 		int i = 0;
 		while (!(tab[i] == toSearch)) {
@@ -99,27 +98,14 @@ public class ColorDetectorController {
 	}
 
 	private Integer strSpriterOfH(String str) {
-		// TODO Auto-generated method stub
 		String[] array = str.split("/");
 		return Integer.parseInt(array[0]);
 	}
 	
 	private Integer strSpriterOfV(String str) {
-		// TODO Auto-generated method stub
 		String[] array = str.split("/");
 		return Integer.parseInt(array[2]);
 	}
-
-	/*
-	 * private void getNear() {
-	 * 
-	 * Map<String, Integer> data = new HashMap<String, Integer>(); //int[] data = {
-	 * 10,15,18,25,30,35 }; // 데이터 int near = 7; // 찾을 숫자 int min =
-	 * Integer.MAX_VALUE; // 기준데이터 최소값 - Interger형의 최대값으로 값을 넣는다. int nearData = 0;
-	 * // 가까운 값을 저장할 변수 // 2. process for(int i=0;i<data.size();i++){ int a =
-	 * Math.abs(data.-near); // 절대값을 취한다. if(min > a){ min = a; nearData = data[i];
-	 * } } // 3. 출력 System.out.println(near + "에 근접한 값 : " + nearData); }
-	 */
 
 	private int getNear(int[] data, int near) {
 		int min = Integer.MAX_VALUE; // 기준데이터 최소값 - Interger형의 최대값으로 값을 넣는다.

@@ -41,11 +41,25 @@ public class FeedController extends AbstractCRUDController<FeedMapper, Feed, Def
 		return mapper.getList();
 	}
 	
-	
 	@ResponseBody
 	@RequestMapping(value = "/search/list", method = RequestMethod.POST)
 	public List<Feed> searchList(@RequestBody DefaultParam defaultParam) {
 		System.err.println("defaultParam : " + defaultParam.getSearchWord());
 		return mapper.getSearchList(defaultParam.getSearchWord());
 	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/get/info", method = RequestMethod.POST)
+	public Feed getFeedInfo(@RequestParam("feedId") int id) {
+		return  mapper.get(id);
+	}
+		
+	
+	@ResponseBody
+	@RequestMapping(value = "/get/radar/chart/data", method = RequestMethod.POST)
+	public Feed getRadarChartData(@RequestParam("date")  String date, @RequestParam("petIdx") int petIdx) {
+		return mapper.getRadarChartData(date, petIdx);
+	}
+	
+	
 }

@@ -33,6 +33,12 @@ public class DeviceController {
 	
 	
 	@ResponseBody
+	@RequestMapping(value = "/change/connect/status", method = RequestMethod.POST)
+	public int changeDeviceConnectStatus(@RequestParam("deviceIdx") int deviceIdx, @RequestParam("connect") Boolean connect) {
+		return deviceNapper.changeDeviceConnectStatus(deviceIdx, connect);
+	}
+	
+	@ResponseBody
 	@RequestMapping(value = "/insert/device", method = RequestMethod.POST)
 	public int insert(@RequestBody Device device) {
 		GroupPetMapping mapping = groupPetMappingMapper.isEmpty(device.getGroupCode());
