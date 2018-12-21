@@ -72,7 +72,7 @@ public interface PetMapper extends CRUDMapper<Pet, DefaultParam, Integer> {
 	
 	@Select("select * " + 
 			"from group_pet_mapping " + 
-			"join pet on  group_pet_mapping.petGroupCode = pet.petGroupCode " + 
+			"join pet on group_pet_mapping.petGroupCode = pet.petGroupCode " + 
 			"join pet_basic_info on pet_basic_info.id = pet.basic " + 
 			"join pet_chronic_disease on pet_chronic_disease.id = pet.disease " + 
 			"join pet_physical_info on pet_physical_info.id = pet.physical " + 

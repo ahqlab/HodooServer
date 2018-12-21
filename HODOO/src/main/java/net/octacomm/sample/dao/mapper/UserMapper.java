@@ -65,10 +65,10 @@ public interface UserMapper extends CRUDMapper<User, DefaultParam, Integer>{
 	@Select("SELECT * FROM " + TABLE_NAME + " join user_group_mapping on user_group_mapping.userIdx = user.userIdx where user.email =  #{email} AND user.password = #{password} ")
 	User login(User user);
 	
-	@Select("SELECT * FROM " + TABLE_NAME + "  WHERE groupId = #{groupId}")
-	List<User> getGroupMemner(@Param("groupId") String groupId);
+	@Select("SELECT * FROM " + TABLE_NAME + "  join user_group_mapping on  user_group_mapping.groupCode =  #{groupCode} and user.userIdx = user_group_mapping.userIdx")
+	List<User> getGroupMemner(@Param("groupCode") String groupCode);
 	
-	@Update("UPDATE " + TABLE_NAME + " SET " + BASIC_INFO_UPDATE_VALUES + " WHERE userIdx =  #{userIdx}")
+	@Update("UPDATE " + TABLE_NAME + " SET " + BASIC_INFO_UPDATE_VALUES + " WHERE userIdx =  #{userIdx} ")
 	Integer updateBasic(User user);
 
 }

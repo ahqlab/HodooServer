@@ -39,12 +39,42 @@ public class DeviceController {
 	}
 	
 	@ResponseBody
+	@RequestMapping(value = "/change/connection", method = RequestMethod.POST)
+	public int changeDeviceConnection(@RequestParam("deviceIdx") int deviceIdx, @RequestParam("isDel") Boolean isDel) {
+		return deviceNapper.changeDeviceConnection(deviceIdx, isDel);
+	}
+	
+	@ResponseBody
 	@RequestMapping(value = "/insert/device", method = RequestMethod.POST)
 	public int insert(@RequestBody Device device) {
 		GroupPetMapping mapping = groupPetMappingMapper.isEmpty(device.getGroupCode());
 		if(mapping != null) {
+			List<Device> registed = deviceNapper.getRegisted(device);
+			if(registed.size() > 0) {
+				for (Device dv : registed) {
+					if(dv.getSerialNumber().matches(device.getSerialNumber())) {
+						if(dv.getIsDel().matches("DISCONNECTED")) {
+							return deviceNapper.changeDeviceConnection(dv.getDeviceIdx(), true);
+						}
+					}
+					
+				}
+				return 100;
+			}
 			return deviceNapper.insert(device);
 		}else {
+			List<Device> registed = deviceNapper.getRegisted(device);
+			if(registed.size() > 0) {
+				for (Device dv : registed) {
+					if(dv.getSerialNumber().matches(device.getSerialNumber())) {
+						if(dv.getIsDel().matches("DISCONNECTED")) {
+							return deviceNapper.changeDeviceConnection(dv.getDeviceIdx(), true);
+						}
+					}
+
+				}
+				return 100;
+			}
 			String petGroupCode = MathUtil.getGroupId();
 			GroupPetMapping groupPetMapping = new GroupPetMapping();
 			groupPetMapping.setGroupCode(device.getGroupCode());

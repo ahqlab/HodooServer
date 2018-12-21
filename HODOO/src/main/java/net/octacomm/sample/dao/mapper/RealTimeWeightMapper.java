@@ -20,15 +20,15 @@ import net.octacomm.sample.domain.Statistics;
 
 public interface RealTimeWeightMapper extends CRUDMapper<RealTimeWeight, DefaultParam, Integer>{
 	
-	public String INSERT_FIELDS = " ( mac, value, createDate )";
+	public String INSERT_FIELDS = " ( mac, value, type , createDate )";
 	
-	public String INSERT_VALUES = " ( #{mac}, #{value}, now())";
+	public String INSERT_VALUES = " ( #{mac}, #{value}, #{type}, now())";
 	
 	public String TABLE_NAME = " real_time_weight ";
 	
 	public String UPDATE_VALUES = " mac = #{mac} ,  value = #{value} ";
 	
-	public String SELECT_FIELDS = " id, mac, value, createDate ";
+	public String SELECT_FIELDS = " id, mac, value, type,  createDate ";
 	
 	@Insert("INSERT INTO " + TABLE_NAME  + INSERT_FIELDS + " VALUES " + INSERT_VALUES)
 	@Override
@@ -46,16 +46,13 @@ public interface RealTimeWeightMapper extends CRUDMapper<RealTimeWeight, Default
 	@Override
 	public RealTimeWeight get(Integer id);
 	
-	
 	@Select("select value from " + TABLE_NAME  +" where mac = #{mac} order by createDate desc limit 1")
 	public Float getLatelyData(@Param("mac") String mac);
-	
 	
 	@Select("select value from " + TABLE_NAME  +" where mac = #{mac} order by createDate desc limit 4")
 	public List<Float> getRealTimeList(@Param("mac") String mac);
 	
-	
-	public RealTimeWeight getListofDeviceList(@Param("date") String date, @Param("devices") List<Device> devices);
+	public RealTimeWeight getListofDeviceList(@Param("date") String date, @Param("devices") List<Device> devices, @Param("type") String type);
 	
 	public List<Statistics> getStatisticsOfTime(HashMap<String, Object> map);
 	
@@ -65,7 +62,7 @@ public interface RealTimeWeightMapper extends CRUDMapper<RealTimeWeight, Default
 	
 	public List<Statistics> getStatisticsOfMonth(HashMap<String, Object> map);
 	
-	public List<Statistics> getStatisticsOfMonth(@Param("devices") List<Device> devices, @Param("year") String year);
+	public List<Statistics> getStatisticsOfMonth(@Param("devices") List<Device> devices, @Param("year") String year, @Param("type") String type);
 	
 	public List<Statistics> getStatisticsOfYear(HashMap<String, Object> map);
 		

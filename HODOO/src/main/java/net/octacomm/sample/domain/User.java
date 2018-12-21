@@ -22,18 +22,17 @@ public class User implements Domain {
 
 	private String country;
 
+	private String pushToken;
+	
 	private String createDate;
-
+	
 	// joinColumn
 	private String groupCode;
 
 	@Override
 	public String toString() {
 		return "User [userIdx=" + userIdx + ", email=" + email + ", password=" + password + ", passwordCheck="
-				+ passwordCheck + ", nickname=" + nickname + ", sex=" + sex + ", country=" + country + ", createDate="
-				+ createDate + ", groupCode=" + groupCode + "]";
+				+ passwordCheck + ", nickname=" + nickname + ", sex=" + sex + ", country=" + country + ", pushToken="
+				+ pushToken + ", createDate=" + createDate + ", groupCode=" + groupCode + "]";
 	}
-	
-	
-	
 }

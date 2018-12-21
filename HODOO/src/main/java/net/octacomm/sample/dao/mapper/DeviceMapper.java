@@ -41,11 +41,22 @@ public interface DeviceMapper extends CRUDMapper<Device, DefaultParam, Integer> 
 	public Device get(Integer id);
 	
 	
-	@Select("select device.* from user join user_group_mapping on user.userIdx = user_group_mapping.userIdx join device on user_group_mapping.groupCode = device.groupCode where user_group_mapping.groupCode = #{groupCode}")
+	@Select("select device.* from user join user_group_mapping on user.userIdx = user_group_mapping.userIdx join device on user_group_mapping.groupCode = device.groupCode where user_group_mapping.groupCode = #{groupCode} and device.connect = 'ON' and device.isDel = 'CONNECTED'")
 	public List<Device> myDeviceList(@Param("groupCode") String groupCode);
+	
+	
+	@Select("select device.* from user join user_group_mapping on user.userIdx = user_group_mapping.userIdx join device on user_group_mapping.groupCode = device.groupCode where user_group_mapping.groupCode = #{groupCode}")
+	public List<Device> myAllDeviceList(@Param("groupCode") String groupCode);
 	
 	
 	@Update("UPDATE " + TABLE_NAME + " SET  connect = '${connect == true ? 'ON' : 'OFF'}' WHERE deviceIdx =  #{deviceIdx}")
 	public int changeDeviceConnectStatus(@Param("deviceIdx") int deviceIdx,  @Param("connect") boolean connect);
+	
+	@Update("UPDATE " + TABLE_NAME + " SET  isDel = '${isDel == true ? 'CONNECTED' : 'DISCONNECTED'}' WHERE deviceIdx =  #{deviceIdx}")
+	public int changeDeviceConnection(@Param("deviceIdx") int deviceIdx,  @Param("isDel") boolean isDel);
+	
+	@Select("SELECT * FROM " + TABLE_NAME + " WHERE serialNumber =  #{serialNumber}")
+	public List<Device> getRegisted(Device device);
+
 
 }

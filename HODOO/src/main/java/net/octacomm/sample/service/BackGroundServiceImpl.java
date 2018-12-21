@@ -18,7 +18,13 @@ import net.octacomm.sample.utils.DateUtil;
 @Service
 public class BackGroundServiceImpl implements BackGroundService {
 
-	@Autowired
+	@Override
+	public void additionalWeightWork() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/*@Autowired
 	RealTimeWeightMapper realTimeWorkMapper;
 
 	private String[] items = new String[] { "b4e62d9f13c9", "zw4es9DzZqSQ", "dyDZYHAdLDj4", "I2eOjbeDZ6ZB",
@@ -44,7 +50,7 @@ public class BackGroundServiceImpl implements BackGroundService {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		dateFormatStringTime = dateFormat.format(date1);
 		return dateFormatStringTime;
-	}
+	}*/
 	
 	
 }

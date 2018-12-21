@@ -314,6 +314,22 @@
 			<version>1.2.2</version>
 		</dependency>
 
+		<!-- Firebase Admin SDK -->
+		<dependency>
+			<groupId>com.google.firebase</groupId>
+			<artifactId>firebase-admin</artifactId>
+			<version>6.5.0</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/com.google.gms/google-services -->
+		<dependency>
+			<groupId>com.google.gms</groupId>
+			<artifactId>google-services</artifactId>
+			<version>3.0.0</version>
+			<scope>runtime</scope>
+		</dependency>
+
+
 	</dependencies>
 
 	<build>

@@ -1,5 +1,6 @@
 package net.octacomm.sample.controller;
 
+import java.util.Arrays;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -12,12 +13,20 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.firebase.messaging.FirebaseMessagingException;
+import com.google.firebase.messaging.TopicManagementResponse;
 import com.google.gson.Gson;
 
 import net.octacomm.sample.dao.mapper.UserGroupMappingMapper;
 import net.octacomm.sample.dao.mapper.UserMapper;
+import net.octacomm.sample.domain.Device;
 import net.octacomm.sample.domain.Groups;
+import net.octacomm.sample.domain.PetAllInfos;
 import net.octacomm.sample.domain.ResultMessageGroup;
+import net.octacomm.sample.domain.SessionMaintenance;
 import net.octacomm.sample.domain.User;
 import net.octacomm.sample.domain.UserGroupMapping;
 import net.octacomm.sample.exceptions.InvalidPasswordException;
@@ -47,11 +56,18 @@ public class UserController {
 	@Autowired
 	private LoginService loginService;
 
-
 	@ResponseBody
 	@RequestMapping(value = "/regist", method = RequestMethod.POST)
-	public ResultMessageGroup regist(@RequestBody User param) {
+	public ResultMessageGroup regist(@RequestBody User param) throws FirebaseMessagingException {
 		// 그룹을 만든다 (그룹아이디를 가져온다)
+		
+	/*	if (!FirebaseApp.getApps().isEmpty()) {
+	        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+		}
+		List<String> registrationTokens = Arrays.asList(param.getPushToken());
+		TopicManagementResponse response = FirebaseMessaging.getInstance().subscribeToTopic(registrationTokens, "ALL");
+		System.out.println(response.getSuccessCount() + " tokens were subscribed successfully");*/
+		
 		String grougCode = MathUtil.getGroupId();
 		List<User> findUser = userMapper.getUserList(param);
 		ResultMessageGroup group = new ResultMessageGroup();
@@ -80,16 +96,22 @@ public class UserController {
 
 	@ResponseBody
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
-	public ResultMessageGroup login(@RequestBody User user) {
-		System.err.println("user : " + user);
-		ResultMessageGroup group = loginService.login(user);
+	public SessionMaintenance login(@RequestBody User user) {
+		SessionMaintenance group = loginService.login(user);
+		return group;
+	}
+
+	@ResponseBody
+	@RequestMapping(value = "/login2", method = RequestMethod.POST)
+	public ResultMessageGroup login2(@RequestBody User user) {
+		ResultMessageGroup group = loginService.login2(user);
 		return group;
 	}
 
 	@ResponseBody
 	@RequestMapping(value = "/get/group/member", method = RequestMethod.POST)
-	public List<User> login(@RequestParam("groupId") String groupId) {
-		return userMapper.getGroupMemner(groupId);
+	public List<User> login(@RequestParam("groupCode") String groupCode) {
+		return userMapper.getGroupMemner(groupCode);
 	}
 
 	@ResponseBody

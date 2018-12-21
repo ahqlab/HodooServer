@@ -13,7 +13,8 @@
 			#{device.serialNumber}
 		</foreach>
 		<!-- and date(real_time_weight.createDate) = date(now()) -->
-		and substring(real_time_weight.createDate, 1,10) = #{date}
+		and substring(real_time_weight.createDate, 1,10) = #{date} 
+		and type = #{type}
 		order by real_time_weight.createDate desc
 	</select>
 	
@@ -28,7 +29,7 @@
 		<foreach collection="deviceList" item="device" open="(" close=")" separator=",">
 			#{device.serialNumber}
 		</foreach>
-		and substring(real_time_weight.createDate, 1,10) = #{today}
+		and substring(real_time_weight.createDate, 1,10) = #{today} and type = #{type}
 		group by theHour order by theHour asc
 	</select>
 	
@@ -52,6 +53,8 @@
 		<foreach collection="deviceList" item="device" open="(" close=")" separator=",">
 			#{device.serialNumber}
 		</foreach>
+		AND
+		  type = #{type}
 		AND 
 			createDate BETWEEN DATE_ADD(NOW(), INTERVAL -1 WEEK) AND NOW()
  		GROUP BY `date`;
@@ -71,6 +74,8 @@
 		<foreach collection="deviceList" item="device" open="(" close=")" separator=",">
 			#{device.serialNumber}
 		</foreach>
+		AND
+		  type = #{type}
 		AND 
 			substring(REAL_TIME_WEIGHT.createDate, 6,2) = #{month}
  		GROUP BY date;
@@ -88,7 +93,10 @@
 		<foreach collection="devices" item="device" open="(" close=")" separator=",">
 			#{device.serialNumber}
 		</foreach>
-		and substring(real_time_weight.createDate, 1,4) = #{year}
+		AND
+			type = #{type}
+		AND 
+			substring(real_time_weight.createDate, 1,4) = #{year}
 		group by theMonth 
 		order by real_time_weight.createDate asc
 	</select>
@@ -104,6 +112,8 @@
 		<foreach collection="deviceList" item="device" open="(" close=")" separator=",">
 			#{device.serialNumber}
 		</foreach>
+		AND
+			type = #{type}
 		group by theYear order by real_time_weight.createDate asc
 	</select>
 	
