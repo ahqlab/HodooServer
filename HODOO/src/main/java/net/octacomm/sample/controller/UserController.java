@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.database.FirebaseDatabase;
@@ -163,4 +164,9 @@ public class UserController {
 	public int updateUsetPassword(@RequestBody User user) {
 		return userMapper.updateUsetPassowrd(user);
 	} 
+	@RequestMapping( value="/welcomeSignup", method=RequestMethod.GET )
+	public ModelAndView welcomeSignup() {
+		ModelAndView mav = new ModelAndView("welcome_signup");
+		return mav;
+	}
 }

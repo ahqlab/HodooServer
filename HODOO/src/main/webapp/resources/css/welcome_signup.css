@@ -1,0 +1,43 @@
+@charset "UTF-8";
+body {
+	margin: 0;
+	padding: 0;
+	background: #e2f2f3;
+	font-family: Malgun Gothic, '맑은 고딕';
+}
+#wrap {
+	margin: 150px auto 0;
+	padding : 0 10px;
+	width: 300px;
+	text-align: center;
+}
+#wrap h1,
+.welcome {
+	margin: 0 auto;
+	display: inline-block;
+	text-indent: -9999px;
+	background-repeat: no-repeat;
+}
+.welcome {
+	width: 212px;
+	height: 30px;
+	background-image: url("/img/welcome.gif");
+}
+#wrap h1 {
+	margin-top: 20px;
+	width: 175px;
+	height: 40px;
+	background-image: url("/img/logo.gif");
+}
+#wrap h2 {
+	font-size: 24px;
+	color: #d46a87;
+}
+#wrap p {
+	font-size: 14px;
+	line-height: 20px;
+	color: #e388a1;
+}
+#wrap img {
+	margin: 47px 0 30px;
+}
