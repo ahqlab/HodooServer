@@ -9,6 +9,7 @@ import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
 import net.octacomm.sample.dao.CRUDMapper;
+import net.octacomm.sample.domain.CommonResponce;
 import net.octacomm.sample.domain.DefaultParam;
 import net.octacomm.sample.domain.Device;
 
@@ -24,8 +25,8 @@ public interface DeviceMapper extends CRUDMapper<Device, DefaultParam, Integer> 
 
 	public String SELECT_FIELDS = " deviceIdx , groupCode , serialNumber , connect, createDate ";
 
-	@Insert("INSERT INTO " + TABLE_NAME + INSERT_FIELDS + " VALUES " + INSERT_VALUES)
-	@Override
+	//@Insert("INSERT INTO " + TABLE_NAME + INSERT_FIELDS + " VALUES " + INSERT_VALUES)
+	//@Override
 	public int insert(Device device);
 
 	@Delete("DELETE FROM " + TABLE_NAME + " WHERE deviceIdx =  #{deviceIdx}")
@@ -57,6 +58,12 @@ public interface DeviceMapper extends CRUDMapper<Device, DefaultParam, Integer> 
 	
 	@Select("SELECT * FROM " + TABLE_NAME + " WHERE serialNumber =  #{serialNumber}")
 	public List<Device> getRegisted(Device device);
+
+	public int changeDeviceConnectionForIos(Device dv, @Param("isDel") boolean isDel);
+	
+	
+	@Delete("DELETE FROM " + TABLE_NAME + " WHERE serialNumber =  #{serialNumber}")
+	public int testDeleteDevice(@Param("serialNumber") String serialNumber);
 
 
 }

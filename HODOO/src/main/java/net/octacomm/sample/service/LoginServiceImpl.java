@@ -64,6 +64,18 @@ public class LoginServiceImpl implements LoginService{
 		return sessionMaintenance;
 	}
 	
+	
+	
+
+	@Override
+	public SessionMaintenance getAllInfoLogin(User user) throws NotFoundUserException, InvalidPasswordException {
+		SessionMaintenance sessionMaintenance = null;
+		sessionMaintenance = new SessionMaintenance();
+		sessionMaintenance.setResultMessage(ResultMessage.SUCCESS);
+		sessionMaintenance.setUser(user);
+		getAllInformation(sessionMaintenance, user.getGroupCode());
+		return sessionMaintenance;
+	}
 
 	@Override
 	public ResultMessageGroup login2(User user) throws NotFoundUserException, InvalidPasswordException{

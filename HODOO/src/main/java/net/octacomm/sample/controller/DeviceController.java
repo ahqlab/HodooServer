@@ -21,53 +21,55 @@ import net.octacomm.sample.utils.MathUtil;
 @RequestMapping("/device")
 @Controller
 public class DeviceController {
-	
-	@Autowired private DeviceMapper deviceNapper;
-	@Autowired private GroupPetMappingMapper groupPetMappingMapper;
+
+	@Autowired
+	private DeviceMapper deviceNapper;
+	@Autowired
+	private GroupPetMappingMapper groupPetMappingMapper;
 
 	@ResponseBody
 	@RequestMapping(value = "/my/device/list", method = RequestMethod.POST)
 	public List<Device> myDeviceList(@RequestParam("groupCode") String groupCode) {
 		return deviceNapper.myDeviceList(groupCode);
 	}
-	
-	
+
 	@ResponseBody
 	@RequestMapping(value = "/change/connect/status", method = RequestMethod.POST)
-	public int changeDeviceConnectStatus(@RequestParam("deviceIdx") int deviceIdx, @RequestParam("connect") Boolean connect) {
+	public int changeDeviceConnectStatus(@RequestParam("deviceIdx") int deviceIdx,
+			@RequestParam("connect") Boolean connect) {
 		return deviceNapper.changeDeviceConnectStatus(deviceIdx, connect);
 	}
-	
+
 	@ResponseBody
 	@RequestMapping(value = "/change/connection", method = RequestMethod.POST)
 	public int changeDeviceConnection(@RequestParam("deviceIdx") int deviceIdx, @RequestParam("isDel") Boolean isDel) {
 		return deviceNapper.changeDeviceConnection(deviceIdx, isDel);
 	}
-	
+
 	@ResponseBody
 	@RequestMapping(value = "/insert/device", method = RequestMethod.POST)
 	public int insert(@RequestBody Device device) {
 		GroupPetMapping mapping = groupPetMappingMapper.isEmpty(device.getGroupCode());
-		if(mapping != null) {
+		if (mapping != null) {
 			List<Device> registed = deviceNapper.getRegisted(device);
-			if(registed.size() > 0) {
+			if (registed.size() > 0) {
 				for (Device dv : registed) {
-					if(dv.getSerialNumber().matches(device.getSerialNumber())) {
-						if(dv.getIsDel().matches("DISCONNECTED")) {
+					if (dv.getSerialNumber().matches(device.getSerialNumber())) {
+						if (dv.getIsDel().matches("DISCONNECTED")) {
 							return deviceNapper.changeDeviceConnection(dv.getDeviceIdx(), true);
 						}
 					}
-					
+
 				}
 				return 100;
 			}
 			return deviceNapper.insert(device);
-		}else {
+		} else {
 			List<Device> registed = deviceNapper.getRegisted(device);
-			if(registed.size() > 0) {
+			if (registed.size() > 0) {
 				for (Device dv : registed) {
-					if(dv.getSerialNumber().matches(device.getSerialNumber())) {
-						if(dv.getIsDel().matches("DISCONNECTED")) {
+					if (dv.getSerialNumber().matches(device.getSerialNumber())) {
+						if (dv.getIsDel().matches("DISCONNECTED")) {
 							return deviceNapper.changeDeviceConnection(dv.getDeviceIdx(), true);
 						}
 					}
@@ -82,5 +84,11 @@ public class DeviceController {
 			groupPetMappingMapper.insert(groupPetMapping);
 			return deviceNapper.insert(device);
 		}
+	}
+
+	@ResponseBody
+	@RequestMapping(value = "/insert/device2", method = RequestMethod.POST)
+	public Device insert2(@RequestBody Device device) {
+		return device;
 	}
 }

@@ -13,9 +13,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import net.octacomm.sample.dao.mapper.DeviceMapper;
 import net.octacomm.sample.dao.mapper.GroupPetMappingMapper;
 import net.octacomm.sample.domain.ArrayListDevice;
+import net.octacomm.sample.domain.CommonResponce;
 import net.octacomm.sample.domain.Device;
 import net.octacomm.sample.domain.GroupPetMapping;
 import net.octacomm.sample.domain.PetChronicDisease;
+import net.octacomm.sample.message.ResultMessage;
 import net.octacomm.sample.utils.MathUtil;
 
 @RequestMapping("/ios/device")
@@ -32,19 +34,77 @@ public class IOSDeviceController {
 	}
 	
 	
+	
+	@ResponseBody
+	@RequestMapping(value = "/test/delete/device", method = RequestMethod.GET)
+	public int delete(@RequestParam("serialNumber") String serialNumber) {
+		return deviceNapper.testDeleteDevice(serialNumber);
+	}
+	
+	
+	
 	@ResponseBody
 	@RequestMapping(value = "/insert/device", method = RequestMethod.POST)
-	public int insert(@RequestBody Device device) {
+	public CommonResponce<Device> insert(@RequestBody Device device) {
+		CommonResponce<Device> responce;
 		GroupPetMapping mapping = groupPetMappingMapper.isEmpty(device.getGroupCode());
-		if(mapping != null) {
-			return deviceNapper.insert(device);
-		}else {
+		if (mapping != null) {
+			List<Device> registed = deviceNapper.getRegisted(device);
+			if (registed.size() > 0) {
+				for (Device dv : registed) {
+					if (dv.getSerialNumber().matches(device.getSerialNumber())) {
+						if (dv.getIsDel().matches("DISCONNECTED")) {
+							deviceNapper.changeDeviceConnection(dv.getDeviceIdx(), true);
+							responce = new CommonResponce<Device>();
+							responce.setDomain(deviceNapper.get(dv.getDeviceIdx()));
+							responce.setResultMessage(ResultMessage.SUCCESS);
+							return responce;
+						}
+					}
+
+				}
+				
+				responce = new CommonResponce<Device>();
+				responce.setDomain(new Device());
+				responce.setResultMessage(ResultMessage.DUPLICATE_DEVICE);
+				return responce;
+			}
+			deviceNapper.insert(device);
+			responce = new CommonResponce<Device>();
+			responce.setDomain(deviceNapper.get(device.getDeviceIdx()));
+			responce.setResultMessage(ResultMessage.SUCCESS);
+			return responce;
+		} else {
+			List<Device> registed = deviceNapper.getRegisted(device);
+			if (registed.size() > 0) {
+				for (Device dv : registed) {
+					if (dv.getSerialNumber().matches(device.getSerialNumber())) {
+						if (dv.getIsDel().matches("DISCONNECTED")) {
+							deviceNapper.changeDeviceConnection(dv.getDeviceIdx(), true);
+							responce = new CommonResponce<Device>();
+							responce.setDomain(deviceNapper.get(dv.getDeviceIdx()));
+							responce.setResultMessage(ResultMessage.SUCCESS);
+							return responce;
+						}
+					}
+
+				}
+				responce = new CommonResponce<Device>();
+				responce.setDomain(new Device());
+				responce.setResultMessage(ResultMessage.DUPLICATE_DEVICE);
+				return responce;
+			}
 			String petGroupCode = MathUtil.getGroupId();
 			GroupPetMapping groupPetMapping = new GroupPetMapping();
 			groupPetMapping.setGroupCode(device.getGroupCode());
 			groupPetMapping.setPetGroupCode(petGroupCode);
 			groupPetMappingMapper.insert(groupPetMapping);
-			return deviceNapper.insert(device);
+			deviceNapper.insert(device);
+			
+			responce = new CommonResponce<Device>();
+			responce.setDomain(deviceNapper.get(device.getDeviceIdx()));
+			responce.setResultMessage(ResultMessage.SUCCESS);
+			return responce;
 		}
 	}
 }

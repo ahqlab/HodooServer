@@ -30,7 +30,7 @@ public interface MealHistoryMapper extends CRUDMapper<MealHistory, DefaultParam,
 	@Override
 	int insert(MealHistory domain);
 	
-	@Select("SELECT * FROM " + TABLE_NAME + " WHERE historyIdx =  #{historyIdx}")
+	@Select("SELECT * FROM " + TABLE_NAME + " WHERE historyIdx =  #{historyIdx} and isDel = 1")
 	@Override
 	MealHistory get(Integer historyIdx);
 	
@@ -40,11 +40,10 @@ public interface MealHistoryMapper extends CRUDMapper<MealHistory, DefaultParam,
 	int update(MealHistory domain);
 	
 	
-	@Delete("DELETE FROM " + TABLE_NAME + " WHERE historyIdx =  #{historyIdx}")
-	@Override
-	int delete(Integer id);
+	@Update("UPDATE " + TABLE_NAME + " SET  isDel = 0 WHERE historyIdx =  #{historyIdx}")
+	int delete(@Param("historyIdx") int historyIdx);
 	
-	@Select("SELECT * FROM " + TABLE_NAME + " WHERE petIdx =  #{petIdx} and substring(mear_history.createDate, 1,10) = #{date}")
+	@Select("SELECT * FROM " + TABLE_NAME + " WHERE petIdx =  #{petIdx} and substring(mear_history.createDate, 1,10) = #{date} and isDel = 1")
 	List<MealHistory> getContentList(@Param("date") String date, @Param("petIdx") int petIdx);
 
 	@Select("select "
@@ -58,7 +57,7 @@ public interface MealHistoryMapper extends CRUDMapper<MealHistory, DefaultParam,
 			+"   END AS calorie " 
 			+" 	 from mear_history join feed on mear_history.feedIdx = feed.id " 
 			+"   where date(mear_history.createDate) = date(now()) "
-			+"   and mear_history.petIdx = #{petIdx}" 
+			+"   and mear_history.petIdx = #{petIdx} and isDel = 1" 
 			+") as tb")
 	MealHistory getTodatSumCalorie(@Param("petIdx") int petIdx);
 	

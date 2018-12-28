@@ -70,4 +70,11 @@ public class MealHistoryController {
 	public MealHistory getThisHistory(@RequestParam("historyIdx") int historyIdx) {
 		return mealHistoryMapper.get(historyIdx);
 	}
+	
+	
+	@ResponseBody
+	@RequestMapping(value = "/delete", method = RequestMethod.POST)
+	public int delete(@RequestParam("historyIdx") int historyIdx) {
+		return mealHistoryMapper.delete(historyIdx);
+	}
 }

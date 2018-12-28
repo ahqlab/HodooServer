@@ -70,11 +70,13 @@ public interface PetMapper extends CRUDMapper<Pet, DefaultParam, Integer> {
 	public int registWeight(@Param("weight") int weight, @Param("petIdx") int petIdx);
 	
 	
+	/*			"join pet_chronic_disease on pet_chronic_disease.id = pet.disease " + 
+*/
+	
 	@Select("select * " + 
 			"from group_pet_mapping " + 
 			"join pet on group_pet_mapping.petGroupCode = pet.petGroupCode " + 
 			"join pet_basic_info on pet_basic_info.id = pet.basic " + 
-			"join pet_chronic_disease on pet_chronic_disease.id = pet.disease " + 
 			"join pet_physical_info on pet_physical_info.id = pet.physical " + 
 			"join pet_weight_info on pet_weight_info.id = pet.weight " + 
 			"where group_pet_mapping.groupCode = #{groupCode} ")

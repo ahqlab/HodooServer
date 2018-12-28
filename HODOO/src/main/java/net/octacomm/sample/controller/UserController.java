@@ -93,7 +93,38 @@ public class UserController {
 		}
 		return group;
 	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/regist2", method = RequestMethod.POST)
+	public SessionMaintenance regist2(@RequestBody User param) throws FirebaseMessagingException {
+		String grougCode = MathUtil.getGroupId();
+		List<User> findUser = userMapper.getUserList(param);
+		SessionMaintenance group;
+		User user = null;
+		int result = 0;
+		if (findUser.size() != 0) {
+			group = new SessionMaintenance();
+			group.setResultMessage(ResultMessage.DUPLICATE_EMAIL);
+			//group.setDomain(null);
+		} else {
+			user = userService.createUser(param);
+			user.setGroupCode(grougCode);
+			UserGroupMapping groupMapping = new UserGroupMapping();
+			groupMapping.setUserIdx(user.getUserIdx());
+			groupMapping.setGroupCode(grougCode);
+			result = userGroupMappingMapper.insert(groupMapping);
+			if (result != 0) {
+				group = loginService.getAllInfoLogin(user);
+				group.setResultMessage(ResultMessage.SUCCESS);
+			} else {
+				group = loginService.getAllInfoLogin(user);
+				group.setResultMessage(ResultMessage.FAILED);
+			}
+		}
+		return group;
+	}
 
+	
 	@ResponseBody
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public SessionMaintenance login(@RequestBody User user) {
@@ -122,8 +153,14 @@ public class UserController {
 
 	@ResponseBody
 	@RequestMapping(value = "/update/basic/info", method = RequestMethod.POST)
-	public Integer updateBasic(@RequestBody User user) {
+	public int updateBasic(@RequestBody User user) {
 		System.err.println("user L " + user);
 		return userMapper.updateBasic(user);
 	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/update/user/password", method = RequestMethod.POST)
+	public int updateUsetPassword(@RequestBody User user) {
+		return userMapper.updateUsetPassowrd(user);
+	} 
 }

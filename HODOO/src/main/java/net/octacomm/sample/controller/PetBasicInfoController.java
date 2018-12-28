@@ -63,9 +63,9 @@ public class PetBasicInfoController {
 				basicInfo.setProfileFileName(basicInfo.getProfile().getOriginalFilename());
 				outputStream = new FileOutputStream(organizedfilePath);
 				int readByte = 0;
-				byte[] buffer = new byte[8192];
+				byte[] buffer = new byte[16384];
 
-				while ((readByte = inputStream.read(buffer, 0, 8120)) != -1) {
+				while ((readByte = inputStream.read(buffer, 0, buffer.length)) != -1) {
 					outputStream.write(buffer, 0, readByte);
 				}
 			} catch (Exception e) {
@@ -123,9 +123,9 @@ public class PetBasicInfoController {
 				basicInfo.setProfileFileName(basicInfo.getProfile().getOriginalFilename());
 				outputStream = new FileOutputStream(organizedfilePath);
 				int readByte = 0;
-				byte[] buffer = new byte[8192];
+				byte[] buffer = new byte[16384];
 
-				while ((readByte = inputStream.read(buffer, 0, 8120)) != -1) {
+				while ((readByte = inputStream.read(buffer, 0, buffer.length)) != -1) {
 					outputStream.write(buffer, 0, readByte);
 				}
 			} catch (Exception e) {

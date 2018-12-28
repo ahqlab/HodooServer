@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="net.octacomm.sample.dao.mapper.UserMapper">
+
+	<sql id="condition">
+        <where>
+       	<if test="param.id != ''">
+       		id like '%${param.id}%'
+       	</if>
+       	<if test="param.name != ''">
+       		AND name like '%${param.name}%'
+       	</if>
+       </where>
+	</sql>
+
+    <select id="getCountByParam" resultType="_int">
+        SELECT COUNT(*) FROM user
+    	<include refid="condition"/>
+    </select>
+   
+    <select id="getListByParam" resultType="User">
+    	SELECT * FROM user
+    	<include refid="condition"/>
+    	ORDER BY reg_date DESC
+        LIMIT #{pageSize} OFFSET #{startRow}
+    </select>   
+
+	<insert id="insert" parameterType="User" useGeneratedKeys="true"  keyProperty="userIdx" >
+		INSERT INTO USER ( email, password, nickname, sex, user.country , createDate ) VALUES (  #{email}, #{password} , #{nickname} , #{sex} , #{country} , now() )
+		<selectKey keyProperty="userIdx" resultType="Integer" order="AFTER">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+	</insert>
+
+</mapper>

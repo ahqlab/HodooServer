@@ -13,7 +13,6 @@ public class Device implements Domain{
 	
 	private String connect;
 	
-	
 	private String isDel;
 
 	private String createDate;

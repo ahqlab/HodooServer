@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="net.octacomm.sample.dao.mapper.DeviceMapper">
+
+
+ 	<!-- <update id="changeDeviceConnectionForIos"  useGeneratedKeys="true"  keyProperty="deviceIdx" >
+		UPDATE device SET  isDel = '${isDel == true ? 'CONNECTED' : 'DISCONNECTED'}' WHERE deviceIdx =  #{deviceIdx}
+		<selectKey keyProperty="deviceIdx" resultType="Integer" order="AFTER">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+	</update>  -->
+	
+	<insert id="insert" parameterType="Device" useGeneratedKeys="true"  keyProperty="deviceIdx" >
+		INSERT INTO DEVICE ( deviceIdx , groupCode , serialNumber , createDate ) VALUES (  null , #{groupCode} , #{serialNumber} , now()  )
+		<selectKey keyProperty="deviceIdx" resultType="Integer" order="AFTER">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+	</insert>
+
+</mapper>

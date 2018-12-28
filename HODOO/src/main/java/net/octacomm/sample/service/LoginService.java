@@ -10,5 +10,7 @@ public interface LoginService {
 
 	SessionMaintenance login(User user) throws NotFoundUserException, InvalidPasswordException;
 	
+	SessionMaintenance getAllInfoLogin(User user) throws NotFoundUserException, InvalidPasswordException;
+	
 	ResultMessageGroup login2(User user) throws NotFoundUserException, InvalidPasswordException;
 }
