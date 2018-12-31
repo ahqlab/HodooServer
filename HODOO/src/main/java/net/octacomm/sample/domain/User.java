@@ -28,6 +28,9 @@ public class User implements Domain {
 	
 	// joinColumn
 	private String groupCode;
+	
+	private int userCode;
+
 
 	@Override
 	public String toString() {

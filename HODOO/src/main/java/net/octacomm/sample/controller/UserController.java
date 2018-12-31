@@ -1,12 +1,23 @@
 package net.octacomm.sample.controller;
 
+import java.io.UnsupportedEncodingException;
+import java.security.GeneralSecurityException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -36,7 +47,9 @@ import net.octacomm.sample.message.ResultMessage;
 import net.octacomm.sample.service.GroupsService;
 import net.octacomm.sample.service.LoginService;
 import net.octacomm.sample.service.UserService;
+import net.octacomm.sample.utils.AES256Util;
 import net.octacomm.sample.utils.MathUtil;
+import net.octacomm.sample.utils.RSA;
 
 @RequestMapping("/user")
 @Controller
@@ -163,7 +176,54 @@ public class UserController {
 	@RequestMapping(value = "/update/user/password", method = RequestMethod.POST)
 	public int updateUsetPassword(@RequestBody User user) {
 		return userMapper.updateUsetPassowrd(user);
-	} 
+	}
+	@RequestMapping( value="/checkUserCertifiedMail", method=RequestMethod.GET )
+	public ModelAndView checkUserCertifiedMail(
+			@RequestParam("code") String code) {
+		String codeD = "";
+		try {
+			codeD = new AES256Util().decrypt(code);
+		} catch (UnsupportedEncodingException | GeneralSecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		String split[] = codeD.split("day");
+		User tempUser = new User();
+		tempUser.setEmail(split[0].toString());
+		User user = userMapper.getUser(tempUser);
+		
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		long now = System.currentTimeMillis();
+		long compare = 0;
+		try {
+			
+			compare = sdf.parse(split[1]).getTime();
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		int state = 0;
+		if ( user.getUserCode() == 0 ) { //검증 안됨
+			/* 날짜 검증 */
+			if ( now - compare > 24 * 60 * 60 * 1000 ) {
+				state = -2;
+			} else {
+				user.setUserCode(1);
+				int result = userMapper.updateForUsercode(user);
+				state = result;
+			}
+			
+		} else {
+			state = -1;
+		}
+		
+		
+ 		ModelAndView mav = new ModelAndView("signup_confirm");
+		mav.addObject("state", state);
+		return mav;
+	}
 	@RequestMapping( value="/welcomeSignup", method=RequestMethod.GET )
 	public ModelAndView welcomeSignup() {
 		ModelAndView mav = new ModelAndView("welcome_signup");
