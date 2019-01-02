@@ -20,7 +20,7 @@ public class User implements Domain {
 
 	private String sex;
 
-	private String country;
+	private int country;
 
 	private String pushToken;
 	
