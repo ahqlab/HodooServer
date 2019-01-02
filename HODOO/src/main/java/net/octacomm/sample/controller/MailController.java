@@ -80,7 +80,9 @@ public class MailController {
 			tempUser.setEmail(tomail);
 			User user = userMapper.getUser(tempUser);
 			String mixStr = user.getEmail() + "day" + user.getCreateDate();
-			String url = request.getRequestURL().toString().replace(request.getRequestURI(),"") + "/user/checkUserCertifiedMail?code=" + new AES256Util().encrypt(mixStr);
+			String encodingStr = new AES256Util().encrypt(mixStr);
+			encodingStr = encodingStr.replace("+", "%2B");
+			String url = request.getRequestURL().toString().replace(request.getRequestURI(),"") + "/user/checkUserCertifiedMail?code=" + encodingStr;
 			String htmlStr = "<html>" + 
 					"<body style='font-size: 12px; color: #e388a1'>" + 
 					"<div id='wrap' style='margin: 40px auto 0; width: 680px; text-align: center;'>" + 

@@ -6,17 +6,17 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
+<title>HODOO - 이메일 인증</title>
 </head>
 <body>
 
 <c:choose>
-	<c:when test="${state == -2 }">
+	<%-- <c:when test="${state == -2 }">
     	<script type="text/javascript">
     		alert("인증세션이 만료되었습니다.");
     		self.close();
     	</script>
-    </c:when>
+    </c:when> --%>
     <c:when test="${state == -1 }">
     	<script type="text/javascript">
     		alert("인증을 이미 완료했습니다.");

@@ -2,6 +2,7 @@ package net.octacomm.sample.controller;
 
 import java.io.UnsupportedEncodingException;
 import java.security.GeneralSecurityException;
+import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
@@ -186,34 +187,20 @@ public class UserController {
 		} catch (UnsupportedEncodingException | GeneralSecurityException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		String split[] = codeD.split("day");
 		User tempUser = new User();
 		tempUser.setEmail(split[0].toString());
 		User user = userMapper.getUser(tempUser);
 		
-		
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		long now = System.currentTimeMillis();
-		long compare = 0;
-		try {
-			
-			compare = sdf.parse(split[1]).getTime();
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
 		int state = 0;
 		if ( user.getUserCode() == 0 ) { //검증 안됨
-			/* 날짜 검증 */
-			if ( now - compare > 24 * 60 * 60 * 1000 ) {
-				state = -2;
-			} else {
-				user.setUserCode(1);
-				int result = userMapper.updateForUsercode(user);
-				state = result;
-			}
+			user.setUserCode(1);
+			int result = userMapper.updateForUsercode(user);
+			state = result;
 			
 		} else {
 			state = -1;
@@ -229,4 +216,5 @@ public class UserController {
 		ModelAndView mav = new ModelAndView("welcome_signup");
 		return mav;
 	}
+
 }
