@@ -96,7 +96,7 @@ public class MailController {
 					"<h2 style='color: #d46a87; font-size: 24px;'>회원가입 인증 메일입니다</h2>" + 
 					"<p>아래 주소로 접속해서 이메일 인증을 완료해주세요.</p>" + 
 					"<p>" + 
-					"<a href='" + url + "' target='_blank'>" + url + "</a>" + 
+					"<a href='" + url + "' target='_blank'>[회원 인증 하기]</a>" + 
 					"</p>" + 
 					"<p class='sub_script' style='font-size: 9px;'>" + 
 					"위 주소는 보안을 위해 한번만 사용하실 수 있으며, 인증 완료 후 다시 사용하실 수 없습니다." + 
