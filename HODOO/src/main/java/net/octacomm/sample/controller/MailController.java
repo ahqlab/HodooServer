@@ -82,7 +82,12 @@ public class MailController {
 			String mixStr = user.getEmail() + "day" + user.getCreateDate();
 			String encodingStr = new AES256Util().encrypt(mixStr);
 			encodingStr = encodingStr.replace("+", "%2B");
+			
+			/* 보내는 url 생성 (s)
+			 * 실제 서버 또는 도메인 연결시 포트는 생략
+			 *  */
 			String url = request.getRequestURL().toString().replace(request.getRequestURI(),"") + "/user/checkUserCertifiedMail?code=" + encodingStr;
+			/* 보내는 url 생성 (e) */
 			String htmlStr = "<html>" + 
 					"<body style='font-size: 12px; color: #e388a1'>" + 
 					"<div id='wrap' style='margin: 40px auto 0; width: 680px; text-align: center;'>" + 
