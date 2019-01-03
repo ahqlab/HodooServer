@@ -24,6 +24,7 @@ import net.octacomm.sample.domain.GroupPetMapping;
 import net.octacomm.sample.domain.Pet;
 import net.octacomm.sample.domain.PetAllInfos;
 import net.octacomm.sample.domain.PetBasicInfo;
+import net.octacomm.sample.domain.PetBasicInfoResponse;
 import net.octacomm.sample.domain.ResultMessageGroup;
 import net.octacomm.sample.message.ResultMessage;
 import net.octacomm.sample.utils.MathUtil;
@@ -40,9 +41,9 @@ public class IOSPetBasicInfoController {
 
 	@ResponseBody
 	@RequestMapping(value = "/basic/regist", method = RequestMethod.POST)
-	public ResultMessageGroup regist(HttpServletRequest request, PetBasicInfo basicInfo) {
+	public PetBasicInfoResponse regist(HttpServletRequest request, PetBasicInfo basicInfo) {
 		
-		ResultMessageGroup group = new ResultMessageGroup();
+		PetBasicInfoResponse group = new PetBasicInfoResponse();
 		
 		String localPath = "/resources/upload/profile/";
 		String path = request.getSession().getServletContext().getRealPath(localPath);
@@ -91,10 +92,10 @@ public class IOSPetBasicInfoController {
 		int result = petMapper.insert(pet); 
 		if(result != 0) {
 			group.setResultMessage(ResultMessage.SUCCESS);
-			group.setDomain(pet);
+			group.setBasicInfo(petBasicInfoMapper.getBasicInfo(basicInfo.getId()));
+			group.setPet(pet);
 		}else {
 			group.setResultMessage(ResultMessage.FAILED);
-			group.setDomain(null);
 		}
 		return group;
 	}
@@ -102,9 +103,10 @@ public class IOSPetBasicInfoController {
 	
 	@ResponseBody
 	@RequestMapping(value = "/basic/update", method = RequestMethod.POST)
-	public ResultMessageGroup update(HttpServletRequest request, PetBasicInfo basicInfo) {
+	public PetBasicInfoResponse update(HttpServletRequest request, PetBasicInfo basicInfo) {
 		
-		ResultMessageGroup group = new ResultMessageGroup();
+		PetBasicInfoResponse group = new PetBasicInfoResponse();
+		
 		String localPath = "/resources/upload/profile/";
 		String path = request.getSession().getServletContext().getRealPath(localPath);
 		System.err.println("path : " + path);
@@ -143,12 +145,19 @@ public class IOSPetBasicInfoController {
 			}
 		}
 		int result = petBasicInfoMapper.update(basicInfo);
-		if (result != 0) {
+		/*if (result != 0) {
 			group.setResultMessage(ResultMessage.SUCCESS);
 			group.setDomain(basicInfo.getId());
 		} else {
 			group.setResultMessage(ResultMessage.FAILED);
 			group.setDomain(basicInfo.getId());
+		}*/
+		
+		if(result != 0) {
+			group.setResultMessage(ResultMessage.SUCCESS);
+			group.setBasicInfo(petBasicInfoMapper.getBasicInfo(basicInfo.getId()));
+		}else {
+			group.setResultMessage(ResultMessage.FAILED);
 		}
 		return group;
 	}

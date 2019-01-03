@@ -1,6 +1,7 @@
 package net.octacomm.sample.controller.ios;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,48 +13,61 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import net.octacomm.sample.dao.mapper.PetChronicDeseaseMapper;
 import net.octacomm.sample.dao.mapper.PetMapper;
+import net.octacomm.sample.domain.Pet;
+import net.octacomm.sample.domain.PetAllInfos;
 import net.octacomm.sample.domain.PetChronicDisease;
+import net.octacomm.sample.domain.PetCommonResponse;
+import net.octacomm.sample.message.ResultMessage;
 
-@RequestMapping("/ios/chronic/desease")
+@RequestMapping("/ios/chronic/diseases")
 @Controller
 public class IOSPetChronicDeseaseController {
-	
+
 	@Autowired
 	private PetChronicDeseaseMapper chronicDeseaseMapper;
-	
+
 	@Autowired
 	private PetMapper petMapper;
-	
+
 	@ResponseBody
-	@RequestMapping(value = "/delete" , method = RequestMethod.POST)
+	@RequestMapping(value = "/delete", method = RequestMethod.POST)
 	public int delete(@RequestParam("petIdx") int petIdx, @RequestParam("diseaseIdx") int diseaseIdx) {
 		petMapper.resetDisease(petIdx);
 		return chronicDeseaseMapper.delete(diseaseIdx);
 	}
-	
+
 	@ResponseBody
-	@RequestMapping(value = "/regist" , method = RequestMethod.POST)
-	public int regist(@RequestBody PetChronicDisease chronicDesease, @RequestParam("petIdx") int petIdx) {
-		chronicDeseaseMapper.insert(chronicDesease);
-		return petMapper.registDisease(chronicDesease.getId(), petIdx);
+	@RequestMapping(value = "/regist", method = RequestMethod.POST)
+	public PetCommonResponse regist(@RequestBody Map<String, Object> param) {
+		int code = (Integer) param.get("diseaseName");
+		int upCode = (Integer) param.get("petIdx");
+		PetCommonResponse commonResponse = new PetCommonResponse();
+		/*
+		 * chronicDeseaseMapper.insert(chronicDesease);
+		 * if(petMapper.registDisease(chronicDesease.getId(), petIdx) != 0) {
+		 * commonResponse.setChronicDisease(chronicDeseaseMapper.get(chronicDesease.
+		 * getId())); commonResponse.setResultMessage(ResultMessage.SUCCESS); }else {
+		 * commonResponse.setResultMessage(ResultMessage.FAILED); }
+		 */
+		return commonResponse;
 	}
-	
+
 	@ResponseBody
-	@RequestMapping(value = "/list" , method = RequestMethod.POST)
+	@RequestMapping(value = "/list", method = RequestMethod.POST)
 	public List<PetChronicDisease> regist(@RequestParam("groupId") int groupId) {
 		return chronicDeseaseMapper.list(groupId);
 	}
-	
-	
+
 	@ResponseBody
 	@RequestMapping(value = "/info/check", method = RequestMethod.POST)
 	public PetChronicDisease basicInfoCheck(@RequestParam("groupId") String groupId, @RequestParam("id") int petId) {
 		return chronicDeseaseMapper.InfoCheck(groupId, petId);
 	}
-	
+
 	@ResponseBody
 	@RequestMapping(value = "/get", method = RequestMethod.POST)
-	public PetChronicDisease getBasicInformation(@RequestParam("groupCode") String groupCode, @RequestParam("petIdx") int petIdx) {
+	public PetChronicDisease getBasicInformation(@RequestParam("groupCode") String groupCode,
+			@RequestParam("petIdx") int petIdx) {
 		return chronicDeseaseMapper.getDiseaseInformation(groupCode, petIdx);
 	}
 }

@@ -75,6 +75,12 @@ public interface UserMapper extends CRUDMapper<User, DefaultParam, Integer>{
 	@Update("UPDATE " + TABLE_NAME + " SET password = #{password}  WHERE userIdx =  #{userIdx} ")
 	int updateUsetPassowrd(User user);
 	
+	
+	@Select("SELECT * FROM " + TABLE_NAME + " WHERE  email = #{email}")
+	User getByUserEmail(String email);
+	
+	
+	
 	@Update("UPDATE " + TABLE_NAME + " SET userCode = #{userCode}  WHERE userIdx =  #{userIdx} ")
 	int updateForUsercode(User user);
 

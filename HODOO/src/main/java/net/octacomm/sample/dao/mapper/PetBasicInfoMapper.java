@@ -34,6 +34,7 @@ public interface PetBasicInfoMapper extends CRUDMapper<PetBasicInfo, DefaultPara
 	@Override
 	PetBasicInfo get(Integer id);
 	
+	
 	@Select("SELECT * FROM " + TABLE_NAME + " WHERE id =  #{id}")
 	PetBasicInfo getBasicInfo(Integer id);
 

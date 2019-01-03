@@ -10,4 +10,6 @@ public class Notification {
 	private String body;
 	
 	private String sound;
+	
+	private String priority;
 }
