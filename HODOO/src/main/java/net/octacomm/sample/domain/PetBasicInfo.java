@@ -7,6 +7,7 @@ import lombok.Data;
 @Data
 public class PetBasicInfo implements Domain{
 	
+	
 	private int id;
 	
 	private String groupCode;

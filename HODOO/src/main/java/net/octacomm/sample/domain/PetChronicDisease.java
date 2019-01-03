@@ -8,4 +8,5 @@ public class PetChronicDisease implements Domain{
 	private int id;
 
     private int diseaseName;
+    
 }

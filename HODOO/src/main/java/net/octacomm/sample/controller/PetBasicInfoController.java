@@ -16,15 +16,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import net.octacomm.sample.dao.mapper.GroupPetMappingMapper;
 import net.octacomm.sample.dao.mapper.PetBasicInfoMapper;
 import net.octacomm.sample.dao.mapper.PetMapper;
+import net.octacomm.sample.domain.CommonResponce;
 import net.octacomm.sample.domain.GroupPetMapping;
 import net.octacomm.sample.domain.Pet;
 import net.octacomm.sample.domain.PetAllInfos;
 import net.octacomm.sample.domain.PetBasicInfo;
 import net.octacomm.sample.domain.ResultMessageGroup;
+import net.octacomm.sample.domain.User;
 import net.octacomm.sample.message.ResultMessage;
 import net.octacomm.sample.utils.MathUtil;
 
@@ -161,5 +164,16 @@ public class PetBasicInfoController {
 	public List<PetAllInfos> aboutMyPetList(@RequestParam("groupCode") String groupCode) {
 		return petMapper.aboutMyPetList(groupCode);
 	}
-
+	
+	@ResponseBody
+	@RequestMapping(value = "/test/image/upload", method = RequestMethod.POST)
+	public CommonResponce<User> IosMultiPartTest(@RequestParam("profile") MultipartFile profile) {
+		System.err.println("profile : " + profile.getOriginalFilename());
+		CommonResponce<User> responce = new CommonResponce<User>();
+		responce.setResultMessage(ResultMessage.SUCCESS);
+		return responce;
+	}
+	
+	
+	
 }

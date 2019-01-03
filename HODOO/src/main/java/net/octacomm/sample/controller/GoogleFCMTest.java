@@ -41,13 +41,14 @@ public class GoogleFCMTest {
 		//String input = "{\"notification\" : {\"title\" : \"여기다 제목 넣기 \", \"body\" : \"여기다 내용 넣기\"}, \"to\":\"/topics/ALL\"}";
 		
 		Message message = new Message();
-		//message.setTo("fLVSoRV4lrw:APA91bGnpE1c5LDplPUskWpjpIByuARW97PM3fylotRVABeCH_0LL-TeFZerwh7aN7gS2R7q0ZGlXrNJXiIAdBpuvS2kuzJZ0lTiGnRkoU4tlKeoCxmuGjlu3Y4usLSjvjY8W2kKNXcCtqXZYftyplIqSASVKj86fQ");
+		message.setTo("ciNz3DLykWk:APA91bFvTng4XsSpmNHU5VqGGZeUkJJgIIdABYZN68zoMdcHFlzN7pyPHLmkrnXHdA434fN06cNq0eKpofexKj3SfNKKUnxfdHqBKpoiQ8kWH8LgWzsfNjg2IYHhfXe317o1dLhDxQnu");
 		//message.setTo("fYUgwb9M2oU:APA91bFXb9BDIsOvbqewBCQWeuhPw7khWUmsN25KkPw1N5Ng5RfhzLcFmYJBSBiWtY_6Xbvbjc-XMO7U1xRLcodgOeTTfT1qLqcF4pNgN7bsN7mTfWKOhlDuDsFnpsleEl_zsgLoJz2P");
-		message.setTo("topics/news");
+		//message.setTo("/topics/news");
 		Notification content = new net.octacomm.sample.domain.Notification();
 		content.setBody("측정결과입니다.");
 		content.setTitle("Hoodoo scale");
 		content.setSound("default");
+		content.setPriority("high");
 		message.setNotification(content);
 		Gson gson = new Gson();
 		String json = gson.toJson(message);
