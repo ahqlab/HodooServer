@@ -1,10 +1,15 @@
 package net.octacomm.sample.controller;
 
+import java.io.UnsupportedEncodingException;
+import java.security.GeneralSecurityException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
 import javax.mail.internet.MimeMessage;
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.database.FirebaseDatabase;
@@ -40,6 +46,7 @@ import net.octacomm.sample.message.ResultMessage;
 import net.octacomm.sample.service.GroupsService;
 import net.octacomm.sample.service.LoginService;
 import net.octacomm.sample.service.UserService;
+import net.octacomm.sample.utils.AES256Util;
 import net.octacomm.sample.utils.MathUtil;
 
 @RequestMapping("/user")
@@ -68,17 +75,14 @@ public class UserController {
 	@RequestMapping(value = "/regist", method = RequestMethod.POST)
 	public ResultMessageGroup regist(@RequestBody User param) throws FirebaseMessagingException {
 		// 그룹을 만든다 (그룹아이디를 가져온다)
-
-		/*
-		 * if (!FirebaseApp.getApps().isEmpty()) {
-		 * FirebaseDatabase.getInstance().setPersistenceEnabled(true); } List<String>
-		 * registrationTokens = Arrays.asList(param.getPushToken());
-		 * TopicManagementResponse response =
-		 * FirebaseMessaging.getInstance().subscribeToTopic(registrationTokens, "ALL");
-		 * System.out.println(response.getSuccessCount() +
-		 * " tokens were subscribed successfully");
-		 */
-
+		
+	/*	if (!FirebaseApp.getApps().isEmpty()) {
+	        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+		}
+		List<String> registrationTokens = Arrays.asList(param.getPushToken());
+		TopicManagementResponse response = FirebaseMessaging.getInstance().subscribeToTopic(registrationTokens, "ALL");
+		System.out.println(response.getSuccessCount() + " tokens were subscribed successfully");*/
+		
 		String grougCode = MathUtil.getGroupId();
 		List<User> findUser = userMapper.getUserList(param);
 		ResultMessageGroup group = new ResultMessageGroup();
@@ -135,6 +139,7 @@ public class UserController {
 		return group;
 	}
 
+	
 	@ResponseBody
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public SessionMaintenance login(@RequestBody User user) {
@@ -258,4 +263,44 @@ public class UserController {
 		}
 		return true;
 	}
+	
+	@RequestMapping( value="/checkUserCertifiedMail", method=RequestMethod.GET )
+	public ModelAndView checkUserCertifiedMail(
+			@RequestParam("code") String code) {
+		String codeD = "";
+		try {
+			codeD = new AES256Util().decrypt(code);
+		} catch (UnsupportedEncodingException | GeneralSecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		String split[] = codeD.split("day");
+		User tempUser = new User();
+		tempUser.setEmail(split[0].toString());
+		User user = userMapper.getUser(tempUser);
+		
+		int state = 0;
+		if ( user.getUserCode() == 0 ) { //검증 안됨
+			user.setUserCode(1);
+			int result = userMapper.updateForUsercode(user);
+			state = result;
+			
+		} else {
+			state = -1;
+		}
+		
+		
+ 		ModelAndView mav = new ModelAndView("signup_confirm");
+		mav.addObject("state", state);
+		return mav;
+	}
+	@RequestMapping( value="/welcomeSignup", method=RequestMethod.GET )
+	public ModelAndView welcomeSignup() {
+		ModelAndView mav = new ModelAndView("welcome_signup");
+		return mav;
+	}
+
 }

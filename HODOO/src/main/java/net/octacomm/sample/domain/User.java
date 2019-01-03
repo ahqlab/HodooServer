@@ -20,7 +20,7 @@ public class User implements Domain {
 
 	private String sex;
 
-	private String country;
+	private int country;
 
 	private String pushToken;
 	
@@ -28,6 +28,9 @@ public class User implements Domain {
 	
 	// joinColumn
 	private String groupCode;
+	
+	private int userCode;
+
 
 	@Override
 	public String toString() {
