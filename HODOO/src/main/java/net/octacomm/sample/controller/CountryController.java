@@ -21,10 +21,27 @@ public class CountryController {
 	@Autowired
 	CountryService service;
 	
+	private final int KO_CODE = 1;
+	private final int EN_CODE = 2;
+	private final int JA_CODE = 3;
+	private final int CH_CODE = 4;
+	
 	@ResponseBody
 	@RequestMapping(value = "/{language}/getAllCountry", method = RequestMethod.GET)
 	public JSONArray getAllCountry (
 			@PathVariable("language") int language) {
+		
+		String columnName = "";
+		switch( language ) {
+			case KO_CODE:
+				columnName = "ko_name";
+				break;
+			case EN_CODE:
+				columnName = "en_name";
+			case JA_CODE :
+				columnName = "en_name";
+		}
+		
 		List<Country> country = service.getAllCountry();
 		
 		JSONArray array = new JSONArray();

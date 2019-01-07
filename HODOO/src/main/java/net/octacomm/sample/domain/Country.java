@@ -9,4 +9,5 @@ public class Country implements Domain {
 	private String enName;
 	private String jaName;
 	private String chName;
+	private String name;
 }

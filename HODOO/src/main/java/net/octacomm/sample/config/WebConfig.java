@@ -105,7 +105,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 		mailSender.setHost("smtp.gmail.com");
 		mailSender.setPort(587);
 		mailSender.setUsername("silverlight2017@gmail.com");
-		mailSender.setPassword("1213dlgudwns");
+		mailSender.setPassword("1213dlgudwns!");
 		mailSender.getJavaMailProperties().setProperty("mail.transport.protocol", "smtp");
 		mailSender.getJavaMailProperties().setProperty("mail.smtp.auth", "true");
 		mailSender.getJavaMailProperties().setProperty("mail.smtp.starttls.enable", "true");
