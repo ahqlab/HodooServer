@@ -239,7 +239,7 @@ public class UserController {
 	}
 
 	public boolean sendEmail(String toMail, String title, String content) {
-		String setfrom = "silverlight2017@gmail.com";
+		String setfrom = "hellomyhodoo@gmail.com";
 		/*
 		 * String tomail = "silverlight2017@ahqlab.com"; // 받는 사람 이메일 String title =
 		 * "안녕하세요"; // 제목 String content = "아큐랩입니다."; // 내용
