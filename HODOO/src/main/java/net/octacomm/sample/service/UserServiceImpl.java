@@ -5,9 +5,11 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import net.octacomm.sample.dao.mapper.GroupsMapper;
+import net.octacomm.sample.dao.mapper.UserGroupMappingMapper;
 import net.octacomm.sample.dao.mapper.UserMapper;
 import net.octacomm.sample.domain.Groups;
 import net.octacomm.sample.domain.User;
+import net.octacomm.sample.domain.UserGroupMapping;
 import net.octacomm.sample.utils.MathUtil;
 
 @Service
@@ -17,6 +19,9 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private UserMapper userMapper;
+	
+	@Autowired
+	private UserGroupMappingMapper userGroupMapper;
 
 	@Override
 	public User createUser(User user) {
@@ -26,4 +31,11 @@ public class UserServiceImpl implements UserService {
 			return null;
 		}
 	}
+
+	@Override
+	public int saveFCMToken(User user) {
+		// TODO Auto-generated method stub
+		return userMapper.saveFCMToken(user);
+	}
+
 }

@@ -6,4 +6,6 @@ import net.octacomm.sample.domain.User;
 public interface UserService {
 	
 	User createUser(User user);
+	
+	int saveFCMToken( User user );
 }
