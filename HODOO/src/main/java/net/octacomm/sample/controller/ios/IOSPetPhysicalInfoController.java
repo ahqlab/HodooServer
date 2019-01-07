@@ -1,6 +1,8 @@
 package net.octacomm.sample.controller.ios;
 
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -11,7 +13,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import net.octacomm.sample.dao.mapper.PetMapper;
 import net.octacomm.sample.dao.mapper.PetPhysicalInfoMapper;
+import net.octacomm.sample.domain.PetChronicDisease;
+import net.octacomm.sample.domain.PetCommonResponse;
 import net.octacomm.sample.domain.PetPhysicalInfo;
+import net.octacomm.sample.domain.PetWeightInfo;
+import net.octacomm.sample.message.ResultMessage;
 
 @RequestMapping("/ios/pet/physical")
 @Controller
@@ -25,9 +31,27 @@ public class IOSPetPhysicalInfoController {
 
 	@ResponseBody
 	@RequestMapping(value = "/regist", method = RequestMethod.POST)
-	public int regist(@RequestParam("petIdx") int petIdx, @RequestBody PetPhysicalInfo petPhysicalInfo) {
+	public PetCommonResponse<PetPhysicalInfo> regist(@RequestBody Map<String, Object> param) {
+		PetCommonResponse<PetPhysicalInfo> commonResponse = new PetCommonResponse<PetPhysicalInfo>();
+		
+		String width = (String) param.get("width");
+		String height = (String) param.get("height");
+		String weight = (String) param.get("weight");
+		int petIdx = (Integer) param.get("petIdx");
+		
+		PetPhysicalInfo petPhysicalInfo = new PetPhysicalInfo();
+		petPhysicalInfo.setWidth(width);
+		petPhysicalInfo.setHeight(height);
+		petPhysicalInfo.setWeight(weight);
+		
 		petPhysicalInfoMapper.insert(petPhysicalInfo);
-		return petMapper.registPhysical(petPhysicalInfo.getId(), petIdx);
+		if (petMapper.registPhysical(petPhysicalInfo.getId(), petIdx) != 0) {
+			commonResponse.setDomain(petPhysicalInfoMapper.get(petPhysicalInfo.getId()));
+			commonResponse.setResultMessage(ResultMessage.SUCCESS);
+		} else {
+			commonResponse.setResultMessage(ResultMessage.FAILED);
+		}
+		return commonResponse;
 	}
 
 	@ResponseBody

@@ -88,6 +88,7 @@ public interface PetMapper extends CRUDMapper<Pet, DefaultParam, Integer> {
 		@Result(column="physical", property="pet.physical"),
 		@Result(column="weight", property="pet.weight"),
 		
+		@Result(column="pet_basic_info.id", property="petBasicInfo.id"),
 		@Result(column="profileFilePath", property="petBasicInfo.profileFilePath"),
 		@Result(column="profileFileName", property="petBasicInfo.profileFileName"),
 		@Result(column="petName", property="petBasicInfo.petName"),
@@ -105,6 +106,49 @@ public interface PetMapper extends CRUDMapper<Pet, DefaultParam, Integer> {
 		@Result(column="bcs", property="petWeightInfo.bcs"),
 	})
 	public List<PetAllInfos> aboutMyPetList(String groupCode);
+	
+	
+	@Select("select * ,"
+			+ "pet_basic_info.id as basicId , "
+			+ "pet_chronic_disease.id as diseaseId ,"
+			+ "pet_physical_info.id as physicalId ,"
+			+ "pet_weight_info.id as weightId " 
+			+ "from group_pet_mapping " + 
+			"left join pet on group_pet_mapping.petGroupCode = pet.petGroupCode " + 
+			"left join pet_chronic_disease on pet_chronic_disease.id = pet.disease " + 
+			"left join pet_basic_info on pet_basic_info.id = pet.basic " + 
+			"left join pet_physical_info on pet_physical_info.id = pet.physical " + 
+			"left join pet_weight_info on pet_weight_info.id = pet.weight " + 
+			"where group_pet_mapping.groupCode = #{groupCode} ")
+	@Results({
+		@Result(column="petIdx", property="pet.petIdx"),
+		@Result(column="petGroupCode", property="pet.petGroupCode"),
+		@Result(column="basic", property="pet.basic"),
+		@Result(column="disease", property="pet.disease"),
+		@Result(column="physical", property="pet.physical"),
+		@Result(column="weight", property="pet.weight"),
+		
+		@Result(column="basicId", property="petBasicInfo.id"),
+		@Result(column="profileFilePath", property="petBasicInfo.profileFilePath"),
+		@Result(column="profileFileName", property="petBasicInfo.profileFileName"),
+		@Result(column="petName", property="petBasicInfo.petName"),
+		@Result(column="petBreed", property="petBasicInfo.petBreed"),
+		@Result(column="sex", property="petBasicInfo.sex"),
+		@Result(column="birthday", property="petBasicInfo.birthday"),
+		@Result(column="neutralization", property="petBasicInfo.neutralization"),
+		
+		@Result(column="diseaseId", property="petChronicDisease.id"),
+		@Result(column="diseaseName", property="petChronicDisease.diseaseName"),
+		
+		@Result(column="physicalId", property="petPhysicalInfo.id"),
+		@Result(column="width", property="petPhysicalInfo.width"),
+		@Result(column="height", property="petPhysicalInfo.height"),
+		@Result(column="weight", property="petPhysicalInfo.weight"),
+		
+		@Result(column="weightId", property="petWeightInfo.id"),
+		@Result(column="bcs", property="petWeightInfo.bcs")
+	})
+	public List<PetAllInfos> aboutMyPetListForIos(String groupCode);
 	
 	
 	

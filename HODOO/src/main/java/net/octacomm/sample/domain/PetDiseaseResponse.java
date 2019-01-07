@@ -8,8 +8,7 @@ public class PetDiseaseResponse {
 	
 	public Pet pet;
 	
-	public PetBasicInfo basicInfo;
-	
+	public PetChronicDisease chronicDisease;
 	
 	public ResultMessage resultMessage;
 	

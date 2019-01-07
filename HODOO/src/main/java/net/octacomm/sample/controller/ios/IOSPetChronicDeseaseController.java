@@ -17,6 +17,7 @@ import net.octacomm.sample.domain.Pet;
 import net.octacomm.sample.domain.PetAllInfos;
 import net.octacomm.sample.domain.PetChronicDisease;
 import net.octacomm.sample.domain.PetCommonResponse;
+import net.octacomm.sample.domain.PetDiseaseResponse;
 import net.octacomm.sample.message.ResultMessage;
 
 @RequestMapping("/ios/chronic/diseases")
@@ -38,17 +39,22 @@ public class IOSPetChronicDeseaseController {
 
 	@ResponseBody
 	@RequestMapping(value = "/regist", method = RequestMethod.POST)
-	public PetCommonResponse regist(@RequestBody Map<String, Object> param) {
-		int code = (Integer) param.get("diseaseName");
-		int upCode = (Integer) param.get("petIdx");
-		PetCommonResponse commonResponse = new PetCommonResponse();
-		/*
-		 * chronicDeseaseMapper.insert(chronicDesease);
-		 * if(petMapper.registDisease(chronicDesease.getId(), petIdx) != 0) {
-		 * commonResponse.setChronicDisease(chronicDeseaseMapper.get(chronicDesease.
-		 * getId())); commonResponse.setResultMessage(ResultMessage.SUCCESS); }else {
-		 * commonResponse.setResultMessage(ResultMessage.FAILED); }
-		 */
+	public PetDiseaseResponse regist(@RequestBody Map<String, Object> param) {
+		PetDiseaseResponse commonResponse = new PetDiseaseResponse();
+		
+		int diseaseName = (Integer) param.get("diseaseName");
+		int petIdx = (Integer) param.get("petIdx");
+		
+		PetChronicDisease chronicDesease = new PetChronicDisease();
+		chronicDesease.setDiseaseName(diseaseName);
+		
+		chronicDeseaseMapper.insert(chronicDesease);
+		if (petMapper.registDisease(chronicDesease.getId(), petIdx) != 0) {
+			commonResponse.setChronicDisease(chronicDeseaseMapper.get(chronicDesease.getId()));
+			commonResponse.setResultMessage(ResultMessage.SUCCESS);
+		} else {
+			commonResponse.setResultMessage(ResultMessage.FAILED);
+		}
 		return commonResponse;
 	}
 

@@ -7,10 +7,6 @@ import java.util.List;
 import java.util.Random;
 
 import javax.mail.internet.MimeMessage;
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
-import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -23,25 +19,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.google.firebase.FirebaseApp;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingException;
-import com.google.firebase.messaging.TopicManagementResponse;
-import com.google.gson.Gson;
 
 import net.octacomm.sample.dao.mapper.UserGroupMappingMapper;
 import net.octacomm.sample.dao.mapper.UserMapper;
 import net.octacomm.sample.domain.CommonResponce;
-import net.octacomm.sample.domain.Device;
-import net.octacomm.sample.domain.Groups;
-import net.octacomm.sample.domain.PetAllInfos;
 import net.octacomm.sample.domain.ResultMessageGroup;
 import net.octacomm.sample.domain.SessionMaintenance;
 import net.octacomm.sample.domain.User;
 import net.octacomm.sample.domain.UserGroupMapping;
-import net.octacomm.sample.exceptions.InvalidPasswordException;
-import net.octacomm.sample.exceptions.NotFoundUserException;
 import net.octacomm.sample.message.ResultMessage;
 import net.octacomm.sample.service.GroupsService;
 import net.octacomm.sample.service.LoginService;
@@ -74,15 +60,18 @@ public class UserController {
 	@ResponseBody
 	@RequestMapping(value = "/regist", method = RequestMethod.POST)
 	public ResultMessageGroup regist(@RequestBody User param) throws FirebaseMessagingException {
+		
 		// 그룹을 만든다 (그룹아이디를 가져온다)
-		
-	/*	if (!FirebaseApp.getApps().isEmpty()) {
-	        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
-		}
-		List<String> registrationTokens = Arrays.asList(param.getPushToken());
-		TopicManagementResponse response = FirebaseMessaging.getInstance().subscribeToTopic(registrationTokens, "ALL");
-		System.out.println(response.getSuccessCount() + " tokens were subscribed successfully");*/
-		
+		/*
+		 * if (!FirebaseApp.getApps().isEmpty()) {
+		 * FirebaseDatabase.getInstance().setPersistenceEnabled(true); } List<String>
+		 * registrationTokens = Arrays.asList(param.getPushToken());
+		 * TopicManagementResponse response =
+		 * FirebaseMessaging.getInstance().subscribeToTopic(registrationTokens, "ALL");
+		 * System.out.println(response.getSuccessCount() +
+		 * " tokens were subscribed successfully");
+		 */
+
 		String grougCode = MathUtil.getGroupId();
 		List<User> findUser = userMapper.getUserList(param);
 		ResultMessageGroup group = new ResultMessageGroup();
@@ -139,14 +128,20 @@ public class UserController {
 		return group;
 	}
 
-	
 	@ResponseBody
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public SessionMaintenance login(@RequestBody User user) {
 		SessionMaintenance group = loginService.login(user);
 		return group;
 	}
-
+	
+	@ResponseBody
+	@RequestMapping(value = "/login3", method = RequestMethod.GET)
+	public SessionMaintenance login3(User user) {
+		SessionMaintenance group = loginService.login(user);
+		return group;
+	}
+	
 	@ResponseBody
 	@RequestMapping(value = "/login2", method = RequestMethod.POST)
 	public ResultMessageGroup login2(@RequestBody User user) {
@@ -187,8 +182,8 @@ public class UserController {
 
 		User returnUser = userMapper.getByUserEmail(email);
 		if (returnUser == null) {
-			//not found user;
-			//존재하지 않는 유저입니다.
+			// not found user;
+			// 존재하지 않는 유저입니다.
 			return null;
 		} else {
 
@@ -263,10 +258,9 @@ public class UserController {
 		}
 		return true;
 	}
-	
-	@RequestMapping( value="/checkUserCertifiedMail", method=RequestMethod.GET )
-	public ModelAndView checkUserCertifiedMail(
-			@RequestParam("code") String code) {
+
+	@RequestMapping(value = "/checkUserCertifiedMail", method = RequestMethod.GET)
+	public ModelAndView checkUserCertifiedMail(@RequestParam("code") String code) {
 		String codeD = "";
 		try {
 			codeD = new AES256Util().decrypt(code);
@@ -281,23 +275,21 @@ public class UserController {
 		User tempUser = new User();
 		tempUser.setEmail(split[0].toString());
 		User user = userMapper.getUser(tempUser);
-		
+
 		int state = 0;
-		if ( user.getUserCode() == 0 ) { //검증 안됨
+		if (user.getUserCode() == 0) { // 검증 안됨
 			user.setUserCode(1);
 			int result = userMapper.updateForUsercode(user);
 			state = result;
-			
 		} else {
 			state = -1;
 		}
-		
-		
- 		ModelAndView mav = new ModelAndView("signup_confirm");
+		ModelAndView mav = new ModelAndView("signup_confirm");
 		mav.addObject("state", state);
 		return mav;
 	}
-	@RequestMapping( value="/welcomeSignup", method=RequestMethod.GET )
+
+	@RequestMapping(value = "/welcomeSignup", method = RequestMethod.GET)
 	public ModelAndView welcomeSignup() {
 		ModelAndView mav = new ModelAndView("welcome_signup");
 		return mav;
