@@ -294,5 +294,17 @@ public class UserController {
 		ModelAndView mav = new ModelAndView("welcome_signup");
 		return mav;
 	}
+	@ResponseBody
+	@RequestMapping(value = "/update/fcmToken", method = RequestMethod.POST)
+	public int saveFCMToken( @RequestBody User user ) {
+		return userService.saveFCMToken(user);
+	}
+	@ResponseBody
+	@RequestMapping(value = "/invitation/approval", method = RequestMethod.POST)
+	public int invitationApproval( 
+			@RequestParam("toUserIdx") int toUserIdx,
+			@RequestParam("fromUserIdx") int fromUserIdx) {
+		return userGroupMappingMapper.invitationApproval(toUserIdx, fromUserIdx);
+	}
 
 }

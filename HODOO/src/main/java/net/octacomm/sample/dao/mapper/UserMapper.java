@@ -83,5 +83,11 @@ public interface UserMapper extends CRUDMapper<User, DefaultParam, Integer>{
 	
 	@Update("UPDATE " + TABLE_NAME + " SET userCode = #{userCode}  WHERE userIdx =  #{userIdx} ")
 	int updateForUsercode(User user);
+	
+	@Update("UPDATE " + TABLE_NAME + " SET pushToken = #{pushToken} WHERE userIdx =  #{userIdx} ")
+	int saveFCMToken ( User user );
+	
+	@Update("UPDATE " + TABLE_NAME + " SET groupCode = ( SELECT groupCode FROM (SELECT * FROM " + TABLE_NAME +  ") AS map WHERE userIdx = #{toUserIdx} )  WHERE userIdx = #{fromUserIdx}")
+	int invitationApproval(@Param("toUserIdx") int toUserIdx, @Param("fromUserIdx") int fromUserIdx);
 
 }
