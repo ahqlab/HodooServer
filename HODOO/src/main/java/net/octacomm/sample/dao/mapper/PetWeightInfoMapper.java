@@ -37,7 +37,7 @@ public interface PetWeightInfoMapper extends CRUDMapper<PetWeightInfo, DefaultPa
 
 	@Select("SELECT * FROM " + TABLE_NAME + " WHERE id =  #{id}")
 	@Override
-	public PetWeightInfo get(Integer petId);
+	public PetWeightInfo get(Integer id);
 	
 	@Select("select pet_weight_info.* from pet_basic_info " + 
 			"join pet on pet.basic = pet_basic_info.id " + 

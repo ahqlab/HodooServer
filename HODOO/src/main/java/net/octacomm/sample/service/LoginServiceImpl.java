@@ -7,9 +7,11 @@ import org.springframework.stereotype.Service;
 
 import net.octacomm.sample.dao.mapper.DeviceMapper;
 import net.octacomm.sample.dao.mapper.PetMapper;
+import net.octacomm.sample.dao.mapper.PetWeightInfoMapper;
 import net.octacomm.sample.dao.mapper.UserMapper;
 import net.octacomm.sample.domain.Device;
 import net.octacomm.sample.domain.PetAllInfos;
+import net.octacomm.sample.domain.PetWeightInfo;
 import net.octacomm.sample.domain.ResultMessageGroup;
 import net.octacomm.sample.domain.SessionMaintenance;
 import net.octacomm.sample.domain.User;
@@ -20,7 +22,6 @@ import net.octacomm.sample.message.ResultMessage;
 @Service
 public class LoginServiceImpl implements LoginService{
 	
-	
 	@Autowired
 	private PetMapper petMapper;
 	
@@ -29,6 +30,10 @@ public class LoginServiceImpl implements LoginService{
 	
 	@Autowired
 	private UserMapper userMapper;
+	
+	@Autowired
+	private PetWeightInfoMapper petWeightInfoMapper;
+	
 
 	@Override
 	public SessionMaintenance login(User user) throws NotFoundUserException, InvalidPasswordException{
@@ -37,14 +42,12 @@ public class LoginServiceImpl implements LoginService{
 		if (exisId == null) {
 			sessionMaintenance = new SessionMaintenance();
 			sessionMaintenance.setResultMessage(ResultMessage.NOT_FOUND_EMAIL);
-			//group.setDomain(null);
 			return sessionMaintenance;
 		}
 		User result = userMapper.getUserForAuth(user);
 		if (result == null) {
 			sessionMaintenance = new SessionMaintenance();
 			sessionMaintenance.setResultMessage(ResultMessage.ID_PASSWORD_DO_NOT_MATCH);
-			//group.setDomain(null);
 			return sessionMaintenance;
 		}
 		sessionMaintenance = new SessionMaintenance();
@@ -57,15 +60,19 @@ public class LoginServiceImpl implements LoginService{
 	public SessionMaintenance getAllInformation(SessionMaintenance sessionMaintenance, String groupCode) {
 		List<User> users = userMapper.getGroupMemner(groupCode);
 		sessionMaintenance.setGroupUsers(users);
-		List<PetAllInfos> allInfos = petMapper.aboutMyPetList(groupCode);
+		List<PetAllInfos> allInfos = petMapper.aboutMyPetListForIos(groupCode);
+		for (PetAllInfos petAllInfos : allInfos) {
+			if(petAllInfos.getPetWeightInfo() != null) {
+				petAllInfos.setPetWeightInfo(petWeightInfoMapper.get(petAllInfos.getPetWeightInfo().getId()));
+			}else {
+				petAllInfos.setPetWeightInfo(new PetWeightInfo());
+			}
+		}
 		sessionMaintenance.setPetAllInfo(allInfos);
 		List<Device> devices = deviceMapper.myAllDeviceList(groupCode);
 		sessionMaintenance.setDevices(devices);
 		return sessionMaintenance;
 	}
-	
-	
-	
 
 	@Override
 	public SessionMaintenance getAllInfoLogin(User user) throws NotFoundUserException, InvalidPasswordException {

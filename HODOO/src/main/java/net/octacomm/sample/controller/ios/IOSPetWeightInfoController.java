@@ -1,6 +1,7 @@
 package net.octacomm.sample.controller.ios;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,8 +14,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import net.octacomm.sample.dao.mapper.PetMapper;
 import net.octacomm.sample.dao.mapper.PetPhysicalInfoMapper;
 import net.octacomm.sample.dao.mapper.PetWeightInfoMapper;
+import net.octacomm.sample.domain.PetCommonResponse;
 import net.octacomm.sample.domain.PetPhysicalInfo;
 import net.octacomm.sample.domain.PetWeightInfo;
+import net.octacomm.sample.message.ResultMessage;
 
 
 @RequestMapping("/ios/pet/weight")
@@ -31,9 +34,24 @@ public class IOSPetWeightInfoController {
 	
 	@ResponseBody
 	@RequestMapping(value = "/regist", method = RequestMethod.POST)
-	public int regist(@RequestParam("petIdx") int petIdx, @RequestBody PetWeightInfo petWeightInfo) {
+	public PetCommonResponse<PetWeightInfo> regist(@RequestBody Map<String, Object> param) {
+		
+		PetCommonResponse<PetWeightInfo> commonResponse = new PetCommonResponse<PetWeightInfo>();
+		
+		int bcs = (Integer) param.get("bcs");
+		int petIdx = (Integer) param.get("petIdx");
+		
+		PetWeightInfo petWeightInfo = new PetWeightInfo();
+		petWeightInfo.setBcs(bcs);
+		
 		petWeightInfoMapper.insert(petWeightInfo);
-		return petMapper.registWeight(petWeightInfo.getId(), petIdx);
+		if(petMapper.registWeight(petWeightInfo.getId(), petIdx) != 0) {
+			commonResponse.setDomain(petWeightInfoMapper.get(petWeightInfo.getId()));
+			commonResponse.setResultMessage(ResultMessage.SUCCESS);
+		}else {
+			commonResponse.setResultMessage(ResultMessage.FAILED);
+		}
+		return commonResponse;
 	}
 
 	

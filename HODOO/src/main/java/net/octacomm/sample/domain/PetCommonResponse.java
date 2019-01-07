@@ -4,11 +4,11 @@ import lombok.Data;
 import net.octacomm.sample.message.ResultMessage;
 
 @Data
-public class PetCommonResponse {
+public class PetCommonResponse<D extends Domain> {
 	
 	public Pet pet;
 	
-	public PetChronicDisease chronicDisease;
+	public D domain;
 	
 	public ResultMessage resultMessage;
 

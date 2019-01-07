@@ -47,7 +47,7 @@ public class MailController {
 
 	@RequestMapping(value = "/mail/mailSending")
 	public void mailSending() {
-		String setfrom = "silverlight2017@gmail.com";
+		String setfrom = "hellomyhodoo@gmail.com";
 		String tomail = "silverlight2017@ahqlab.com"; // 받는 사람 이메일
 		String title = "안녕하세요"; // 제목
 		String content = "아큐랩입니다."; // 내용
@@ -67,11 +67,10 @@ public class MailController {
 	@RequestMapping(value = "/user/certified", method = RequestMethod.POST)
 	public int userCertifiedMailSend(
 			HttpServletRequest request,
-			@RequestParam("toMailAddr")  String toMailAddr
-			) {
+			@RequestParam("toMailAddr")  String toMailAddr) {
 		
 		
-		String setfrom = "silverlight2017@gmail.com";
+		String setfrom = "hellomyhodoo@gmail.com";
 		String tomail = toMailAddr; // 받는 사람 이메일
 		String title = "안녕하세요"; // 제목
 		String content = "아큐랩입니다."; // 내용
