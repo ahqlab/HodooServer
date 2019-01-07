@@ -15,9 +15,9 @@ public class CountryImpl implements CountryService {
 	CountryMapper mapper;
 
 	@Override
-	public List<Country> getAllCountry() {
+	public List<Country> getAllCountry( String name ) {
 		// TODO Auto-generated method stub
-		List<Country> country = mapper.getList();
+		List<Country> country = mapper.getNameList( name );
 		return country;
 	}
 

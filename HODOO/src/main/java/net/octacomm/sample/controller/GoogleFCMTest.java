@@ -5,6 +5,8 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,19 +25,25 @@ import com.google.gson.Gson;
 import net.octacomm.sample.domain.Notification;
 import net.octacomm.sample.domain.User;
 import net.octacomm.sample.service.UserService;
+import net.octacomm.sample.dao.mapper.FirebaseMapper;
 import net.octacomm.sample.dao.mapper.UserMapper;
+import net.octacomm.sample.domain.InvitationRequest;
 import net.octacomm.sample.domain.Message;
 
 @RequestMapping("/fcm")
 @Controller
 public class GoogleFCMTest {
 	
+	public int NOT_TO_DEVICE = -2;
 	public int NOT_TO_USER = -1;
 	public int ERROR = 0;
 	public int SUCESS = 1;
 	
 	@Autowired
 	UserMapper mapper;
+	
+	@Autowired
+	FirebaseMapper firebaseMapper;
 
 	@ResponseBody
 	@RequestMapping(value = "/mobile/send.do")
@@ -114,6 +122,9 @@ public class GoogleFCMTest {
 			
 			if ( toUser == null )
 				return NOT_TO_USER;
+			if ( mapper.getDeviceCount(toUser.getUserIdx()) <= 0 ) {
+				return NOT_TO_DEVICE;
+			}
 			
 			
 			//final String apiKey = "AAAAEs65_CY:APA91bHK9ZVb0UP616OHPy5ZZiLu_1ogkrypPM5ahfOxSgyk0laN5NhOjBRf75k_mZzEgjJg3jgaWyQbT2SEsB9spuNOfgV9v4yMpPC79zrk5ESc5mm51N8yAV2Buk0ksWZ6jXYAzmidtQamnbZcf5qHhm5P6O0fnQ";
@@ -169,12 +180,38 @@ public class GoogleFCMTest {
 			}
 			in.close();
 			// print result
+			
+			InvitationRequest request = new InvitationRequest();
+			request.setToUserIdx(toUser.getUserIdx());
+			request.setFromUserIdx(fromUser.getUserIdx());
+			request.setCreated(new Date().getTime());
+			if ( firebaseMapper.getCount(request) > 0 ) {
+				Date date = new Date();
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				request.setCreated( sdf.format(date) );
+				firebaseMapper.updateCreated(request);
+			} else {
+				firebaseMapper.insert(request);
+			}
+			
+			
 			System.out.println(response.toString());
 			result = SUCESS;
 		} catch( Exception e ) {
 			result = ERROR;
 		}
 		return result;
+	}
+	@ResponseBody
+	@RequestMapping("/register")
+	public int register ( 
+			@RequestParam("toUserIdx") int toUserIdx,
+			@RequestParam("fromUserIdx") int fromUserIdx
+			) {
 		
+		InvitationRequest request = new InvitationRequest();
+		request.setToUserIdx(toUserIdx);
+		request.setFromUserIdx(fromUserIdx);
+		return firebaseMapper.insert(request);
 	}
 }
