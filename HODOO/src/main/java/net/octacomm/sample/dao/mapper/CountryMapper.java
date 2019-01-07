@@ -2,6 +2,7 @@ package net.octacomm.sample.dao.mapper;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 import net.octacomm.sample.dao.CRUDMapper;
@@ -34,7 +35,10 @@ public interface CountryMapper extends CRUDMapper<Country, DefaultParam, Integer
 
 	@Override
 	@Select("SELECT * FROM" + TABLE_NAME)
-	List<Country> getList();
+	List<Country> getList( );
+	
+	@Select("SELECT ${name} AS NAME FROM" + TABLE_NAME)
+	List<Country> getNameList( @Param("name") String name );
 
 	
 }

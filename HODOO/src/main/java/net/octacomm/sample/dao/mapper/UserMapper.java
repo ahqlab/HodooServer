@@ -89,5 +89,8 @@ public interface UserMapper extends CRUDMapper<User, DefaultParam, Integer>{
 	
 	@Update("UPDATE " + TABLE_NAME + " SET groupCode = ( SELECT groupCode FROM (SELECT * FROM " + TABLE_NAME +  ") AS map WHERE userIdx = #{toUserIdx} )  WHERE userIdx = #{fromUserIdx}")
 	int invitationApproval(@Param("toUserIdx") int toUserIdx, @Param("fromUserIdx") int fromUserIdx);
+	
+	@Select("SELECT COUNT(*) FROM device WHERE GroupCode = (SELECT m.groupCode FROM USER u JOIN user_group_mapping m ON u.userIdx = m.userIdx WHERE u.userIdx = #{userIdx})")
+	int getDeviceCount( @Param("userIdx") int userIdx );
 
 }
