@@ -1,5 +1,6 @@
 package net.octacomm.sample.service;
 
+import net.octacomm.sample.domain.CommonResponce;
 import net.octacomm.sample.domain.ResultMessageGroup;
 import net.octacomm.sample.domain.SessionMaintenance;
 import net.octacomm.sample.domain.User;
@@ -12,5 +13,5 @@ public interface LoginService {
 	
 	SessionMaintenance getAllInfoLogin(User user) throws NotFoundUserException, InvalidPasswordException;
 	
-	ResultMessageGroup login2(User user) throws NotFoundUserException, InvalidPasswordException;
+	CommonResponce<User> login2(User user) throws NotFoundUserException, InvalidPasswordException;
 }

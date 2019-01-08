@@ -9,6 +9,7 @@ import net.octacomm.sample.dao.mapper.DeviceMapper;
 import net.octacomm.sample.dao.mapper.PetMapper;
 import net.octacomm.sample.dao.mapper.PetWeightInfoMapper;
 import net.octacomm.sample.dao.mapper.UserMapper;
+import net.octacomm.sample.domain.CommonResponce;
 import net.octacomm.sample.domain.Device;
 import net.octacomm.sample.domain.PetAllInfos;
 import net.octacomm.sample.domain.PetWeightInfo;
@@ -85,22 +86,22 @@ public class LoginServiceImpl implements LoginService{
 	}
 
 	@Override
-	public ResultMessageGroup login2(User user) throws NotFoundUserException, InvalidPasswordException{
-		ResultMessageGroup group = null;
+	public CommonResponce<User> login2(User user) throws NotFoundUserException, InvalidPasswordException{
+		CommonResponce<User> group = null;
 		if (userMapper.getUser(user) == null) {
-			group = new ResultMessageGroup();
+			group = new CommonResponce<User>();
 			group.setResultMessage(ResultMessage.NOT_FOUND_EMAIL);
 			group.setDomain(null);
 			return group;
 		}
 		User result = userMapper.getUserForAuth(user);
 		if (result == null) {
-			group = new ResultMessageGroup();
+			group = new CommonResponce<User>();
 			group.setResultMessage(ResultMessage.ID_PASSWORD_DO_NOT_MATCH);
 			group.setDomain(null);
 			return group;
 		}
-		group = new ResultMessageGroup();
+		group = new CommonResponce<User>();
 		group.setResultMessage(ResultMessage.SUCCESS);
 		group.setDomain(result);
 		return group;

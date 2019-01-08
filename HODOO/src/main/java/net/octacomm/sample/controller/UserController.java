@@ -149,8 +149,8 @@ public class UserController {
 	
 	@ResponseBody
 	@RequestMapping(value = "/login2", method = RequestMethod.POST)
-	public ResultMessageGroup login2(@RequestBody User user) {
-		ResultMessageGroup group = loginService.login2(user);
+	public CommonResponce<User> login2(@RequestBody User user) {
+		CommonResponce<User> group = loginService.login2(user);
 		return group;
 	}
 
@@ -178,20 +178,25 @@ public class UserController {
 	public int updateUsetPassword(@RequestBody User user) {
 		return userMapper.updateUsetPassowrd(user);
 	}
-
+	
+	
 	@ResponseBody
-	@RequestMapping(value = "/find/user/password", method = RequestMethod.GET)
+	@RequestMapping(value = "/find/user/password2", method = RequestMethod.POST)
+	public int findUserPasswordTest() {
+		return 0;
+	}
+	
+	
+	@ResponseBody
+	@RequestMapping(value = "/find/user/password", method = RequestMethod.POST)
 	public CommonResponce<User> changeUserPassword(@RequestParam("email") String email) {
-
 		CommonResponce<User> responce = new CommonResponce<User>();
-
 		User returnUser = userMapper.getByUserEmail(email);
 		if (returnUser == null) {
 			// not found user;
 			// 존재하지 않는 유저입니다.
 			return null;
 		} else {
-
 			// 난수 발생
 			String tempPassword = createTempPassword();
 			// 이전 비밀번호 저장
@@ -206,9 +211,9 @@ public class UserController {
 					// 메일 전송 성공
 					responce.setDomain(returnUser);
 					responce.setResultMessage(ResultMessage.SUCCESS);
-					System.err.println("메일 전송 성공");
+					/*System.err.println("메일 전송 성공");
 					System.err.println("responce : " + responce);
-					System.err.println("mailResult : " + mailResult);
+					System.err.println("mailResult : " + mailResult);*/
 					return responce;
 				} else {
 					// 리턴 메일 전송 실패
@@ -221,7 +226,6 @@ public class UserController {
 				// 이전 비밀번호로 다시 업데이트
 				returnUser.setPassword(oldPassword);
 				userMapper.updateUsetPassowrd(returnUser);
-
 				responce.setDomain(returnUser);
 				responce.setResultMessage(ResultMessage.PASSWORD_UPDATE_FAILED);
 				return responce;
@@ -245,10 +249,6 @@ public class UserController {
 
 	public boolean sendEmail(String toMail, String title, String content) {
 		String setfrom = "hellomyhodoo@gmail.com";
-		/*
-		 * String tomail = "silverlight2017@ahqlab.com"; // 받는 사람 이메일 String title =
-		 * "안녕하세요"; // 제목 String content = "아큐랩입니다."; // 내용
-		 */
 		try {
 			MimeMessage message = mailSender.createMimeMessage();
 			MimeMessageHelper messageHelper = new MimeMessageHelper(message, true, "UTF-8");
@@ -257,11 +257,11 @@ public class UserController {
 			messageHelper.setSubject(title); // 메일제목은 생략이 가능하다
 			messageHelper.setText(content); // 메일 내용
 			mailSender.send(message);
+			return true;
 		} catch (Exception e) {
-			// System.out.println(e);
 			return false;
 		}
-		return true;
+	
 	}
 
 	@RequestMapping(value = "/checkUserCertifiedMail", method = RequestMethod.GET)
