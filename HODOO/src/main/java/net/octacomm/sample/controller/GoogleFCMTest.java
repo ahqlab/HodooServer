@@ -25,6 +25,7 @@ import com.google.gson.Gson;
 import net.octacomm.sample.domain.Notification;
 import net.octacomm.sample.domain.User;
 import net.octacomm.sample.service.UserService;
+import net.octacomm.sample.constant.HodooConstant;
 import net.octacomm.sample.dao.mapper.FirebaseMapper;
 import net.octacomm.sample.dao.mapper.UserMapper;
 import net.octacomm.sample.domain.InvitationRequest;
@@ -115,72 +116,30 @@ public class GoogleFCMTest {
 			@RequestParam("fromUserEmail") String fromUserEmail
 			) {
 		int result = 0;
-		try {
-			
-			User toUser = mapper.getByUserEmail(toUserEmail);
-			User fromUser = mapper.getByUserEmail(fromUserEmail);
-			
-			if ( toUser == null )
-				return NOT_TO_USER;
-			if ( mapper.getDeviceCount(toUser.getUserIdx()) <= 0 ) {
-				return NOT_TO_DEVICE;
-			}
-			
-			
-			//final String apiKey = "AAAAEs65_CY:APA91bHK9ZVb0UP616OHPy5ZZiLu_1ogkrypPM5ahfOxSgyk0laN5NhOjBRf75k_mZzEgjJg3jgaWyQbT2SEsB9spuNOfgV9v4yMpPC79zrk5ESc5mm51N8yAV2Buk0ksWZ6jXYAzmidtQamnbZcf5qHhm5P6O0fnQ";
-			//호두
-			final String apiKey = "AAAAfhtaYsk:APA91bEgKSbdUUKWISstd-k2uDvzCla8anBmDQhibr114NYN7tfpwTI8QTaqamqZSpPwa2746TVIuUYlVGqGbUIH6oUjHI9zz6pzwDdvMt4yPmw492zfc6sAaJpAmukLO8B4fJngr4D_";
-			URL url = new URL("https://fcm.googleapis.com/fcm/send");
-			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-			conn.setDoOutput(true);
-			conn.setRequestMethod("POST");
-			conn.setRequestProperty("Content-Type", "application/json");
-			conn.setRequestProperty("Authorization", "key=" + apiKey);
+		User toUser = mapper.getByUserEmail(toUserEmail);
+		User fromUser = mapper.getByUserEmail(fromUserEmail);
+		
+		Message message = new Message();
+		message.setTo(toUser.getPushToken());
 
-			conn.setDoOutput(true);
-			
-			Message message = new Message();
-			message.setTo(toUser.getPushToken());
-
-			
-			/* 커스텀 Notification을 위한 데이터 처리(s) */
-			Map<String, Object> data = new HashMap<>();
-			data.put("fromUserEmail", fromUser.getEmail());
-			data.put("fromUserIdx", fromUser.getUserIdx());
-			data.put("toUserIdx", toUser.getUserIdx());
-			data.put("host", "invitation");
-			data.put("title", "회원 초대 알림");
-			data.put("content", fromUser.getEmail());
-			/* 커스텀 Notification을 위한 데이터 처리(e) */
-			
-			message.setTo(toUser.getPushToken());
-			message.setData(data);
-			Gson gson = new Gson();
-			String json = gson.toJson(message);
-			
-			
-			OutputStream os = conn.getOutputStream();
-
-			// 서버에서 날려서 한글 깨지는 사람은 아래처럼 UTF-8로 인코딩해서 날려주자
-			os.write(json.getBytes("UTF-8"));
-			os.flush();
-			os.close();
-
-			int responseCode = conn.getResponseCode();
-			System.out.println("\nSending 'POST' request to URL : " + url);
-			System.out.println("Post parameters : " + json);
-			System.out.println("Response Code : " + responseCode);
-
-			BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-			String inputLine;
-			StringBuffer response = new StringBuffer();
-
-			while ((inputLine = in.readLine()) != null) {
-				response.append(inputLine);
-			}
-			in.close();
-			// print result
-			
+		
+		/* 커스텀 Notification을 위한 데이터 처리(s) */
+		Map<String, Object> data = new HashMap<>();
+		data.put("notiType", HodooConstant.FIREBASE_INVITATION_TYPE);
+		data.put("fromUserEmail", fromUser.getEmail());
+		data.put("fromUserIdx", fromUser.getUserIdx());
+		data.put("toUserIdx", toUser.getUserIdx());
+		data.put("host", "invitation");
+		data.put("title", "회원 초대 알림");
+		data.put("content", fromUser.getEmail());
+		/* 커스텀 Notification을 위한 데이터 처리(e) */
+		
+		message.setTo(toUser.getPushToken());
+		message.setData(data);
+		
+		result = requestFCM(message);
+		
+		if ( result == SUCESS ) {
 			InvitationRequest request = new InvitationRequest();
 			request.setToUserIdx(toUser.getUserIdx());
 			request.setFromUserIdx(fromUser.getUserIdx());
@@ -193,14 +152,10 @@ public class GoogleFCMTest {
 			} else {
 				firebaseMapper.insert(request);
 			}
-			
-			
-			System.out.println(response.toString());
-			result = SUCESS;
-		} catch( Exception e ) {
-			result = ERROR;
 		}
+		
 		return result;
+		
 	}
 	@ResponseBody
 	@RequestMapping("/register")
@@ -213,5 +168,50 @@ public class GoogleFCMTest {
 		request.setToUserIdx(toUserIdx);
 		request.setFromUserIdx(fromUserIdx);
 		return firebaseMapper.insert(request);
+	}
+	
+	private int requestFCM ( Message message ) {
+		int result = 0;
+		try {
+			URL url = new URL("https://fcm.googleapis.com/fcm/send");
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			conn.setDoOutput(true);
+			conn.setRequestMethod("POST");
+			conn.setRequestProperty("Content-Type", "application/json");
+			conn.setRequestProperty("Authorization", "key=" + HodooConstant.FCM_APIKEY);
+	
+			conn.setDoOutput(true);
+			
+			Gson gson = new Gson();
+			String json = gson.toJson(message);
+			
+			
+			OutputStream os = conn.getOutputStream();
+	
+			// 서버에서 날려서 한글 깨지는 사람은 아래처럼 UTF-8로 인코딩해서 날려주자
+			os.write(json.getBytes("UTF-8"));
+			os.flush();
+			os.close();
+	
+			result = conn.getResponseCode();
+			if ( result == 200 )
+				result = SUCESS;
+			
+			System.out.println("Response Code : " + result);
+			
+			BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+			String inputLine;
+			StringBuffer response = new StringBuffer();
+	
+			while ((inputLine = in.readLine()) != null) {
+				response.append(inputLine);
+			}
+			in.close();
+			return result;
+		
+		}  catch( Exception e ) {
+			result = ERROR;
+		}
+		return result;
 	}
 }
