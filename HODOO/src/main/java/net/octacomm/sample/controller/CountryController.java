@@ -25,9 +25,7 @@ public class CountryController {
 	
 	@ResponseBody
 	@RequestMapping(value = "/{language}/getAllCountry", method = RequestMethod.GET)
-	public List<Country> getAllCountry (
-			@PathVariable("language") int language) {
-		
+	public List<Country> getAllCountry (@PathVariable("language") int language) {
 		String columnName = "";
 		switch( language ) {
 			case HodooConstant.KO_CODE:
@@ -46,7 +44,9 @@ public class CountryController {
 				columnName = "ko_name";
 				break;
 		}
-		
 		return service.getAllCountry( columnName );
 	}
 }
+
+
+
