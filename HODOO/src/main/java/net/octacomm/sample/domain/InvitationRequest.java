@@ -5,7 +5,9 @@ import lombok.Data;
 @Data
 public class InvitationRequest implements Domain {
 	private int id;
-	private int fromUserIdx;
-	private int toUserIdx;
-	private Object created;
+    private int toUserIdx;
+    private int fromUserIdx;
+    private int state;
+    private Object created;
+    private String nickname;
 }

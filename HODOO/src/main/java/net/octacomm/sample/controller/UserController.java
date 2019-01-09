@@ -21,9 +21,11 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.google.firebase.messaging.FirebaseMessagingException;
 
+import net.octacomm.sample.dao.mapper.FirebaseMapper;
 import net.octacomm.sample.dao.mapper.UserGroupMappingMapper;
 import net.octacomm.sample.dao.mapper.UserMapper;
 import net.octacomm.sample.domain.CommonResponce;
+import net.octacomm.sample.domain.InvitationRequest;
 import net.octacomm.sample.domain.ResultMessageGroup;
 import net.octacomm.sample.domain.SessionMaintenance;
 import net.octacomm.sample.domain.User;
@@ -50,6 +52,9 @@ public class UserController {
 
 	@Autowired
 	private UserGroupMappingMapper userGroupMappingMapper;
+	
+	@Autowired
+	FirebaseMapper firebaseMapper;
 
 	@Autowired
 	private LoginService loginService;
@@ -305,6 +310,28 @@ public class UserController {
 			@RequestParam("toUserIdx") int toUserIdx,
 			@RequestParam("fromUserIdx") int fromUserIdx) {
 		return userGroupMappingMapper.invitationApproval(toUserIdx, fromUserIdx);
+	}
+	@ResponseBody
+	@RequestMapping(value = "/invitation/refusal", method = RequestMethod.POST)
+	public int invitationRefusal( 
+			@RequestParam("toUserIdx") int toUserIdx,
+			@RequestParam("fromUserIdx") int fromUserIdx) {
+		return firebaseMapper.invitationRefusal(toUserIdx, fromUserIdx);
+	}
+	@ResponseBody
+	@RequestMapping(value = "/invitation/getInvitationUser", method = RequestMethod.POST)
+	public List<InvitationRequest> getInvitationList( 
+			@RequestParam("userIdx") int userIdx) {
+		return firebaseMapper.getInvitationList(userIdx);
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/invitation/setInvitationType", method = RequestMethod.POST)
+	public int setInvitationType( 
+			@RequestParam("type") int type,
+			@RequestParam("toUserIdx") int toUserIdx,
+			@RequestParam("fromUserIdx") int fromUserIdx) {
+		return firebaseMapper.setInvitationType(type, toUserIdx, fromUserIdx);
 	}
 
 }
