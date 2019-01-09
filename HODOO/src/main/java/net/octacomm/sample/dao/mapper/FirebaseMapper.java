@@ -45,9 +45,15 @@ public interface FirebaseMapper extends CRUDMapper<InvitationRequest, DefaultPar
 	@Select("select count(*) from " + TABLE_NAME + " where toUserIdx = #{toUserIdx} and fromUserIdx = #{fromUserIdx}")
 	int getCount(InvitationRequest domain);
 	
-	@Update("UPDATE " + TABLE_NAME + " SET created = STR_TO_DATE(#{created}, '%Y-%m-%d %H:%i:%s') WHERE toUserIdx = #{toUserIdx} and fromUserIdx = #{fromUserIdx}")
-	int updateCreated(InvitationRequest domain);
+	@Select("select * from " + TABLE_NAME + " where toUserIdx = #{toUserIdx} and fromUserIdx = #{fromUserIdx}")
+	InvitationRequest getInvitationUser(InvitationRequest domain);
+	
+	@Update("UPDATE " + TABLE_NAME + " SET created = STR_TO_DATE(#{created}, '%Y-%m-%d %H:%i:%s'), state = 0  WHERE toUserIdx = #{toUserIdx} and fromUserIdx = #{fromUserIdx}")
+	int updateUser(InvitationRequest domain);
 	
 	@Delete("DELETE FROM " + TABLE_NAME + " WHERE toUserIdx = #{toUserIdx} AND fromUserIdx = #{fromUserIdx};")
 	int invitationRefusal(@Param("toUserIdx") int toUserIdx, @Param("fromUserIdx") int fromUserIdx);
+	
+	@Update("UPDATE " + TABLE_NAME + " SET state = #{type } WHERE toUserIdx = #{toUserIdx } AND fromUserIdx = #{fromUserIdx }")
+	int setInvitationType( @Param("type") int type, @Param("toUserIdx") int toUserIdx, @Param("fromUserIdx") int fromUserIdx);
 }

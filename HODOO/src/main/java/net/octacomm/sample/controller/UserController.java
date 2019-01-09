@@ -324,5 +324,14 @@ public class UserController {
 			@RequestParam("userIdx") int userIdx) {
 		return firebaseMapper.getInvitationList(userIdx);
 	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/invitation/setInvitationType", method = RequestMethod.POST)
+	public int setInvitationType( 
+			@RequestParam("type") int type,
+			@RequestParam("toUserIdx") int toUserIdx,
+			@RequestParam("fromUserIdx") int fromUserIdx) {
+		return firebaseMapper.setInvitationType(type, toUserIdx, fromUserIdx);
+	}
 
 }

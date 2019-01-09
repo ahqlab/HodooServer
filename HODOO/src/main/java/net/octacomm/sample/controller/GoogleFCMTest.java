@@ -39,6 +39,7 @@ public class GoogleFCMTest {
 	public int NOT_TO_USER = -1;
 	public int ERROR = 0;
 	public int SUCESS = 1;
+	public int EXISTENCE_USER = 2;
 	
 	@Autowired
 	UserMapper mapper;
@@ -137,18 +138,26 @@ public class GoogleFCMTest {
 		message.setTo(toUser.getPushToken());
 		message.setData(data);
 		
-		result = requestFCM(message);
+		InvitationRequest request = new InvitationRequest();
+		request.setToUserIdx(toUser.getUserIdx());
+		request.setFromUserIdx(fromUser.getUserIdx());
+		request.setCreated(new Date().getTime());
 		
+		if ( firebaseMapper.getCount(request) > 0 ) {
+			InvitationRequest invitationUser = firebaseMapper.getInvitationUser(request);
+			if ( invitationUser.getState() == 1 ) {
+				result = EXISTENCE_USER;
+				return result;
+			}
+		}
+		
+		result = requestFCM(message);
 		if ( result == SUCESS ) {
-			InvitationRequest request = new InvitationRequest();
-			request.setToUserIdx(toUser.getUserIdx());
-			request.setFromUserIdx(fromUser.getUserIdx());
-			request.setCreated(new Date().getTime());
 			if ( firebaseMapper.getCount(request) > 0 ) {
 				Date date = new Date();
 				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 				request.setCreated( sdf.format(date) );
-				firebaseMapper.updateCreated(request);
+				firebaseMapper.updateUser(request);
 			} else {
 				firebaseMapper.insert(request);
 			}

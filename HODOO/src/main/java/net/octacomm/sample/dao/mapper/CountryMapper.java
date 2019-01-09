@@ -37,7 +37,7 @@ public interface CountryMapper extends CRUDMapper<Country, DefaultParam, Integer
 	@Select("SELECT * FROM" + TABLE_NAME)
 	List<Country> getList( );
 	
-	@Select("SELECT ${name} AS NAME FROM" + TABLE_NAME)
+	@Select("SELECT ${name} AS NAME, id FROM" + TABLE_NAME)
 	List<Country> getNameList( @Param("name") String name );
 
 	
