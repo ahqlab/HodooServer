@@ -16,7 +16,6 @@ public interface CountryMapper extends CRUDMapper<Country, DefaultParam, Integer
 
 	@Override
 	int insert(Country domain);
-
 	
 	@Override
 	Country get(Integer id);
