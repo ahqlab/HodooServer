@@ -178,6 +178,34 @@ public class GoogleFCMTest {
 		request.setFromUserIdx(fromUserIdx);
 		return firebaseMapper.insert(request);
 	}
+	@ResponseBody
+	@RequestMapping(value = "/mobile/send/normal", method = RequestMethod.POST)
+	public int normalPush (
+			@RequestParam("title") String title,
+			@RequestParam("content") String content,
+			@RequestParam("toUserEmail") String toUserEmail
+			) {
+		User toUser = mapper.getByUserEmail(toUserEmail);
+		
+		int result = 0;
+		Message message = new Message();
+		message.setTo(toUser.getPushToken());
+
+		
+		/* 커스텀 Notification을 위한 데이터 처리(s) */
+		Map<String, Object> data = new HashMap<>();
+		data.put("notiType", HodooConstant.FIREBASE_NORMAL_TYPE);
+		data.put("title", title);
+		data.put("content", content);
+		/* 커스텀 Notification을 위한 데이터 처리(e) */
+		
+		message.setTo(toUser.getPushToken());
+		message.setData(data);
+		
+		result = requestFCM(message);
+		
+		return result;
+	}
 	
 	private int requestFCM ( Message message ) {
 		int result = 0;

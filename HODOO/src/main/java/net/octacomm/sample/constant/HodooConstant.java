@@ -2,7 +2,14 @@ package net.octacomm.sample.constant;
 
 public class HodooConstant {
 	
+	public static final int INVITATION_RESET_TYPE = 0;
+	public static final int ACCEPT_TYPE = 1;
+    public static final int DECLINE_TYPE = 2;
+	
+    public static final int FIREBASE_NORMAL_TYPE = 0;
 	public static final int FIREBASE_INVITATION_TYPE = 1;
+	
+	public static final int WITHDRAW = -1;
 	
 	public static final int KO_CODE = 1;
 	public static final int EN_CODE = 2;

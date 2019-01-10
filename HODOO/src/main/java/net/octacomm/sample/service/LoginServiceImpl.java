@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import net.octacomm.sample.constant.HodooConstant;
 import net.octacomm.sample.dao.mapper.DeviceMapper;
 import net.octacomm.sample.dao.mapper.PetMapper;
 import net.octacomm.sample.dao.mapper.PetWeightInfoMapper;
@@ -94,6 +95,15 @@ public class LoginServiceImpl implements LoginService{
 			group.setDomain(null);
 			return group;
 		}
+
+		User getUser = userMapper.getUser(user);
+		if ( getUser.getUserCode() == HodooConstant.WITHDRAW ) {
+			group = new CommonResponce<User>();
+			group.setResultMessage(ResultMessage.WITHDRAW_USER);
+			group.setDomain(null);
+			return group;
+		}
+		
 		User result = userMapper.getUserForAuth(user);
 		if (result == null) {
 			group = new CommonResponce<User>();

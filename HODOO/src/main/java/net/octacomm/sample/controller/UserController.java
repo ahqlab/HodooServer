@@ -21,6 +21,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.google.firebase.messaging.FirebaseMessagingException;
 
+import net.octacomm.sample.constant.HodooConstant;
 import net.octacomm.sample.dao.mapper.FirebaseMapper;
 import net.octacomm.sample.dao.mapper.UserGroupMappingMapper;
 import net.octacomm.sample.dao.mapper.UserMapper;
@@ -332,6 +333,37 @@ public class UserController {
 			@RequestParam("toUserIdx") int toUserIdx,
 			@RequestParam("fromUserIdx") int fromUserIdx) {
 		return firebaseMapper.setInvitationType(type, toUserIdx, fromUserIdx);
+	}
+	@ResponseBody
+	@RequestMapping(value = "/setUserCode", method = RequestMethod.POST)
+	public int setInvitationType(
+			@RequestParam("idx") int idx,
+			@RequestParam("type") int code) {
+		User user = userMapper.get(idx);
+		user.setUserCode(code);
+		int result = 0;
+		if ( userGroupMappingMapper.delete( userGroupMappingMapper.getUserGroupId(idx) ) > 0 ) {
+			if ( userMapper.updateForUsercode(user) > 0 ) {
+				result = 1;
+			}
+		}
+		return result;
+	}
+	@ResponseBody
+	@RequestMapping(value = "/withdrawGroup", method = RequestMethod.POST)
+	public int withdrawGroup(
+			@RequestParam("to") int to,
+			@RequestParam("from") int from
+			) {
+		String grougCode = MathUtil.getGroupId();
+		int result = userGroupMappingMapper.withdrawGroup(grougCode, from);
+		if ( result > 0 ) {
+			result = firebaseMapper.invitationRefusal(to, from);
+		} else {
+			result = 0;
+		}
+		
+		return result;
 	}
 
 }
