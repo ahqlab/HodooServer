@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+/*<<<<<<< HEAD
 package net.octacomm.sample.controller;
 
 import java.io.BufferedReader;
@@ -125,7 +125,7 @@ public class GoogleFCMTest {
 		message.setTo(toUser.getPushToken());
 
 		
-		/* 커스텀 Notification을 위한 데이터 처리(s) */
+		 커스텀 Notification을 위한 데이터 처리(s) 
 		Map<String, Object> data = new HashMap<>();
 		data.put("notiType", HodooConstant.FIREBASE_INVITATION_TYPE);
 		data.put("fromUserEmail", fromUser.getEmail());
@@ -134,7 +134,7 @@ public class GoogleFCMTest {
 		data.put("host", "invitation");
 		data.put("title", "회원 초대 알림");
 		data.put("content", fromUser.getEmail());
-		/* 커스텀 Notification을 위한 데이터 처리(e) */
+		 커스텀 Notification을 위한 데이터 처리(e) 
 		
 		message.setTo(toUser.getPushToken());
 		message.setData(data);
@@ -225,7 +225,7 @@ public class GoogleFCMTest {
 		return result;
 	}
 }
-=======
+=======*/
 package net.octacomm.sample.controller;
 
 import java.io.BufferedReader;
@@ -480,4 +480,3 @@ public class GoogleFCMTest {
 		return result;
 	}
 }
->>>>>>> branch 'master' of https://github.com/ahqlab/HodooServer.git
