@@ -33,7 +33,7 @@ public interface UserMapper extends CRUDMapper<User, DefaultParam, Integer>{
 	
 	public String BASIC_INFO_UPDATE_VALUES = "  nickname = #{nickname} , USER.country = #{country} ";
 	
-	public String SELECT_FIELDS = "  user.userIdx , user.email, user.password, user.nickname, user.sex, user.country , user.userCode, user_group_mapping.groupCode , DATE_FORMAT(user.createDate, \"%Y-%l-%d\") AS createDate ";
+	public String SELECT_FIELDS = "  user.userIdx , user.email, user.password, user.nickname, user.sex, user.country , user.userCode, user_group_mapping.groupCode , user_group_mapping.accessType, DATE_FORMAT(user.createDate, \"%Y-%l-%d\") AS createDate ";
 	
 	int insert(User user);
 	
