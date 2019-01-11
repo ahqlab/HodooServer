@@ -25,4 +25,5 @@ public class RealTimeWeight implements Domain{
 	private String tag;
 	
 	private String createDate;
+
 }
