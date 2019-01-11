@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 package net.octacomm.sample.service;
 
 import java.util.List;
@@ -113,8 +112,7 @@ public class LoginServiceImpl implements LoginService{
 	}
 
 }
-=======
-package net.octacomm.sample.service;
+/*package net.octacomm.sample.service;
 
 import java.util.List;
 
@@ -235,3 +233,4 @@ public class LoginServiceImpl implements LoginService{
 
 }
 >>>>>>> branch 'master' of https://github.com/ahqlab/HodooServer.git
+*/
