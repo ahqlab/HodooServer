@@ -136,6 +136,7 @@ public class UserController {
 	@ResponseBody
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public SessionMaintenance login(@RequestBody User user) {
+		System.err.println("user : " + user);
 		SessionMaintenance group = loginService.login(user);
 		return group;
 	}

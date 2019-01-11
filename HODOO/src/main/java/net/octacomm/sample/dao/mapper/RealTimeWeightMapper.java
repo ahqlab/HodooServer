@@ -20,9 +20,9 @@ import net.octacomm.sample.domain.Statistics;
 
 public interface RealTimeWeightMapper extends CRUDMapper<RealTimeWeight, DefaultParam, Integer>{
 	
-	public String INSERT_FIELDS = " ( mac, value, type , createDate )";
+	public String INSERT_FIELDS = " ( mac, value, type , tag, createDate )";
 	
-	public String INSERT_VALUES = " ( #{mac}, #{value}, #{type}, now())";
+	public String INSERT_VALUES = " ( #{mac}, #{value}, #{type}, #{tag}, now())";
 	
 	public String TABLE_NAME = " real_time_weight ";
 	

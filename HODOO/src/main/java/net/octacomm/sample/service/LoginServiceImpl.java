@@ -51,6 +51,10 @@ public class LoginServiceImpl implements LoginService{
 			sessionMaintenance.setResultMessage(ResultMessage.ID_PASSWORD_DO_NOT_MATCH);
 			return sessionMaintenance;
 		}
+		User toKenUPdateUser = new User();
+		toKenUPdateUser.setUserIdx(result.getUserIdx());
+		toKenUPdateUser.setPushToken(user.getPushToken());
+		userMapper.saveFCMToken(toKenUPdateUser);
 		sessionMaintenance = new SessionMaintenance();
 		sessionMaintenance.setResultMessage(ResultMessage.SUCCESS);
 		sessionMaintenance.setUser(result);

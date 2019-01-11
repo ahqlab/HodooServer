@@ -1,4 +1,4 @@
-package net.octacomm.sample.controller;
+package net.octacomm.sample.controller.ios;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -31,9 +32,9 @@ import net.octacomm.sample.dao.mapper.UserMapper;
 import net.octacomm.sample.domain.InvitationRequest;
 import net.octacomm.sample.domain.Message;
 
-@RequestMapping("/fcm")
+@RequestMapping("/ios/fcm")
 @Controller
-public class GoogleFCMTest {
+public class IOSGoogleFCMTest {
 	
 	public int NOT_TO_DEVICE = -2;
 	public int NOT_TO_USER = -1;
@@ -111,11 +112,14 @@ public class GoogleFCMTest {
 
 		return response.toString();
 	}
+	
+	
 	@ResponseBody
 	@RequestMapping(value = "/mobile/send/invitation", method = RequestMethod.POST)
-	public int invitation (
-			@RequestParam("toUserEmail") String toUserEmail,
-			@RequestParam("fromUserEmail") String fromUserEmail) {
+	public int invitation2 (@RequestBody Map<String, Object> param) {
+		String toUserEmail = (String) param.get("toUserEmail");
+		String fromUserEmail = (String) param.get("fromUserEmail");
+		
 		int result = 0;
 		User toUser = mapper.getByUserEmail(toUserEmail);
 		User fromUser = mapper.getByUserEmail(fromUserEmail);
