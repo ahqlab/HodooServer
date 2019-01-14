@@ -105,6 +105,12 @@ public class LoginServiceImpl implements LoginService{
 			group.setDomain(null);
 			return group;
 		}
+		
+		if ( userMapper.getFCMTokenOverlapCheck(result) > 0  ) {
+			result.setPushToken(user.getPushToken());
+			userMapper.saveFCMToken(result);
+		}
+		
 		group = new CommonResponce<User>();
 		group.setResultMessage(ResultMessage.SUCCESS);
 		group.setDomain(result);
@@ -113,12 +119,9 @@ public class LoginServiceImpl implements LoginService{
 
 }
 /*package net.octacomm.sample.service;
-
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import net.octacomm.sample.constant.HodooConstant;
 import net.octacomm.sample.dao.mapper.DeviceMapper;
 import net.octacomm.sample.dao.mapper.PetMapper;
@@ -134,7 +137,6 @@ import net.octacomm.sample.domain.User;
 import net.octacomm.sample.exceptions.InvalidPasswordException;
 import net.octacomm.sample.exceptions.NotFoundUserException;
 import net.octacomm.sample.message.ResultMessage;
-
 @Service
 public class LoginServiceImpl implements LoginService{
 	
@@ -150,7 +152,6 @@ public class LoginServiceImpl implements LoginService{
 	@Autowired
 	private PetWeightInfoMapper petWeightInfoMapper;
 	
-
 	@Override
 	public SessionMaintenance login(User user) throws NotFoundUserException, InvalidPasswordException{
 		SessionMaintenance sessionMaintenance = null;
@@ -189,7 +190,6 @@ public class LoginServiceImpl implements LoginService{
 		sessionMaintenance.setDevices(devices);
 		return sessionMaintenance;
 	}
-
 	@Override
 	public SessionMaintenance getAllInfoLogin(User user) throws NotFoundUserException, InvalidPasswordException {
 		SessionMaintenance sessionMaintenance = null;
@@ -199,7 +199,6 @@ public class LoginServiceImpl implements LoginService{
 		getAllInformation(sessionMaintenance, user.getGroupCode());
 		return sessionMaintenance;
 	}
-
 	@Override
 	public CommonResponce<User> login2(User user) throws NotFoundUserException, InvalidPasswordException{
 		CommonResponce<User> group = null;
@@ -209,7 +208,6 @@ public class LoginServiceImpl implements LoginService{
 			group.setDomain(null);
 			return group;
 		}
-
 		User getUser = userMapper.getUser(user);
 		if ( getUser.getUserCode() == HodooConstant.WITHDRAW ) {
 			group = new CommonResponce<User>();
@@ -230,7 +228,6 @@ public class LoginServiceImpl implements LoginService{
 		group.setDomain(result);
 		return group;
 	}
-
 }
 >>>>>>> branch 'master' of https://github.com/ahqlab/HodooServer.git
 */
