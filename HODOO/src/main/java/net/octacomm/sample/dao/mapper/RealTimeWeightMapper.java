@@ -17,6 +17,7 @@ import net.octacomm.sample.domain.PetBasicInfo;
 import net.octacomm.sample.domain.RealTimeWeight;
 import net.octacomm.sample.domain.StandardHsv;
 import net.octacomm.sample.domain.Statistics;
+import net.octacomm.sample.domain.User;
 
 public interface RealTimeWeightMapper extends CRUDMapper<RealTimeWeight, DefaultParam, Integer>{
 	
@@ -51,6 +52,9 @@ public interface RealTimeWeightMapper extends CRUDMapper<RealTimeWeight, Default
 	
 	@Select("select value from " + TABLE_NAME  +" where mac = #{mac} order by createDate desc limit 4")
 	public List<Float> getRealTimeList(@Param("mac") String mac);
+	
+	@Select("select u.* from device d left join user_group_mapping m on d.groupCode = m.groupCode left join user u on u.userIdx = m.userIdx where d.serialNumber = #{mac} ")
+	public List<User> getUserList( @Param("mac") String mac );
 	
 	public RealTimeWeight getListofDeviceList(@Param("date") String date, @Param("devices") List<Device> devices, @Param("type") String type);
 	

@@ -106,10 +106,16 @@ public class LoginServiceImpl implements LoginService{
 			return group;
 		}
 		
-		if ( userMapper.getFCMTokenOverlapCheck(result) > 0  ) {
+		if ( result.getPushToken() != null ) {
+			if ( userMapper.getFCMTokenOverlapCheck(result) > 0  ) {
+				result.setPushToken(user.getPushToken());
+				userMapper.saveFCMToken(result);
+			}
+		} else {
 			result.setPushToken(user.getPushToken());
 			userMapper.saveFCMToken(result);
 		}
+		
 		
 		group = new CommonResponce<User>();
 		group.setResultMessage(ResultMessage.SUCCESS);
