@@ -1,7 +1,10 @@
 package net.octacomm.sample.controller;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -10,12 +13,16 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import net.octacomm.sample.constant.HodooConstant;
 import net.octacomm.sample.dao.mapper.DeviceMapper;
 import net.octacomm.sample.domain.Device;
+import net.octacomm.sample.domain.Message;
 import net.octacomm.sample.domain.RealTimeBedData;
 import net.octacomm.sample.domain.RealTimeWeight;
 import net.octacomm.sample.domain.Statistics;
+import net.octacomm.sample.domain.User;
 import net.octacomm.sample.domain.Weight;
+import net.octacomm.sample.utils.FcmUtil;
 
 @RequestMapping("/weight")
 @Controller
@@ -31,6 +38,24 @@ public class RealTimeWeightController {
 	@RequestMapping(value = "/realtime/get")
 	public String regist(RealTimeWeight realTimeWeight) {
 		RealTimeWeightMapper.insert(realTimeWeight);
+		List<User> userList = RealTimeWeightMapper.getUserList(realTimeWeight.getMac());
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		
+		for (int i = 0; i < userList.size(); i++) {
+			if ( userList.get(i).getPushToken() != null ) {
+				Message message = new Message();
+				message.setTo( userList.get(i).getPushToken() );
+				
+				Map<String, Object> data = new HashMap<>();
+				data.put("notiType", HodooConstant.FIREBASE_NORMAL_TYPE);
+				data.put("title", "측정결과");
+				data.put("content", sdf.format(new Date()) + "일 측정 결과 입니다.\n" + realTimeWeight.getType() + " : " + realTimeWeight.getValue());
+				message.setData(data);
+				FcmUtil.requestFCM(message);
+			}
+			
+		}
+
 		return "HELLO";
 	}
 	
