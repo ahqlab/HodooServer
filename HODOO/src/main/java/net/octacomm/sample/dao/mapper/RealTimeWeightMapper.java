@@ -65,6 +65,5 @@ public interface RealTimeWeightMapper extends CRUDMapper<RealTimeWeight, Default
 	public List<Statistics> getStatisticsOfMonth(@Param("devices") List<Device> devices, @Param("year") String year, @Param("type") String type);
 	
 	public List<Statistics> getStatisticsOfYear(HashMap<String, Object> map);
-		
 	
 }
