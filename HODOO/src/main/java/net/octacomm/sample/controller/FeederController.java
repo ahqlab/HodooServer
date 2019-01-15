@@ -54,7 +54,7 @@ public class FeederController {
 	//Calories
 	//OrderIdx
 	@ResponseBody
-	@RequestMapping(value = "/inser/meal", method = RequestMethod.GET)
+	@RequestMapping(value = "/regist/meal", method = RequestMethod.GET)
 	public int insertMealHistory(FeedOrders feedOrders) {
 		MealHistory history = new MealHistory();
 		FeedOrders orders = feederOrderMapper.get(feedOrders.getOrderIdx());
