@@ -94,7 +94,9 @@ public interface UserMapper extends CRUDMapper<User, DefaultParam, Integer>{
 	@Select("SELECT COUNT(*) FROM device WHERE GroupCode = (SELECT m.groupCode FROM USER u JOIN user_group_mapping m ON u.userIdx = m.userIdx WHERE u.userIdx = #{userIdx})")
 	int getDeviceCount( @Param("userIdx") int userIdx );
 	
-	@Select("SELECT pushToken = (SELECT pushToken FROM USER WHERE userIdx = #{userIdx}) FROM USER WHERE pushToken = #{pushToken}")
+	@Select("SELECT count(pushToken = (SELECT pushToken FROM USER WHERE userIdx = #{userIdx})) FROM USER WHERE pushToken = #{pushToken}")
 	int getFCMTokenOverlapCheck( User user);
-
+	
+	@Update("UPDATE USER SET pushToken = NULL WHERE pushToken = #{pushToken }")
+	int removeFCMToken( @Param("pushToken") String pushToken );
 }

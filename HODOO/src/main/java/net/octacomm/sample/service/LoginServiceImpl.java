@@ -107,7 +107,11 @@ public class LoginServiceImpl implements LoginService{
 		}
 		
 		if ( result.getPushToken() != null ) {
-			if ( userMapper.getFCMTokenOverlapCheck(result) > 0  ) {
+			if ( userMapper.getFCMTokenOverlapCheck(result) <= 1  ) {
+				result.setPushToken(user.getPushToken());
+				userMapper.saveFCMToken(result);
+			} else {
+				userMapper.removeFCMToken( user.getPushToken() );
 				result.setPushToken(user.getPushToken());
 				userMapper.saveFCMToken(result);
 			}
