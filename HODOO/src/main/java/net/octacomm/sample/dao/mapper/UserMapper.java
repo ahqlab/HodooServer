@@ -20,6 +20,7 @@ import org.apache.ibatis.annotations.Update;
  * @author tykim.
  * 
  */
+
 @CacheNamespace
 public interface UserMapper extends CRUDMapper<User, DefaultParam, Integer>{
 	
@@ -31,7 +32,7 @@ public interface UserMapper extends CRUDMapper<User, DefaultParam, Integer>{
 	
 	public String UPDATE_VALUES = " email = #{email} , password = #{password} , nickname = #{nickname} , sex = #{sex} , country = #{country} , groupId = #{groupId} , createDate = now() ";
 	
-	public String BASIC_INFO_UPDATE_VALUES = "  nickname = #{nickname} , USER.country = #{country} , user.sex = #{sex}";
+	public String BASIC_INFO_UPDATE_VALUES = "  nickname = #{nickname} , USER.country = #{country} , USER.sex = #{sex}";
 	
 	public String SELECT_FIELDS = "  user.userIdx , user.email, user.password, user.nickname, user.sex, user.country , user.pushToken, user.userCode, user_group_mapping.groupCode , user_group_mapping.accessType, DATE_FORMAT(user.createDate, \"%Y-%l-%d\") AS createDate ";
 	

@@ -484,7 +484,6 @@ public class UserController {
 	@ResponseBody
 	@RequestMapping(value = "/update/basic/info", method = RequestMethod.POST)
 	public int updateBasic(@RequestBody User user) {
-		System.err.println("user L " + user);
 		return userMapper.updateBasic(user);
 	}
 

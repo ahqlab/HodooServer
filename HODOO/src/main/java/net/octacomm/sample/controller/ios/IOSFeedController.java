@@ -42,12 +42,12 @@ public class IOSFeedController extends AbstractCRUDController<FeedMapper, Feed, 
 		return mapper.getList();
 	}
 	
-	@ResponseBody
+/*	@ResponseBody
 	@RequestMapping(value = "/search/list", method = RequestMethod.POST)
 	public List<Feed> searchList(@RequestBody DefaultParam defaultParam) {
 		System.err.println("defaultParam : " + defaultParam.getSearchWord());
 		return mapper.getSearchList(defaultParam.getSearchWord());
-	}
+	}*/
 	
 	@ResponseBody
 	@RequestMapping(value = "/get/info", method = RequestMethod.POST)

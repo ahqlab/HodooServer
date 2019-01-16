@@ -17,11 +17,9 @@ import net.octacomm.sample.constant.HodooConstant;
 import net.octacomm.sample.dao.mapper.DeviceMapper;
 import net.octacomm.sample.domain.Device;
 import net.octacomm.sample.domain.Message;
-import net.octacomm.sample.domain.RealTimeBedData;
 import net.octacomm.sample.domain.RealTimeWeight;
 import net.octacomm.sample.domain.Statistics;
 import net.octacomm.sample.domain.User;
-import net.octacomm.sample.domain.Weight;
 import net.octacomm.sample.utils.FcmUtil;
 
 @RequestMapping("/weight")
@@ -74,7 +72,7 @@ public class RealTimeWeightController {
 
 	@ResponseBody
 	@RequestMapping(value = "/get/last/collection/data")
-	public RealTimeWeight getLastCollectionData(@RequestParam("date") String date, @RequestParam("groupCode") String groupCode, @RequestParam("type") String type) {
+	public RealTimeWeight getLastCollectionData(@RequestParam("date") String date, @RequestParam("groupCode") String groupCode, @RequestParam("type") int type) {
 		List<Device> deviceList = deviceMapper.myDeviceList(groupCode);
 		RealTimeWeight weights = RealTimeWeightMapper.getListofDeviceList(date, deviceList, type);
 		return weights;
@@ -82,7 +80,7 @@ public class RealTimeWeightController {
 
 	@ResponseBody
 	@RequestMapping(value = "/get/statistics/list/of/time")
-	public List<Statistics> getStatisticsOfTime(@RequestParam("groupCode") String groupCode, @RequestParam("today") String today, @RequestParam("type") String type) {
+	public List<Statistics> getStatisticsOfTime(@RequestParam("groupCode") String groupCode, @RequestParam("today") String today, @RequestParam("type") int type) {
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		List<Device> deviceList = deviceMapper.myDeviceList(groupCode);
 		map.put("deviceList", deviceList);
@@ -94,7 +92,7 @@ public class RealTimeWeightController {
 	
 	@ResponseBody
 	@RequestMapping(value = "/get/statistics/list/of/day")
-	public List<Statistics> getStatisticsOfDay(@RequestParam("groupCode") String groupCode, @RequestParam("type") String type) {
+	public List<Statistics> getStatisticsOfDay(@RequestParam("groupCode") String groupCode, @RequestParam("type") int type) {
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		List<Device> deviceList = deviceMapper.myDeviceList(groupCode);
 		map.put("deviceList", deviceList);
@@ -105,7 +103,7 @@ public class RealTimeWeightController {
 	
 	@ResponseBody
 	@RequestMapping(value = "/get/statistics/list/of/week")
-	public List<Statistics> getStatisticsOfWeek(@RequestParam("groupCode") String groupCode, @RequestParam("month") String month, @RequestParam("type") String type) {
+	public List<Statistics> getStatisticsOfWeek(@RequestParam("groupCode") String groupCode, @RequestParam("month") String month, @RequestParam("type") int type) {
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		List<Device> deviceList = deviceMapper.myDeviceList(groupCode);
 		map.put("deviceList", deviceList);
@@ -116,7 +114,7 @@ public class RealTimeWeightController {
 	
 	@ResponseBody
 	@RequestMapping(value = "/get/statistics/list/of/month")
-	public List<Statistics> getStatisticsOfMonth(@RequestParam("groupCode") String groupCode, @RequestParam("year") String year, @RequestParam("type") String type) {
+	public List<Statistics> getStatisticsOfMonth(@RequestParam("groupCode") String groupCode, @RequestParam("year") String year, @RequestParam("type") int type) {
 		/*HashMap<String, Object> map = new HashMap<String, Object>();
 		map.put("deviceList", deviceList);
 		map.put("year", year);*/
@@ -126,7 +124,7 @@ public class RealTimeWeightController {
 	
 	@ResponseBody
 	@RequestMapping(value = "/get/statistics/list/of/year")
-	public List<Statistics> getStatisticsOfYear(@RequestParam("groupCode") String groupCode, @RequestParam("type") String type) {
+	public List<Statistics> getStatisticsOfYear(@RequestParam("groupCode") String groupCode, @RequestParam("type") int type) {
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		List<Device> deviceList = deviceMapper.myDeviceList(groupCode);
 		map.put("deviceList", deviceList);

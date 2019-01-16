@@ -33,7 +33,6 @@ public class User implements Domain {
 	
 	private int userCode;
 
-
 	@Override
 	public String toString() {
 		return "User [userIdx=" + userIdx + ", email=" + email + ", password=" + password + ", passwordCheck="
