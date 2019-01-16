@@ -44,8 +44,8 @@ public interface FeedMapper extends CRUDMapper<Feed, DefaultParam, Integer>{
 	@Override
 	List<Feed> getList();
 	
-	@Select("SELECT * FROM " + TABLE_NAME +  " WHERE NAME LIKE CONCAT('%', #{text}, '%')")
-	public List<Feed> getSearchList(@Param("text") String searchWord);
+	@Select("SELECT * FROM " + TABLE_NAME +  " WHERE NAME LIKE CONCAT('%', #{text}, '%') and language = #{language}")
+	public List<Feed> getSearchList(@Param("text") String searchWord, @Param("language") String language);
 	
 	@Select("SELECT * FROM " + TABLE_NAME +  " WHERE NAME LIKE CONCAT('%', #{text}, '%')")
 	public List<Feed> getFeedInfo(int id);

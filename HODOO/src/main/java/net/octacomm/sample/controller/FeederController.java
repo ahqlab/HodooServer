@@ -42,13 +42,14 @@ public class FeederController {
 	//rer
 	@ResponseBody
 	@RequestMapping(value = "/check", method = RequestMethod.GET)
-	public FeedOrders check() {
+	public String check() {
 		if (feederOrderMapper.getList().size() > 0) {
 			// 있다.
-			return feederOrderMapper.get(feederOrderMapper.getList().get(0).getOrderIdx());
+			FeedOrders order = feederOrderMapper.get(feederOrderMapper.getList().get(0).getOrderIdx());
+			return "calories:" + order.getCalories() + "/orderIdx:" + order.getOrderIdx() + "/rer:" + order.getRer();
 		} else {
 			// 없다.
-			return new FeedOrders();
+			return null;
 		}
 	}
 	//Calories

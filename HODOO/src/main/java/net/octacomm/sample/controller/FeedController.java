@@ -43,9 +43,9 @@ public class FeedController extends AbstractCRUDController<FeedMapper, Feed, Def
 	
 	@ResponseBody
 	@RequestMapping(value = "/search/list", method = RequestMethod.POST)
-	public List<Feed> searchList(@RequestBody DefaultParam defaultParam) {
+	public List<Feed> searchList(@RequestBody DefaultParam defaultParam, @RequestParam("language") String language) {
 		System.err.println("defaultParam : " + defaultParam.getSearchWord());
-		return mapper.getSearchList(defaultParam.getSearchWord());
+		return mapper.getSearchList(defaultParam.getSearchWord(), language);
 	}
 	
 	@ResponseBody
