@@ -39,7 +39,7 @@ public class RealTimeWeightController {
 	public String regist(RealTimeWeight realTimeWeight) {
 		RealTimeWeightMapper.insert(realTimeWeight);
 		List<User> userList = RealTimeWeightMapper.getUserList(realTimeWeight.getMac());
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		
 		for (int i = 0; i < userList.size(); i++) {
 			if ( userList.get(i).getPushToken() != null ) {
