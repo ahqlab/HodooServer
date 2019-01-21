@@ -39,7 +39,7 @@ public class RealTimeWeightController {
 		List<User> userList = RealTimeWeightMapper.getUserList(realTimeWeight.getMac());
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		
-		for (int i = 0; i < userList.size(); i++) {
+		/*for (int i = 0; i < userList.size(); i++) {
 			if ( userList.get(i).getPushToken() != null ) {
 				Message message = new Message();
 				message.setTo( userList.get(i).getPushToken() );
@@ -52,7 +52,7 @@ public class RealTimeWeightController {
 				FcmUtil.requestFCM(message);
 			}
 			
-		}
+		}*/
 
 		return "HELLO";
 	}

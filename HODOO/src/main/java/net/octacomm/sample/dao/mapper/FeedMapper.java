@@ -50,8 +50,8 @@ public interface FeedMapper extends CRUDMapper<Feed, DefaultParam, Integer>{
 	@Select("SELECT * FROM " + TABLE_NAME +  " WHERE NAME LIKE CONCAT('%', #{text}, '%')")
 	public List<Feed> getFeedInfo(int id);
 	
-	
-	@Select("SELECT char_length(feed.crudeProtein) as id, sum(feed.crudeProtein) as crudeProtein, sum(feed.crudeFat) as crudeFat, sum(feed.crudeFiber) as crudeFiber, sum(feed.crudeAsh) as crudeAsh, sum(feed.carbohydrate) as carbohydrate FROM  mear_history  join feed on mear_history.feedIdx = feed.id WHERE petIdx =  #{petIdx} and substring(mear_history.createDate, 1,10) = #{date}")
+	/*value * (mear_history.calorie * 0.01)*/
+	@Select("SELECT char_length(feed.crudeProtein) as id, sum(feed.crudeProtein) as crudeProtein, sum(feed.crudeFat) as crudeFat, sum(feed.crudeFiber) as crudeFiber, sum(feed.crudeAsh) as crudeAsh, sum(feed.carbohydrate) as carbohydrate FROM  mear_history  join feed on mear_history.feedIdx = feed.id WHERE petIdx =  #{petIdx} and substring(mear_history.createDate, 1,10) = #{date} and mear_history.isDel = 1")
 	public Feed getRadarChartData(@Param("date") String date, @Param("petIdx") int petIdx);
 	
 }
