@@ -58,11 +58,11 @@ public class IOSMealHistoryController {
 		return contents;
 	}
 	
-	@ResponseBody
+/*	@ResponseBody
 	@RequestMapping(value = "/get/today/sum/calorie", method = RequestMethod.POST)
 	public MealHistory getTodatSumCalorie(@RequestParam("petIdx") int petIdx) {
 		return mealHistoryMapper.getTodatSumCalorie(petIdx);
-	}
+	}*/
 	
 	
 	@ResponseBody

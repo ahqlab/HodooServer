@@ -97,8 +97,8 @@ public class MealHistoryController {
 	
 	@ResponseBody
 	@RequestMapping(value = "/get/today/sum/calorie", method = RequestMethod.POST)
-	public MealHistory getTodatSumCalorie(@RequestParam("petIdx") int petIdx) {
-		return mealHistoryMapper.getTodatSumCalorie(petIdx);
+	public MealHistory getTodatSumCalorie(@RequestParam("petIdx") int petIdx, @RequestParam("date") String date) {
+		return mealHistoryMapper.getTodatSumCalorie(petIdx, date);
 	}
 	
 	

@@ -56,10 +56,11 @@ public interface MealHistoryMapper extends CRUDMapper<MealHistory, DefaultParam,
 			+"   WHEN '컵' THEN (feed.calculationCalories) * mear_history.calorie" 
 			+"   END AS calorie " 
 			+" 	 from mear_history join feed on mear_history.feedIdx = feed.id " 
-			+"   where date(mear_history.createDate) = date(now()) "
+			+"   where "
+			+"   substring(mear_history.createDate, 1,10) = #{date} "
 			+"   and mear_history.petIdx = #{petIdx} and isDel = 1" 
 			+") as tb")
-	MealHistory getTodatSumCalorie(@Param("petIdx") int petIdx);
+	MealHistory getTodatSumCalorie(@Param("petIdx") int petIdx, @Param("date") String date);
 	
 
 
