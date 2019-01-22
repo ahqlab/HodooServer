@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.google.appengine.api.search.DateUtil;
+
 import net.octacomm.sample.constant.HodooConstant;
 import net.octacomm.sample.dao.mapper.DeviceMapper;
 import net.octacomm.sample.domain.Device;
@@ -46,8 +48,9 @@ public class RealTimeWeightController {
 				
 				Map<String, Object> data = new HashMap<>();
 				data.put("notiType", HodooConstant.FIREBASE_NORMAL_TYPE);
-				data.put("title", "측정결과");
-				data.put("content", sdf.format(new Date()) + "일 측정 결과 입니다.\n" + realTimeWeight.getType() + " : " + realTimeWeight.getValue());
+				data.put("title", "체중감지");
+				//data.put("content", net.octacomm.sample.utils.DateUtil.getOnlyCurrentDateAndHour() + " 시 측정 결과 입니다.\n" + realTimeWeight.getType() + " : " + realTimeWeight.getValue() + "kg");
+				data.put("content", "새로운 체중이 감지되었습니다. 측정체중 : " + realTimeWeight.getValue() + "kg");
 				message.setData(data);
 				FcmUtil.requestFCM(message);
 			}
