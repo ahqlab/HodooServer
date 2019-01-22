@@ -7,7 +7,9 @@ public class HodooConstant {
     public static final int DECLINE_TYPE = 2;
 	
     public static final int FIREBASE_NORMAL_TYPE = 0;
-	public static final int FIREBASE_INVITATION_TYPE = 1;
+    public static final int FIREBASE_WEIGHT_TYPE = 1;
+    public static final int FIREBASE_FEED_TYPE = 2;
+	public static final int FIREBASE_INVITATION_TYPE = 3;
 	
 	public static final int WITHDRAW = -1;
 	
