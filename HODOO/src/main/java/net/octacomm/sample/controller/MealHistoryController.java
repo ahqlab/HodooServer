@@ -46,31 +46,8 @@ public class MealHistoryController {
 	@ResponseBody
 	@RequestMapping(value = "/insert", method = RequestMethod.POST)
 	public int insert(@RequestBody MealHistory mealHistory) {
-		User user = userMapper.get(mealHistory.getUserIdx());
-		List<User> groupUsers = userMapper.getGroupMemner(mealHistory.getGroupId());
-		Feed feed = feedMapper.get(mealHistory.getFeedIdx());
-		PetAllInfos pet = petMapper.allInfoOnThePet(mealHistory.getPetIdx());
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		for (int i = 0; i < groupUsers.size(); i++) {
-			if ( groupUsers.get(i).getPushToken() != null ) {
-				Message message = new Message();
-				message.setTo( groupUsers.get(i).getPushToken() );
-				
-				Map<String, Object> data = new HashMap<>();
-				data.put("notiType", HodooConstant.FIREBASE_FEED_TYPE);
-				data.put("title", "급식 알림");
-				data.put("content", 
-						sdf.format(new Date()) + "\n" 
-						+ user.getNickname() + "님께서 " 
-						+ feed.getBrand() + "의 " 
-						+ feed.getName() + "을(를) " 
-						+ pet.getPetBasicInfo().getPetName() + "에게 "
-						+ String.valueOf(mealHistory.getCalorie()) + mealHistory.getUnitString() 
-						+ "을 주었습니다." );
-				message.setData(data);
-				FcmUtil.requestFCM(message);
-			}
-		}
+		FCMThead thead = new FCMThead(mealHistory);
+		thead.start();
 		return mealHistoryMapper.insert(mealHistory);
 	}
 	
@@ -113,5 +90,46 @@ public class MealHistoryController {
 	@RequestMapping(value = "/delete", method = RequestMethod.POST)
 	public int delete(@RequestParam("historyIdx") int historyIdx) {
 		return mealHistoryMapper.delete(historyIdx);
+	}
+	
+	public class FCMThead extends Thread {
+		private MealHistory mealHistory;
+		FCMThead ( MealHistory mealHistory ){
+			this.mealHistory = mealHistory;
+		}
+		@Override
+		public void run() {
+			// TODO Auto-generated method stub
+			super.run();
+			User user = userMapper.get(mealHistory.getUserIdx());
+			
+			List<User> groupUsers = userMapper.getGroupMemner(mealHistory.getGroupId());
+			
+			Feed feed = feedMapper.get(mealHistory.getFeedIdx());
+			PetAllInfos pet = petMapper.allInfoOnThePet(mealHistory.getPetIdx());
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			for (int i = 0; i < groupUsers.size(); i++) {
+				if ( groupUsers.get(i).getPushToken() != null ) {
+					Message message = new Message();
+					message.setTo( groupUsers.get(i).getPushToken() );
+					
+					Map<String, Object> data = new HashMap<>();
+					data.put("notiType", HodooConstant.FIREBASE_FEED_TYPE);
+					data.put("title", "급식 알림");
+					data.put("content", 
+							sdf.format(new Date()) + "\n" 
+							+ user.getNickname() + "님께서 " 
+							+ feed.getBrand() + "의 " 
+							+ feed.getName() + "을(를) " 
+							+ pet.getPetBasicInfo().getPetName() + "에게 "
+							+ String.valueOf(mealHistory.getCalorie()) + mealHistory.getUnitString() 
+							+ "을 주었습니다." );
+					message.setData(data);
+					FcmUtil.requestFCM(message);
+				}
+			}
+			
+		}
+		
 	}
 }
