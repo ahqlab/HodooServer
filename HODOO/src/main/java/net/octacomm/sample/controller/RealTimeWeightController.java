@@ -38,23 +38,8 @@ public class RealTimeWeightController {
 	@RequestMapping(value = "/realtime/get")
 	public String regist(RealTimeWeight realTimeWeight) {
 		RealTimeWeightMapper.insert(realTimeWeight);
-		List<User> userList = RealTimeWeightMapper.getUserList(realTimeWeight.getMac());
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		
-		for (int i = 0; i < userList.size(); i++) {
-			if ( userList.get(i).getPushToken() != null ) {
-				Message message = new Message();
-				message.setTo( userList.get(i).getPushToken() );
-				
-				Map<String, Object> data = new HashMap<>();
-				data.put("notiType", HodooConstant.FIREBASE_WEIGHT_TYPE);
-				data.put("title", "체중감지");
-				//data.put("content", net.octacomm.sample.utils.DateUtil.getOnlyCurrentDateAndHour() + " 시 측정 결과 입니다.\n" + realTimeWeight.getType() + " : " + realTimeWeight.getValue() + "kg");
-				data.put("content", "새로운 체중이 감지되었습니다. 측정체중 : " + realTimeWeight.getValue() + "kg");
-				message.setData(data);
-				FcmUtil.requestFCM(message);
-			}
-		}
+		RealTimeThred thred = new RealTimeThred(realTimeWeight);
+		thred.start();
 		return "HELLO";
 	}
 	
@@ -131,6 +116,33 @@ public class RealTimeWeightController {
 		map.put("deviceList", deviceList);
 		map.put("type", type);
 		return RealTimeWeightMapper.getStatisticsOfYear(map);
+	}
+	public class RealTimeThred extends Thread {
+		private RealTimeWeight realTimeWeight;
+		RealTimeThred ( RealTimeWeight realTimeWeight ) {
+			this.realTimeWeight = realTimeWeight;
+		}
+		@Override
+		public void run() {
+			// TODO Auto-generated method stub
+			super.run();
+			List<User> userList = RealTimeWeightMapper.getUserList(realTimeWeight.getMac());
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			for (int i = 0; i < userList.size(); i++) {
+				if ( userList.get(i).getPushToken() != null ) {
+					Message message = new Message();
+					message.setTo( userList.get(i).getPushToken() );
+					Map<String, Object> data = new HashMap<>();
+					data.put("notiType", HodooConstant.FIREBASE_WEIGHT_TYPE);
+					data.put("title", "체중감지");
+					//data.put("content", net.octacomm.sample.utils.DateUtil.getOnlyCurrentDateAndHour() + " 시 측정 결과 입니다.\n" + realTimeWeight.getType() + " : " + realTimeWeight.getValue() + "kg");
+					data.put("content", "새로운 체중이 감지되었습니다. 측정체중 : " + realTimeWeight.getValue() + "kg");
+					message.setData(data);
+					FcmUtil.requestFCM(message);
+				}
+			}
+		}
+		
 	}
 	
 }
