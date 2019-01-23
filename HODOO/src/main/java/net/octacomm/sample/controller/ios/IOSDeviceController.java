@@ -54,7 +54,7 @@ public class IOSDeviceController {
 				for (Device dv : registed) {
 					if (dv.getSerialNumber().matches(device.getSerialNumber())) {
 						if (dv.getIsDel().matches("DISCONNECTED")) {
-							deviceNapper.changeDeviceConnection(dv.getDeviceIdx(), true);
+							deviceNapper.changeDeviceConnection(device.getGroupCode(), dv.getDeviceIdx(), true);
 							responce = new CommonResponce<Device>();
 							responce.setDomain(deviceNapper.get(dv.getDeviceIdx()));
 							responce.setResultMessage(ResultMessage.SUCCESS);
@@ -80,7 +80,7 @@ public class IOSDeviceController {
 				for (Device dv : registed) {
 					if (dv.getSerialNumber().matches(device.getSerialNumber())) {
 						if (dv.getIsDel().matches("DISCONNECTED")) {
-							deviceNapper.changeDeviceConnection(dv.getDeviceIdx(), true);
+							deviceNapper.changeDeviceConnection(device.getGroupCode(), dv.getDeviceIdx(), true);
 							responce = new CommonResponce<Device>();
 							responce.setDomain(deviceNapper.get(dv.getDeviceIdx()));
 							responce.setResultMessage(ResultMessage.SUCCESS);

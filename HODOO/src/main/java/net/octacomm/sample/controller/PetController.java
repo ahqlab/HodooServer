@@ -1,6 +1,9 @@
 package net.octacomm.sample.controller;
 
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.List;
+import java.time.format.DateTimeFormatter;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -11,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+
 import net.octacomm.sample.dao.mapper.GroupsMapper;
 import net.octacomm.sample.dao.mapper.PetBasicInfoMapper;
 import net.octacomm.sample.dao.mapper.PetChronicDeseaseMapper;
@@ -20,6 +24,7 @@ import net.octacomm.sample.dao.mapper.PetWeightInfoMapper;
 import net.octacomm.sample.domain.Pet;
 import net.octacomm.sample.domain.PetAllInfos;
 import net.octacomm.sample.domain.PetBasicInfo;
+
 
 @RequestMapping("/pet")
 @Controller
@@ -73,4 +78,6 @@ public class PetController {
 	public PetAllInfos petAllInfos(@RequestParam("petIdx") int petIdx){
 		return petMapper.allInfoOnThePet(petIdx);
 	}
+	
+	
 }
