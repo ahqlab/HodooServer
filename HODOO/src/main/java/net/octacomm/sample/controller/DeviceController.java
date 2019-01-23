@@ -12,10 +12,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import net.octacomm.sample.dao.mapper.DeviceMapper;
 import net.octacomm.sample.dao.mapper.GroupPetMappingMapper;
+import net.octacomm.sample.dao.mapper.UserGroupMappingMapper;
 import net.octacomm.sample.domain.ArrayListDevice;
 import net.octacomm.sample.domain.Device;
 import net.octacomm.sample.domain.GroupPetMapping;
 import net.octacomm.sample.domain.PetChronicDisease;
+import net.octacomm.sample.domain.UserGroupMapping;
 import net.octacomm.sample.utils.MathUtil;
 
 @RequestMapping("/device")
@@ -26,6 +28,9 @@ public class DeviceController {
 	private DeviceMapper deviceNapper;
 	@Autowired
 	private GroupPetMappingMapper groupPetMappingMapper;
+	
+	@Autowired
+	private UserGroupMappingMapper userGroupMappingMapper;
 
 	@ResponseBody
 	@RequestMapping(value = "/my/device/list", method = RequestMethod.POST)
@@ -72,6 +77,9 @@ public class DeviceController {
 				}
 				return 100;
 			}
+			
+			userGroupMappingMapper.setMaster(device.getGroupCode());
+			
 			return deviceNapper.insert(device);
 		} else {
 			List<Device> registed = deviceNapper.getRegisted(device);

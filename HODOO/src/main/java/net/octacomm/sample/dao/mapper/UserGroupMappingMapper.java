@@ -49,6 +49,8 @@ public interface UserGroupMappingMapper extends CRUDMapper<UserGroupMapping, Def
 	@Update("update " + TABLE_NAME + " set groupCode = #{code} where userIdx = #{idx} ")
 	int withdrawGroup(@Param("code") String code, @Param("idx") int idx);
 	
+	@Update("UPDATE " + TABLE_NAME + " SET accessType = 1 WHERE groupCode = #{groupCode }")
+	int setMaster( @Param("groupCode") String groupCode );
 	
 
 }
