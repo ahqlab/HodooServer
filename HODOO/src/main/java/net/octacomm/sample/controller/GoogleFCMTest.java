@@ -379,17 +379,8 @@ public class GoogleFCMTest {
 			}
 		}
 		
-		result = requestFCM(message);
-		if ( result == SUCESS ) {
-			if ( firebaseMapper.getCount(request) > 0 ) {
-				Date date = new Date();
-				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-				request.setCreated( sdf.format(date) );
-				firebaseMapper.updateUser(request);
-			} else {
-				firebaseMapper.insert(request);
-			}
-		}
+		result = 1;
+		new InvitationFCM(request, message).start(); 
 		
 		return result;
 		
@@ -478,5 +469,33 @@ public class GoogleFCMTest {
 			result = ERROR;
 		}
 		return result;
+	}
+	
+	public class InvitationFCM extends Thread {
+		private Message message;
+		InvitationRequest request;
+		public InvitationFCM(InvitationRequest request, Message message) {
+			// TODO Auto-generated constructor stub
+			this.message = message;
+			this.request = request;
+		}
+		@Override
+		public void run() {
+			// TODO Auto-generated method stub
+			super.run();
+			
+			int result = requestFCM(message);
+			if ( result == SUCESS ) {
+				if ( firebaseMapper.getCount(request) > 0 ) {
+					Date date = new Date();
+					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+					request.setCreated( sdf.format(date) );
+					firebaseMapper.updateUser(request);
+				} else {
+					firebaseMapper.insert(request);
+				}
+			}
+		}
+		
 	}
 }
