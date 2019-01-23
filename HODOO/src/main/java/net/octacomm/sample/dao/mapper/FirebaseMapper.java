@@ -56,4 +56,7 @@ public interface FirebaseMapper extends CRUDMapper<InvitationRequest, DefaultPar
 	
 	@Update("UPDATE " + TABLE_NAME + " SET state = #{type } WHERE toUserIdx = #{toUserIdx } AND fromUserIdx = #{fromUserIdx }")
 	int setInvitationType( @Param("type") int type, @Param("toUserIdx") int toUserIdx, @Param("fromUserIdx") int fromUserIdx);
+	
+	@Select("select count(*) from " + TABLE_NAME + " where fromUserIdx = #{userIdx} and state = 0")
+	int checkInvitationState( @Param("userIdx") int userIdx );
 }

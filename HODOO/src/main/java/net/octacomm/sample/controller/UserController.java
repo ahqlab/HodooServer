@@ -678,5 +678,17 @@ public class UserController {
 		
 		return result;
 	}
+	@ResponseBody
+	@RequestMapping(value = "/invitation/cancelInvitation", method = RequestMethod.POST)
+	public int cancelInvitation (
+			@RequestParam("toUserEmail") String toUserEmail,
+			@RequestParam("from") int from
+			) {
+		int checkState = firebaseMapper.checkInvitationState(from);
+		User toUser = userMapper.getByUserEmail(toUserEmail);
+		if ( checkState == 0 )
+			return -1;
+		return firebaseMapper.invitationRefusal(toUser.getUserIdx(), from);
+	}
 
 }

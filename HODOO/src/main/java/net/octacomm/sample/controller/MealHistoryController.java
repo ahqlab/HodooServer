@@ -57,7 +57,7 @@ public class MealHistoryController {
 				message.setTo( groupUsers.get(i).getPushToken() );
 				
 				Map<String, Object> data = new HashMap<>();
-				data.put("notiType", HodooConstant.FIREBASE_NORMAL_TYPE);
+				data.put("notiType", HodooConstant.FIREBASE_FEED_TYPE);
 				data.put("title", "급식 알림");
 				data.put("content", 
 						sdf.format(new Date()) + "\n" 
