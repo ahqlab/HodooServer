@@ -42,4 +42,5 @@ public interface GroupPetMappingMapper extends CRUDMapper<GroupPetMapping, Defau
 	@Select("SELECT * FROM " + TABLE_NAME + " WHERE groupCode =  #{groupCode} ")
 	public GroupPetMapping isEmpty(String groupCode);
 
+
 }

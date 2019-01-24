@@ -44,6 +44,7 @@ public class PetBasicInfoController {
 	@ResponseBody
 	@RequestMapping(value = "/basic/regist", method = RequestMethod.POST)
 	public ResultMessageGroup regist(HttpServletRequest request, PetBasicInfo basicInfo) {
+		System.err.println("basicInfo : " + basicInfo);
 		ResultMessageGroup group = new ResultMessageGroup();
 		String localPath = "/resources/upload/profile/";
 		String path = request.getSession().getServletContext().getRealPath(localPath);
@@ -160,9 +161,14 @@ public class PetBasicInfoController {
 	}
 
 	@ResponseBody
-	@RequestMapping(value = "/about/my/pet/list", method = RequestMethod.POST)
+	@RequestMapping(value = "/about/my/pet/list")
 	public List<PetAllInfos> aboutMyPetList(@RequestParam("groupCode") String groupCode) {
-		return petMapper.aboutMyPetList(groupCode);
+		List<PetAllInfos> list = petMapper.aboutMyPetList(groupCode);
+		for (PetAllInfos petAllInfos : list) {
+			petAllInfos.getPetBasicInfo().setCurrentMonth(petAllInfos.getPetBasicInfo().currentMonth());
+			petAllInfos.getPetBasicInfo().setCurrentYear(petAllInfos.getPetBasicInfo().currentYear());
+		}
+		return list;
 	}
 	
 	@ResponseBody

@@ -1,5 +1,9 @@
 package net.octacomm.sample.domain;
 
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.format.DateTimeFormatter;
+
 import org.springframework.web.multipart.MultipartFile;
 
 import lombok.Data;
@@ -27,4 +31,42 @@ public class PetBasicInfo implements Domain{
 	private String birthday;
 	
 	private String neutralization;
+	
+	private int currentYear;
+
+	private int currentMonth;
+	
+	
+	public int getCurrentYear() {
+		return currentYear();
+	}
+
+	public void setCurrentYear(int currentYear) {
+		this.currentYear = currentYear;
+	}
+
+	public int getCurrentMonth() {
+		return currentMonth();
+	}
+
+	public void setCurrentMonth(int currentMonth) {
+		this.currentMonth = currentMonth;
+	}
+
+	public int currentYear(){
+		return getPeriod().getYears();
+	}
+
+	//return 개월수
+	public int currentMonth(){
+		return getPeriod().getMonths();
+	}
+	
+	private Period getPeriod(){
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-M-d");
+		LocalDate today = LocalDate.now();
+		LocalDate birthday = LocalDate.parse(getBirthday(), formatter);
+		Period p = Period.between(birthday, today);
+		return p;
+	}
 }
