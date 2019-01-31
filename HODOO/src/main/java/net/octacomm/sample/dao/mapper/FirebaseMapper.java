@@ -39,7 +39,7 @@ public interface FirebaseMapper extends CRUDMapper<InvitationRequest, DefaultPar
 	@Override
 	List<InvitationRequest> getList();
 	
-	@Select("select i.id, i.toUserIdx, i.fromUserIdx, i.state, DATE_FORMAT(i.created, '%Y-%m-%d %H:%i:%s') as created, u.nickname from " + TABLE_NAME + " i join user u on u.userIdx = i.fromUserIdx where i.toUserIdx = #{userIdx} ")
+	@Select("SELECT i.id, i.toUserIdx, i.fromUserIdx, i.state, DATE_FORMAT(i.created, '%Y-%m-%d %H:%i:%s') AS created, u.nickname  FROM invitation_request i JOIN USER u ON u.userIdx = i.fromUserIdx WHERE i.toUserIdx IN (SELECT userIdx FROM user_group_mapping WHERE groupCode = (SELECT groupCode FROM user_group_mapping WHERE userIdx = #{userIdx})) GROUP BY i.fromUserIdx")
 	List<InvitationRequest> getInvitationList(@Param("userIdx") int userIdx );
 	
 	@Select("select count(*) from " + TABLE_NAME + " where toUserIdx = #{toUserIdx} and fromUserIdx = #{fromUserIdx}")
