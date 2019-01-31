@@ -317,7 +317,9 @@ package net.octacomm.sample.controller;
 import java.io.UnsupportedEncodingException;
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import javax.mail.internet.MimeMessage;
@@ -341,6 +343,8 @@ import net.octacomm.sample.dao.mapper.UserGroupMappingMapper;
 import net.octacomm.sample.dao.mapper.UserMapper;
 import net.octacomm.sample.domain.CommonResponce;
 import net.octacomm.sample.domain.InvitationRequest;
+import net.octacomm.sample.domain.MealHistory;
+import net.octacomm.sample.domain.Message;
 import net.octacomm.sample.domain.ResultMessageGroup;
 import net.octacomm.sample.domain.SessionMaintenance;
 import net.octacomm.sample.domain.User;
@@ -350,6 +354,7 @@ import net.octacomm.sample.service.GroupsService;
 import net.octacomm.sample.service.LoginService;
 import net.octacomm.sample.service.UserService;
 import net.octacomm.sample.utils.AES256Util;
+import net.octacomm.sample.utils.FcmUtil;
 import net.octacomm.sample.utils.MathUtil;
 
 @RequestMapping("/user")
@@ -616,6 +621,9 @@ public class UserController {
 	@ResponseBody
 	@RequestMapping(value = "/update/fcmToken", method = RequestMethod.POST)
 	public int saveFCMToken( @RequestBody User user ) {
+		if ( user.getUserIdx() == 0 ) {
+			user = userMapper.getByUserEmail(user.getEmail());
+		}
 		return userService.saveFCMToken(user);
 	}
 	@ResponseBody
@@ -645,7 +653,27 @@ public class UserController {
 			@RequestParam("type") int type,
 			@RequestParam("toUserIdx") int toUserIdx,
 			@RequestParam("fromUserIdx") int fromUserIdx) {
-		return firebaseMapper.setInvitationType(type, toUserIdx, fromUserIdx);
+		
+		int result = firebaseMapper.setInvitationType(type, toUserIdx, fromUserIdx);
+		if ( result > 0 && type == HodooConstant.ACCEPT_TYPE ) {
+			User toUser = userMapper.get(toUserIdx);
+			
+			User user = userMapper.get(fromUserIdx);
+			Message message = new Message();
+			
+			Map<String, Object> data = new HashMap<>();
+			data.put("notiType", HodooConstant.FIREBASE_INVITATION_ACCEPT);
+			data.put("title", "초대 승인 알림");
+			data.put("content", toUser.getNickname() + "님이 초대를 승인했습니다.");
+			/* 커스텀 Notification을 위한 데이터 처리(e) */
+			
+			message.setTo(user.getPushToken());
+			message.setData(data);
+			new FCMThead(message).start();
+			
+		}
+		
+		return result;
 	}
 	@ResponseBody
 	@RequestMapping(value = "/setUserCode", method = RequestMethod.POST)
@@ -689,6 +717,17 @@ public class UserController {
 		if ( checkState == 0 )
 			return -1;
 		return firebaseMapper.invitationRefusal(toUser.getUserIdx(), from);
+	}
+	
+	public class FCMThead extends Thread {
+		private Message message;
+		FCMThead ( Message message ){
+			this.message = message;
+		}
+		@Override
+		public void run() {
+			FcmUtil.requestFCM(message);
+		}
 	}
 
 }
