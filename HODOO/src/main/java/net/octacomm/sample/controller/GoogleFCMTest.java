@@ -268,6 +268,7 @@ public class GoogleFCMTest {
 	public int ERROR = 0;
 	public int SUCESS = 1;
 	public int EXISTENCE_USER = 2;
+	public int OVERLAB_INVITATION = 3;
 	
 	@Autowired
 	UserMapper mapper;
@@ -348,6 +349,8 @@ public class GoogleFCMTest {
 		User toUser = mapper.getByUserEmail(toUserEmail);
 		User fromUser = mapper.getByUserEmail(fromUserEmail);
 		
+		toUser.setGroupCode( mapper.getGroupCode(toUser.getUserIdx()) );
+		
 		Message message = new Message();
 		message.setTo(toUser.getPushToken());
 
@@ -370,12 +373,13 @@ public class GoogleFCMTest {
 		request.setToUserIdx(toUser.getUserIdx());
 		request.setFromUserIdx(fromUser.getUserIdx());
 		request.setCreated(new Date().getTime());
-		
-		if ( firebaseMapper.getCount(request) > 0 ) {
+		int count = firebaseMapper.getAcceptCount(request);
+		if ( count > 0 ) {
 			InvitationRequest invitationUser = firebaseMapper.getInvitationUser(request);
-			if ( invitationUser.getState() == 1 ) {
-				result = EXISTENCE_USER;
-				return result;
+			if ( invitationUser != null && invitationUser.getState() == 1 ) {
+				return EXISTENCE_USER;
+			} else {
+				return OVERLAB_INVITATION;
 			}
 		}
 		
@@ -487,6 +491,7 @@ public class GoogleFCMTest {
 			int result = requestFCM(message);
 			if ( result == SUCESS ) {
 				if ( firebaseMapper.getCount(request) > 0 ) {
+					request = firebaseMapper.getInvitationUserFrom(request);
 					Date date = new Date();
 					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 					request.setCreated( sdf.format(date) );

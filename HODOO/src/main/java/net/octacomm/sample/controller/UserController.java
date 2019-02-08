@@ -316,7 +316,9 @@ package net.octacomm.sample.controller;
 
 import java.io.UnsupportedEncodingException;
 import java.security.GeneralSecurityException;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -654,8 +656,12 @@ public class UserController {
 			@RequestParam("toUserIdx") int toUserIdx,
 			@RequestParam("fromUserIdx") int fromUserIdx) {
 		
+		Date date = new Date();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		
 		int result = firebaseMapper.setInvitationType(type, toUserIdx, fromUserIdx);
 		if ( result > 0 && type == HodooConstant.ACCEPT_TYPE ) {
+			firebaseMapper.updateInvitationDate(toUserIdx, fromUserIdx, sdf.format(date));
 			User toUser = userMapper.get(toUserIdx);
 			
 			User user = userMapper.get(fromUserIdx);

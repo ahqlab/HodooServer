@@ -66,7 +66,8 @@ public interface UserMapper extends CRUDMapper<User, DefaultParam, Integer>{
 	@Select("SELECT * FROM " + TABLE_NAME + " join user_group_mapping on user_group_mapping.userIdx = user.userIdx where user.email =  #{email} AND user.password = #{password} ")
 	User login(User user);
 	
-	@Select("SELECT * FROM " + TABLE_NAME + "  join user_group_mapping on  user_group_mapping.groupCode =  #{groupCode} and user.userIdx = user_group_mapping.userIdx")
+	/* 2019.02.07 순서 정렬을 위한 조인 및 서브쿼리 */
+	@Select("SELECT * FROM USER JOIN (SELECT m.*, r.accessDate FROM user_group_mapping m LEFT JOIN (SELECT * FROM invitation_request WHERE toUserIdx IN (SELECT userIdx FROM user_group_mapping WHERE groupCode = #{groupCode})) r ON r.fromUserIdx = m.userIdx WHERE m.groupCode = #{groupCode} GROUP BY m.userIdx) AS user_group_mapping ON user_group_mapping.groupCode = #{groupCode} AND user.userIdx = user_group_mapping.userIdx ORDER BY (CASE user_group_mapping.accessType WHEN 1 THEN 0 ELSE 1 END), user_group_mapping.accessDate ASC")
 	List<User> getGroupMemner(@Param("groupCode") String groupCode);
 	
 	@Update("UPDATE " + TABLE_NAME + " SET " + BASIC_INFO_UPDATE_VALUES + " WHERE userIdx =  #{userIdx} ")
@@ -95,4 +96,7 @@ public interface UserMapper extends CRUDMapper<User, DefaultParam, Integer>{
 	
 	@Update("UPDATE USER SET pushToken = NULL WHERE pushToken = #{pushToken }")
 	int removeFCMToken( @Param("pushToken") String pushToken );
+	
+	@Select("SELECT m.groupCode FROM USER AS u JOIN user_group_mapping m ON u.userIdx = m.userIdx WHERE u.userIdx = #{toUserIdx }")
+	String getGroupCode( @Param("toUserIdx") int toUserIdx );
 }

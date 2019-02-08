@@ -39,19 +39,29 @@ public interface FirebaseMapper extends CRUDMapper<InvitationRequest, DefaultPar
 	@Override
 	List<InvitationRequest> getList();
 	
-	@Select("SELECT i.id, i.toUserIdx, i.fromUserIdx, i.state, DATE_FORMAT(i.created, '%Y-%m-%d %H:%i:%s') AS created, u.nickname  FROM invitation_request i JOIN USER u ON u.userIdx = i.fromUserIdx WHERE i.toUserIdx IN (SELECT userIdx FROM user_group_mapping WHERE groupCode = (SELECT groupCode FROM user_group_mapping WHERE userIdx = #{userIdx})) GROUP BY i.fromUserIdx")
+	/* 2019.02.07 상태에 따른 정렬 */
+	@Select("SELECT i.id, i.toUserIdx, i.fromUserIdx, i.state, DATE_FORMAT(i.created, '%Y-%m-%d %H:%i:%s') AS created, u.nickname  FROM " + TABLE_NAME + " i JOIN USER u ON u.userIdx = i.fromUserIdx WHERE i.toUserIdx IN (SELECT userIdx FROM user_group_mapping WHERE groupCode = (SELECT groupCode FROM user_group_mapping WHERE userIdx = #{userIdx})) GROUP BY i.fromUserIdx ORDER BY ( CASE i.state WHEN 0 THEN 0 ELSE 1 END ), i.created DESC")
 	List<InvitationRequest> getInvitationList(@Param("userIdx") int userIdx );
 	
-	@Select("select count(*) from " + TABLE_NAME + " where toUserIdx = #{toUserIdx} and fromUserIdx = #{fromUserIdx}")
+	@Select("SELECT COUNT(*) FROM " + TABLE_NAME + " r JOIN user_group_mapping m ON r.toUserIdx = m.userIdx  WHERE r.fromUserIdx = #{fromUserIdx} AND m.groupCode = ( SELECT groupCode FROM user_group_mapping WHERE userIdx = #{toUserIdx} ) AND r.state = 1")
+	int getAcceptCount(InvitationRequest domain);
+	
+	@Select("SELECT COUNT(*) FROM " + TABLE_NAME + " r JOIN user_group_mapping m ON r.toUserIdx = m.userIdx  WHERE r.fromUserIdx = #{fromUserIdx} AND m.groupCode = ( SELECT groupCode FROM user_group_mapping WHERE userIdx = #{toUserIdx} ) ")
 	int getCount(InvitationRequest domain);
 	
 	@Select("select * from " + TABLE_NAME + " where toUserIdx = #{toUserIdx} and fromUserIdx = #{fromUserIdx}")
 	InvitationRequest getInvitationUser(InvitationRequest domain);
 	
-	@Update("UPDATE " + TABLE_NAME + " SET created = STR_TO_DATE(#{created}, '%Y-%m-%d %H:%i:%s'), state = 0  WHERE toUserIdx = #{toUserIdx} and fromUserIdx = #{fromUserIdx}")
+	@Select("SELECT * FROM " + TABLE_NAME + " r JOIN user_group_mapping m ON r.toUserIdx = m.userIdx  WHERE r.fromUserIdx = #{fromUserIdx} AND m.groupCode = ( SELECT groupCode FROM user_group_mapping WHERE userIdx = #{toUserIdx} ) ")
+	InvitationRequest getInvitationUserFrom(InvitationRequest domain);
+	
+	@Update("UPDATE " + TABLE_NAME + " SET created = STR_TO_DATE(#{created}, '%Y-%m-%d %H:%i:%s'), state = 0  WHERE id = #{id }")
 	int updateUser(InvitationRequest domain);
 	
-	@Delete("DELETE FROM " + TABLE_NAME + " WHERE toUserIdx = #{toUserIdx} AND fromUserIdx = #{fromUserIdx};")
+	@Update("update invitation_request r join user_group_mapping m on r.fromUserIdx = m.userIdx set accessDate = STR_TO_DATE(#{created}, '%Y-%m-%d %H:%i:%s') WHERE r.toUserIdx = #{toUserIdx} and fromUserIdx = #{fromUserIdx}")
+	int updateInvitationDate(@Param("toUserIdx") int toUserIdx, @Param("fromUserIdx") int fromUserIdx, @Param("created") String created);
+	
+	@Delete("DELETE FROM r USING " + TABLE_NAME + " r JOIN user_group_mapping m ON r.toUserIdx = m.userIdx WHERE r.fromUserIdx = #{fromUserIdx} AND m.groupCode = (SELECT groupCode FROM user_group_mapping WHERE userIdx = #{toUserIdx})")
 	int invitationRefusal(@Param("toUserIdx") int toUserIdx, @Param("fromUserIdx") int fromUserIdx);
 	
 	@Update("UPDATE " + TABLE_NAME + " SET state = #{type } WHERE toUserIdx = #{toUserIdx } AND fromUserIdx = #{fromUserIdx }")
