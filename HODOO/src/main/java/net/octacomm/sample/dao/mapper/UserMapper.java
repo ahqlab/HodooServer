@@ -28,7 +28,7 @@ public interface UserMapper extends CRUDMapper<User, DefaultParam, Integer>{
 	
 	public String INSERT_VALUES = " ( null, #{email}, #{password} , #{nickname} , #{sex} , #{country} , #{groupId}, now() )";
 	
-	public String TABLE_NAME = " USER ";
+	public String TABLE_NAME = " user ";
 	
 	public String UPDATE_VALUES = " email = #{email} , password = #{password} , nickname = #{nickname} , sex = #{sex} , country = #{country} , groupId = #{groupId} , createDate = now() ";
 	
@@ -67,7 +67,7 @@ public interface UserMapper extends CRUDMapper<User, DefaultParam, Integer>{
 	User login(User user);
 	
 	/* 2019.02.07 순서 정렬을 위한 조인 및 서브쿼리 */
-	@Select("SELECT * FROM USER JOIN (SELECT m.*, r.accessDate FROM user_group_mapping m LEFT JOIN (SELECT * FROM invitation_request WHERE toUserIdx IN (SELECT userIdx FROM user_group_mapping WHERE groupCode = #{groupCode})) r ON r.fromUserIdx = m.userIdx WHERE m.groupCode = #{groupCode} GROUP BY m.userIdx) AS user_group_mapping ON user_group_mapping.groupCode = #{groupCode} AND user.userIdx = user_group_mapping.userIdx ORDER BY (CASE user_group_mapping.accessType WHEN 1 THEN 0 ELSE 1 END), user_group_mapping.accessDate ASC")
+	@Select("SELECT * FROM user JOIN (SELECT m.*, r.accessDate FROM user_group_mapping m LEFT JOIN (SELECT * FROM invitation_request WHERE toUserIdx IN (SELECT userIdx FROM user_group_mapping WHERE groupCode = #{groupCode})) r ON r.fromUserIdx = m.userIdx WHERE m.groupCode = #{groupCode} GROUP BY m.userIdx) AS user_group_mapping ON user_group_mapping.groupCode = #{groupCode} AND user.userIdx = user_group_mapping.userIdx ORDER BY (CASE user_group_mapping.accessType WHEN 1 THEN 0 ELSE 1 END), user_group_mapping.accessDate ASC")
 	List<User> getGroupMemner(@Param("groupCode") String groupCode);
 	
 	@Update("UPDATE " + TABLE_NAME + " SET " + BASIC_INFO_UPDATE_VALUES + " WHERE userIdx =  #{userIdx} ")
@@ -88,15 +88,15 @@ public interface UserMapper extends CRUDMapper<User, DefaultParam, Integer>{
 	@Update("UPDATE " + TABLE_NAME + " SET groupCode = ( SELECT groupCode FROM (SELECT * FROM " + TABLE_NAME +  ") AS map WHERE userIdx = #{toUserIdx} )  WHERE userIdx = #{fromUserIdx}")
 	int invitationApproval(@Param("toUserIdx") int toUserIdx, @Param("fromUserIdx") int fromUserIdx);
 	
-	@Select("SELECT COUNT(*) FROM device WHERE GroupCode = (SELECT m.groupCode FROM USER u JOIN user_group_mapping m ON u.userIdx = m.userIdx WHERE u.userIdx = #{userIdx})")
+	@Select("SELECT COUNT(*) FROM device WHERE GroupCode = (SELECT m.groupCode FROM " + TABLE_NAME + " u JOIN user_group_mapping m ON u.userIdx = m.userIdx WHERE u.userIdx = #{userIdx})")
 	int getDeviceCount( @Param("userIdx") int userIdx );
 	
-	@Select("SELECT count(pushToken = (SELECT pushToken FROM USER WHERE userIdx = #{userIdx})) FROM USER WHERE pushToken = #{pushToken}")
+	@Select("SELECT count(pushToken = (SELECT pushToken FROM " + TABLE_NAME + " WHERE userIdx = #{userIdx})) FROM " + TABLE_NAME + " WHERE pushToken = #{pushToken}")
 	int getFCMTokenOverlapCheck( User user);
 	
-	@Update("UPDATE USER SET pushToken = NULL WHERE pushToken = #{pushToken }")
+	@Update("UPDATE " + TABLE_NAME + " SET pushToken = NULL WHERE pushToken = #{pushToken }")
 	int removeFCMToken( @Param("pushToken") String pushToken );
 	
-	@Select("SELECT m.groupCode FROM USER AS u JOIN user_group_mapping m ON u.userIdx = m.userIdx WHERE u.userIdx = #{toUserIdx }")
+	@Select("SELECT m.groupCode FROM " + TABLE_NAME + " AS u JOIN user_group_mapping m ON u.userIdx = m.userIdx WHERE u.userIdx = #{toUserIdx }")
 	String getGroupCode( @Param("toUserIdx") int toUserIdx );
 }

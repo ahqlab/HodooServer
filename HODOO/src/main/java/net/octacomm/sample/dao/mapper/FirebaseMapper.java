@@ -40,7 +40,7 @@ public interface FirebaseMapper extends CRUDMapper<InvitationRequest, DefaultPar
 	List<InvitationRequest> getList();
 	
 	/* 2019.02.07 상태에 따른 정렬 */
-	@Select("SELECT i.id, i.toUserIdx, i.fromUserIdx, i.state, DATE_FORMAT(i.created, '%Y-%m-%d %H:%i:%s') AS created, u.nickname  FROM " + TABLE_NAME + " i JOIN USER u ON u.userIdx = i.fromUserIdx WHERE i.toUserIdx IN (SELECT userIdx FROM user_group_mapping WHERE groupCode = (SELECT groupCode FROM user_group_mapping WHERE userIdx = #{userIdx})) GROUP BY i.fromUserIdx ORDER BY ( CASE i.state WHEN 0 THEN 0 ELSE 1 END ), i.created DESC")
+	@Select("SELECT i.id, i.toUserIdx, i.fromUserIdx, i.state, DATE_FORMAT(i.created, '%Y-%m-%d %H:%i:%s') AS created, u.nickname  FROM " + TABLE_NAME + " i JOIN user u ON u.userIdx = i.fromUserIdx WHERE i.toUserIdx IN (SELECT userIdx FROM user_group_mapping WHERE groupCode = (SELECT groupCode FROM user_group_mapping WHERE userIdx = #{userIdx})) GROUP BY i.fromUserIdx ORDER BY ( CASE i.state WHEN 0 THEN 0 ELSE 1 END ), i.created DESC")
 	List<InvitationRequest> getInvitationList(@Param("userIdx") int userIdx );
 	
 	@Select("SELECT COUNT(*) FROM " + TABLE_NAME + " r JOIN user_group_mapping m ON r.toUserIdx = m.userIdx  WHERE r.fromUserIdx = #{fromUserIdx} AND m.groupCode = ( SELECT groupCode FROM user_group_mapping WHERE userIdx = #{toUserIdx} ) AND r.state = 1")
