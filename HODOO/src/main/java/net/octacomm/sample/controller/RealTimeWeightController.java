@@ -57,7 +57,7 @@ public class RealTimeWeightController {
 	}
 
 	@ResponseBody
-	@RequestMapping(value = "/get/last/collection/data")
+	@RequestMapping(value = "/get/last/collection/data", method = RequestMethod.POST)
 	public RealTimeWeight getLastCollectionData(@RequestParam("date") String date, @RequestParam("groupCode") String groupCode, @RequestParam("type") int type) {
 		List<Device> deviceList = deviceMapper.myDeviceList(groupCode);
 		RealTimeWeight weights = RealTimeWeightMapper.getListofDeviceList(date, deviceList, type);
