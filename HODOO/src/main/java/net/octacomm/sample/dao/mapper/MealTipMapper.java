@@ -28,7 +28,7 @@ public interface MealTipMapper extends CRUDMapper<MealTip, DefaultParam, Integer
 
 	public String INSERT_VALUES = " ( null, #{language}, #{title} , #{content} )";
 
-	public String TABLE_NAME = " WEIGHT_TIP ";
+	public String TABLE_NAME = " weight_tip ";
 
 	public String UPDATE_VALUES = " language = #{language} , title = #{title} , content = #{content}  ";
 

@@ -18,7 +18,7 @@ public interface FeedMapper extends CRUDMapper<Feed, DefaultParam, Integer>{
 
 	public String INSERT_VALUES = " ( null , #{animalType} , #{tag}, #{name} , #{manufacturer}, #{age}, #{calorie}, #{calculationCalories},  #{crudeProtein}, #{crudeFat}, #{carbohydrate}, #{crudeAsh}, #{crudeFiber}, #{taurine}, #{moisture}, #{calcium}, #{phosphorus}, #{omega3}, #{omega6} , #{mainIngredient} )";
 
-	public String TABLE_NAME = " FEED ";
+	public String TABLE_NAME = " feed ";
 
 	public String UPDATE_VALUES = " animalType = #{animalType} , tag = #{tag} , name = #{name} , manufacturer = #{manufacturer} , age = #{age} , calorie = #{calorie} , calculationCalories = #{calculationCalories} , crudeProtein = #{crudeProtein} , crudeFat = #{crudeFat} , carbohydrate = #{carbohydrate} , crudeAsh = #{crudeAsh} , crudeFiber = #{crudeFiber} , taurine = #{taurine} , moisture = #{moisture} , calcium = #{calcium} , phosphorus = #{phosphorus} , omega3 = #{omega3} , omega6 = #{omega6} , mainIngredient = #{mainIngredient} ";
 

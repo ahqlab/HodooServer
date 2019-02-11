@@ -68,16 +68,16 @@
 		    DATE_FORMAT(`createDate`, '%Y%U') AS `date`,
 		    avg(`value`) as average
 		FROM 
-			REAL_TIME_WEIGHT, (SELECT @rownum :=0) AS R
+			real_time_weight, (SELECT @rownum :=0) AS R
 		WHERE
-			REAL_TIME_WEIGHT.mac IN
+			real_time_weight.mac IN
 		<foreach collection="deviceList" item="device" open="(" close=")" separator=",">
 			#{device.serialNumber}
 		</foreach>
 		AND
 		  type = #{type}
 		AND 
-			substring(REAL_TIME_WEIGHT.createDate, 6,2) = #{month}
+			substring(real_time_weight.createDate, 6,2) = #{month}
  		GROUP BY date;
 	</select>
 
@@ -89,7 +89,7 @@
 		FROM 
 		  real_time_weight 
 		WHERE
-			REAL_TIME_WEIGHT.mac IN
+			real_time_weight.mac IN
 		<foreach collection="devices" item="device" open="(" close=")" separator=",">
 			#{device.serialNumber}
 		</foreach>
