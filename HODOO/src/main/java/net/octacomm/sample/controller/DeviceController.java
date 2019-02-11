@@ -33,26 +33,26 @@ public class DeviceController {
 	private UserGroupMappingMapper userGroupMappingMapper;
 
 	@ResponseBody
-	@RequestMapping(value = "/my/device/list", method = RequestMethod.POST)
+	@RequestMapping(value = "/my/device/list.do", method = RequestMethod.POST)
 	public List<Device> myDeviceList(@RequestParam("groupCode") String groupCode) {
 		return deviceNapper.myDeviceList(groupCode);
 	}
 
 	@ResponseBody
-	@RequestMapping(value = "/change/connect/status", method = RequestMethod.POST)
+	@RequestMapping(value = "/change/connect/status.do", method = RequestMethod.POST)
 	public int changeDeviceConnectStatus(@RequestParam("deviceIdx") int deviceIdx,
 			@RequestParam("connect") Boolean connect) {
 		return deviceNapper.changeDeviceConnectStatus(deviceIdx, connect);
 	}
 
 	@ResponseBody
-	@RequestMapping(value = "/change/connection", method = RequestMethod.POST)
+	@RequestMapping(value = "/change/connection.do", method = RequestMethod.POST)
 	public int changeDeviceConnection(@RequestParam("groupCode") String groupCode, @RequestParam("deviceIdx") int deviceIdx, @RequestParam("isDel") Boolean isDel) {
 		return deviceNapper.changeDeviceConnection(groupCode, deviceIdx, isDel);
 	}
 
 	@ResponseBody
-	@RequestMapping(value = "/insert/device", method = RequestMethod.POST)
+	@RequestMapping(value = "/insert/device.do", method = RequestMethod.POST)
 	public int insert(@RequestBody Device device) {
 		GroupPetMapping mapping = groupPetMappingMapper.isEmpty(device.getGroupCode());
 		if (mapping != null) {
@@ -114,7 +114,7 @@ public class DeviceController {
 	}
 
 	@ResponseBody
-	@RequestMapping(value = "/insert/device2", method = RequestMethod.POST)
+	@RequestMapping(value = "/insert/device2.do", method = RequestMethod.POST)
 	public Device insert2(@RequestBody Device device) {
 		return device;
 	}

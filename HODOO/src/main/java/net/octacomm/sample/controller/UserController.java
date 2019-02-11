@@ -385,7 +385,7 @@ public class UserController {
 	private JavaMailSender mailSender;
 
 	@ResponseBody
-	@RequestMapping(value = "/regist", method = RequestMethod.POST)
+	@RequestMapping(value = "/regist.do", method = RequestMethod.POST)
 	public ResultMessageGroup regist(@RequestBody User param) throws FirebaseMessagingException {
 		
 		// 그룹을 만든다 (그룹아이디를 가져온다)
@@ -426,7 +426,7 @@ public class UserController {
 	}
 
 	@ResponseBody
-	@RequestMapping(value = "/regist2", method = RequestMethod.POST)
+	@RequestMapping(value = "/regist2.do", method = RequestMethod.POST)
 	public SessionMaintenance regist2(@RequestBody User param) throws FirebaseMessagingException {
 		String grougCode = MathUtil.getGroupId();
 		List<User> findUser = userMapper.getUserList(param);
@@ -456,60 +456,60 @@ public class UserController {
 	}
 
 	@ResponseBody
-	@RequestMapping(value = "/login", method = RequestMethod.POST)
+	@RequestMapping(value = "/login.do", method = RequestMethod.POST)
 	public SessionMaintenance login(@RequestBody User user) {
 		SessionMaintenance group = loginService.login(user);
 		return group;
 	}
 	
 	@ResponseBody
-	@RequestMapping(value = "/login3", method = RequestMethod.GET)
+	@RequestMapping(value = "/login3.do", method = RequestMethod.GET)
 	public SessionMaintenance login3(User user) {
 		SessionMaintenance group = loginService.login(user);
 		return group;
 	}
 	
 	@ResponseBody
-	@RequestMapping(value = "/login2", method = RequestMethod.POST)
+	@RequestMapping(value = "/login2.do", method = RequestMethod.POST)
 	public CommonResponce<User> login2(@RequestBody User user) {
 		CommonResponce<User> group = loginService.login2(user);
 		return group;
 	}
 
 	@ResponseBody
-	@RequestMapping(value = "/get/group/member", method = RequestMethod.POST)
+	@RequestMapping(value = "/get/group/member.do", method = RequestMethod.POST)
 	public List<User> login(@RequestParam("groupCode") String groupCode) {
 		return userMapper.getGroupMemner(groupCode);
 	}
 
 	@ResponseBody
-	@RequestMapping(value = "/get", method = RequestMethod.POST)
+	@RequestMapping(value = "/get.do", method = RequestMethod.POST)
 	public User get(@RequestParam("userIdx") int userIdx) {
 		return userMapper.get(userIdx);
 	}
 
 	@ResponseBody
-	@RequestMapping(value = "/update/basic/info", method = RequestMethod.POST)
+	@RequestMapping(value = "/update/basic/info.do", method = RequestMethod.POST)
 	public int updateBasic(@RequestBody User user) {
 		return userMapper.updateBasic(user);
 	}
 
 	@ResponseBody
-	@RequestMapping(value = "/update/user/password", method = RequestMethod.POST)
+	@RequestMapping(value = "/update/user/password.do", method = RequestMethod.POST)
 	public int updateUsetPassword(@RequestBody User user) {
 		return userMapper.updateUsetPassowrd(user);
 	}
 	
 	
 	@ResponseBody
-	@RequestMapping(value = "/find/user/password2", method = RequestMethod.POST)
+	@RequestMapping(value = "/find/user/password2.do", method = RequestMethod.POST)
 	public int findUserPasswordTest() {
 		return 0;
 	}
 	
 	
 	@ResponseBody
-	@RequestMapping(value = "/find/user/password", method = RequestMethod.POST)
+	@RequestMapping(value = "/find/user/password.do", method = RequestMethod.POST)
 	public CommonResponce<User> changeUserPassword(@RequestParam("email") String email) {
 		CommonResponce<User> responce = new CommonResponce<User>();
 		User returnUser = userMapper.getByUserEmail(email);
@@ -585,7 +585,7 @@ public class UserController {
 	
 	}
 
-	@RequestMapping(value = "/checkUserCertifiedMail", method = RequestMethod.GET)
+	@RequestMapping(value = "/checkUserCertifiedMail.do", method = RequestMethod.GET)
 	public ModelAndView checkUserCertifiedMail(@RequestParam("code") String code) {
 		String codeD = "";
 		try {
@@ -615,13 +615,13 @@ public class UserController {
 		return mav;
 	}
 
-	@RequestMapping(value = "/welcomeSignup", method = RequestMethod.GET)
+	@RequestMapping(value = "/welcomeSignup.do", method = RequestMethod.GET)
 	public ModelAndView welcomeSignup() {
 		ModelAndView mav = new ModelAndView("welcome_signup");
 		return mav;
 	}
 	@ResponseBody
-	@RequestMapping(value = "/update/fcmToken", method = RequestMethod.POST)
+	@RequestMapping(value = "/update/fcmToken.do", method = RequestMethod.POST)
 	public int saveFCMToken( @RequestBody User user ) {
 		if ( user.getUserIdx() == 0 ) {
 			user = userMapper.getByUserEmail(user.getEmail());
@@ -629,28 +629,28 @@ public class UserController {
 		return userService.saveFCMToken(user);
 	}
 	@ResponseBody
-	@RequestMapping(value = "/invitation/approval", method = RequestMethod.POST)
+	@RequestMapping(value = "/invitation/approval.do", method = RequestMethod.POST)
 	public int invitationApproval( 
 			@RequestParam("toUserIdx") int toUserIdx,
 			@RequestParam("fromUserIdx") int fromUserIdx) {
 		return userGroupMappingMapper.invitationApproval(toUserIdx, fromUserIdx);
 	}
 	@ResponseBody
-	@RequestMapping(value = "/invitation/refusal", method = RequestMethod.POST)
+	@RequestMapping(value = "/invitation/refusal.do", method = RequestMethod.POST)
 	public int invitationRefusal( 
 			@RequestParam("toUserIdx") int toUserIdx,
 			@RequestParam("fromUserIdx") int fromUserIdx) {
 		return firebaseMapper.invitationRefusal(toUserIdx, fromUserIdx);
 	}
 	@ResponseBody
-	@RequestMapping(value = "/invitation/getInvitationUser", method = RequestMethod.POST)
+	@RequestMapping(value = "/invitation/getInvitationUser.do", method = RequestMethod.POST)
 	public List<InvitationRequest> getInvitationList( 
 			@RequestParam("userIdx") int userIdx) {
 		return firebaseMapper.getInvitationList(userIdx);
 	}
 	
 	@ResponseBody
-	@RequestMapping(value = "/invitation/setInvitationType", method = RequestMethod.POST)
+	@RequestMapping(value = "/invitation/setInvitationType.do", method = RequestMethod.POST)
 	public int setInvitationType( 
 			@RequestParam("type") int type,
 			@RequestParam("toUserIdx") int toUserIdx,
@@ -682,7 +682,7 @@ public class UserController {
 		return result;
 	}
 	@ResponseBody
-	@RequestMapping(value = "/setUserCode", method = RequestMethod.POST)
+	@RequestMapping(value = "/setUserCode.do", method = RequestMethod.POST)
 	public int setInvitationType(
 			@RequestParam("idx") int idx,
 			@RequestParam("type") int code) {
@@ -697,7 +697,7 @@ public class UserController {
 		return result;
 	}
 	@ResponseBody
-	@RequestMapping(value = "/withdrawGroup", method = RequestMethod.POST)
+	@RequestMapping(value = "/withdrawGroup.do", method = RequestMethod.POST)
 	public int withdrawGroup(
 			@RequestParam("to") int to,
 			@RequestParam("from") int from
@@ -713,7 +713,7 @@ public class UserController {
 		return result;
 	}
 	@ResponseBody
-	@RequestMapping(value = "/invitation/cancelInvitation", method = RequestMethod.POST)
+	@RequestMapping(value = "/invitation/cancelInvitation.do", method = RequestMethod.POST)
 	public int cancelInvitation (
 			@RequestParam("toUserEmail") String toUserEmail,
 			@RequestParam("from") int from

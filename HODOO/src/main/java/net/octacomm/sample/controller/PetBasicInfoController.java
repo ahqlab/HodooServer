@@ -42,7 +42,7 @@ public class PetBasicInfoController {
 	private PetMapper petMapper;
 
 	@ResponseBody
-	@RequestMapping(value = "/basic/regist", method = RequestMethod.POST)
+	@RequestMapping(value = "/basic/regist.do", method = RequestMethod.POST)
 	public ResultMessageGroup regist(HttpServletRequest request, PetBasicInfo basicInfo) {
 		System.err.println("basicInfo : " + basicInfo);
 		ResultMessageGroup group = new ResultMessageGroup();
@@ -103,7 +103,7 @@ public class PetBasicInfoController {
 	}
 
 	@ResponseBody
-	@RequestMapping(value = "/basic/update", method = RequestMethod.POST)
+	@RequestMapping(value = "/basic/update.do", method = RequestMethod.POST)
 	public ResultMessageGroup update(HttpServletRequest request, PetBasicInfo basicInfo) {
 		ResultMessageGroup group = new ResultMessageGroup();
 		String localPath = "/resources/upload/profile/";
@@ -155,13 +155,13 @@ public class PetBasicInfoController {
 	}
 
 	@ResponseBody
-	@RequestMapping(value = "/basic/get", method = RequestMethod.POST)
+	@RequestMapping(value = "/basic/get.do", method = RequestMethod.POST)
 	public PetBasicInfo getBasicInformation(HttpServletRequest request, @RequestParam("groupCode") String groupCode, @RequestParam("petIdx") int petIdx) {
 		return petBasicInfoMapper.getBasicInformation(groupCode, petIdx);
 	}
 
 	@ResponseBody
-	@RequestMapping(value = "/about/my/pet/list")
+	@RequestMapping(value = "/about/my/pet/list.do")
 	public List<PetAllInfos> aboutMyPetList(@RequestParam("groupCode") String groupCode) {
 		List<PetAllInfos> list = petMapper.aboutMyPetList(groupCode);
 		for (PetAllInfos petAllInfos : list) {
@@ -172,7 +172,7 @@ public class PetBasicInfoController {
 	}
 	
 	@ResponseBody
-	@RequestMapping(value = "/test/image/upload", method = RequestMethod.POST)
+	@RequestMapping(value = "/test/image/upload.do", method = RequestMethod.POST)
 	public CommonResponce<User> IosMultiPartTest(@RequestParam("profile") MultipartFile profile) {
 		System.err.println("profile : " + profile.getOriginalFilename());
 		CommonResponce<User> responce = new CommonResponce<User>();

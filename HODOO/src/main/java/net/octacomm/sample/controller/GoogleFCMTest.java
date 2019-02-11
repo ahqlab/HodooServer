@@ -340,7 +340,7 @@ public class GoogleFCMTest {
 		return response.toString();
 	}
 	@ResponseBody
-	@RequestMapping(value = "/mobile/send/invitation", method = RequestMethod.POST)
+	@RequestMapping(value = "/mobile/send/invitation.do", method = RequestMethod.POST)
 	public int invitation (
 			@RequestParam("toUserEmail") String toUserEmail,
 			@RequestParam("fromUserEmail") String fromUserEmail
@@ -390,7 +390,7 @@ public class GoogleFCMTest {
 		
 	}
 	@ResponseBody
-	@RequestMapping("/register")
+	@RequestMapping("/register.do")
 	public int register ( 
 			@RequestParam("toUserIdx") int toUserIdx,
 			@RequestParam("fromUserIdx") int fromUserIdx
@@ -402,7 +402,7 @@ public class GoogleFCMTest {
 		return firebaseMapper.insert(request);
 	}
 	@ResponseBody
-	@RequestMapping(value = "/mobile/send/normal", method = RequestMethod.POST)
+	@RequestMapping(value = "/mobile/send/normal.do", method = RequestMethod.POST)
 	public int normalPush (
 			@RequestParam("title") String title,
 			@RequestParam("content") String content,

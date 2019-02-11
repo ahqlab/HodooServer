@@ -28,7 +28,7 @@ public class FeederController {
 	private FeederOrderMapper feederOrderMapper;
 
 	@ResponseBody
-	@RequestMapping(value = "/insert", method = RequestMethod.POST)
+	@RequestMapping(value = "/insert.do", method = RequestMethod.POST)
 	public int insert(@RequestBody FeedOrders feedOrders) {
 		if (feederOrderMapper.getList().size() > 0) {
 			feedOrders.setOrderIdx(feederOrderMapper.getList().get(0).getOrderIdx());
@@ -41,7 +41,7 @@ public class FeederController {
 	//OrderIdx
 	//rer
 	@ResponseBody
-	@RequestMapping(value = "/check", method = RequestMethod.GET)
+	@RequestMapping(value = "/check.do", method = RequestMethod.GET)
 	public String check() {
 		if (feederOrderMapper.getList().size() > 0) {
 			// 있다.
@@ -55,7 +55,7 @@ public class FeederController {
 	//Calories
 	//OrderIdx
 	@ResponseBody
-	@RequestMapping(value = "/regist/meal", method = RequestMethod.GET)
+	@RequestMapping(value = "/regist/meal.do", method = RequestMethod.GET)
 	public int insertMealHistory(FeedOrders feedOrders) {
 		MealHistory history = new MealHistory();
 		FeedOrders orders = feederOrderMapper.get(feedOrders.getOrderIdx());

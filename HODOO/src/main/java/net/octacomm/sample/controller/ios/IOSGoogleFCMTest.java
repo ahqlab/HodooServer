@@ -115,7 +115,7 @@ public class IOSGoogleFCMTest {
 	
 	
 	@ResponseBody
-	@RequestMapping(value = "/mobile/send/invitation", method = RequestMethod.POST)
+	@RequestMapping(value = "/mobile/send/invitation.do", method = RequestMethod.POST)
 	public int invitation2 (@RequestBody Map<String, Object> param) {
 		String toUserEmail = (String) param.get("toUserEmail");
 		String fromUserEmail = (String) param.get("fromUserEmail");
@@ -171,7 +171,7 @@ public class IOSGoogleFCMTest {
 		
 	}
 	@ResponseBody
-	@RequestMapping("/register")
+	@RequestMapping("/register.do")
 	public int register ( 
 			@RequestParam("toUserIdx") int toUserIdx,
 			@RequestParam("fromUserIdx") int fromUserIdx

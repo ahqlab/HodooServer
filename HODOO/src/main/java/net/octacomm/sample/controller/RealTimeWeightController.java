@@ -35,7 +35,7 @@ public class RealTimeWeightController {
 	private net.octacomm.sample.dao.mapper.RealTimeWeightMapper RealTimeWeightMapper;
 
 	@ResponseBody
-	@RequestMapping(value = "/realtime/get")
+	@RequestMapping(value = "/realtime/get.do")
 	public String regist(RealTimeWeight realTimeWeight) {
 		RealTimeWeightMapper.insert(realTimeWeight);
 		RealTimeThred thred = new RealTimeThred(realTimeWeight);
@@ -45,19 +45,19 @@ public class RealTimeWeightController {
 	
 	// getLatelyData
 	@ResponseBody
-	@RequestMapping(value = "/get/lately/data")
+	@RequestMapping(value = "/get/lately/data.do")
 	public Float getLatelyData(@RequestParam("mac") String mac) {
 		return RealTimeWeightMapper.getLatelyData(mac);
 	}
 
 	@ResponseBody
-	@RequestMapping(value = "/get/list/of/group")
+	@RequestMapping(value = "/get/list/of/group.do")
 	public List<Float> getRealTimeList(@RequestParam("mac") String mac) {
 		return RealTimeWeightMapper.getRealTimeList(mac);
 	}
 
 	@ResponseBody
-	@RequestMapping(value = "/get/last/collection/data", method = RequestMethod.POST)
+	@RequestMapping(value = "/get/last/collection/data.do", method = RequestMethod.POST)
 	public RealTimeWeight getLastCollectionData(@RequestParam("date") String date, @RequestParam("groupCode") String groupCode, @RequestParam("type") int type) {
 		List<Device> deviceList = deviceMapper.myDeviceList(groupCode);
 		RealTimeWeight weights = RealTimeWeightMapper.getListofDeviceList(date, deviceList, type);
@@ -65,7 +65,7 @@ public class RealTimeWeightController {
 	}
 
 	@ResponseBody
-	@RequestMapping(value = "/get/statistics/list/of/time")
+	@RequestMapping(value = "/get/statistics/list/of/time.do")
 	public List<Statistics> getStatisticsOfTime(@RequestParam("groupCode") String groupCode, @RequestParam("today") String today, @RequestParam("type") int type) {
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		List<Device> deviceList = deviceMapper.myDeviceList(groupCode);
@@ -77,7 +77,7 @@ public class RealTimeWeightController {
 	
 	
 	@ResponseBody
-	@RequestMapping(value = "/get/statistics/list/of/day")
+	@RequestMapping(value = "/get/statistics/list/of/day.do")
 	public List<Statistics> getStatisticsOfDay(@RequestParam("groupCode") String groupCode, @RequestParam("type") int type) {
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		List<Device> deviceList = deviceMapper.myDeviceList(groupCode);
@@ -88,7 +88,7 @@ public class RealTimeWeightController {
 	
 	
 	@ResponseBody
-	@RequestMapping(value = "/get/statistics/list/of/week")
+	@RequestMapping(value = "/get/statistics/list/of/week.do")
 	public List<Statistics> getStatisticsOfWeek(@RequestParam("groupCode") String groupCode, @RequestParam("month") String month, @RequestParam("type") int type) {
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		List<Device> deviceList = deviceMapper.myDeviceList(groupCode);
@@ -99,7 +99,7 @@ public class RealTimeWeightController {
 	}
 	
 	@ResponseBody
-	@RequestMapping(value = "/get/statistics/list/of/month")
+	@RequestMapping(value = "/get/statistics/list/of/month.do")
 	public List<Statistics> getStatisticsOfMonth(@RequestParam("groupCode") String groupCode, @RequestParam("year") String year, @RequestParam("type") int type) {
 		/*HashMap<String, Object> map = new HashMap<String, Object>();
 		map.put("deviceList", deviceList);
@@ -109,7 +109,7 @@ public class RealTimeWeightController {
 	}
 	
 	@ResponseBody
-	@RequestMapping(value = "/get/statistics/list/of/year")
+	@RequestMapping(value = "/get/statistics/list/of/year.do")
 	public List<Statistics> getStatisticsOfYear(@RequestParam("groupCode") String groupCode, @RequestParam("type") int type) {
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		List<Device> deviceList = deviceMapper.myDeviceList(groupCode);

@@ -35,11 +35,11 @@ public abstract class AbstractCRUDController<M extends CRUDMapper<D, P, PK>, D e
 	@Log
 	private Logger logger;
 	
-	protected static final String URL_LIST = "/list";
-	protected static final String URL_REGIST = "/regist";
-	protected static final String URL_DETAIL = "/detail";
-	protected static final String URL_UPDATE = "/update";
-	protected static final String URL_DELETE = "/delete";
+	protected static final String URL_LIST = "/list.do";
+	protected static final String URL_REGIST = "/regist.do";
+	protected static final String URL_DETAIL = "/detail.do";
+	protected static final String URL_UPDATE = "/update.do";
+	protected static final String URL_DELETE = "/delete.do";
 
 	protected M mapper;
 

@@ -44,7 +44,7 @@ public class IOSUserController {
 	private UserGroupMappingMapper userGroupMappingMapper;
 
 	@ResponseBody
-	@RequestMapping(value = "/regist")
+	@RequestMapping(value = "/regist.do")
 	public ResultMessageGroup regist(User param) {
 		System.err.println("param : " + param);
 		// 그룹을 만든다 (그룹아이디를 가져온다)
@@ -63,14 +63,14 @@ public class IOSUserController {
 	}
 
 	@ResponseBody
-	@RequestMapping(value = "/test1", produces = "application/json")
+	@RequestMapping(value = "/test1.do", produces = "application/json")
 	public User test1(User param, @RequestHeader HttpHeaders headers) {
 		System.err.println("headers : " + headers.toString());
 		return param;
 	}
 
 	@ResponseBody
-	@RequestMapping(value = "/test2",  method = RequestMethod.POST, produces = "application/json", headers = "Accept=application/json")
+	@RequestMapping(value = "/test2.do",  method = RequestMethod.POST, produces = "application/json", headers = "Accept=application/json")
 	public User test2(@RequestBody User param, HttpServletResponse response) {
 		response.setContentType("application/json");
 		System.err.println("param : " + param);
@@ -78,20 +78,20 @@ public class IOSUserController {
 	}
 
 	@ResponseBody
-	@RequestMapping(value = "/login", method = RequestMethod.POST)
+	@RequestMapping(value = "/login.do", method = RequestMethod.POST)
 	public User login(User user) {
 		User result = userMapper.login(user);
 		return result;
 	}
 
 	@ResponseBody
-	@RequestMapping(value = "/get/group/member", method = RequestMethod.POST)
+	@RequestMapping(value = "/get/group/member.do", method = RequestMethod.POST)
 	public List<User> login(@RequestParam("groupId") String groupId) {
 		return userMapper.getGroupMemner(groupId);
 	}
 
 	@ResponseBody
-	@RequestMapping(value = "/get", method = RequestMethod.POST)
+	@RequestMapping(value = "/get.do", method = RequestMethod.POST)
 	public User get(@RequestParam("userIdx") int userIdx) {
 		return userMapper.get(userIdx);
 	}

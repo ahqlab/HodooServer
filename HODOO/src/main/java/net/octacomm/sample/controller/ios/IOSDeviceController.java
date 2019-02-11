@@ -28,7 +28,7 @@ public class IOSDeviceController {
 	@Autowired private GroupPetMappingMapper groupPetMappingMapper;
 
 	@ResponseBody
-	@RequestMapping(value = "/my/device/list", method = RequestMethod.POST)
+	@RequestMapping(value = "/my/device/list.do", method = RequestMethod.POST)
 	public List<Device> myDeviceList(@RequestParam("groupCode") String groupCode) {
 		return deviceNapper.myDeviceList(groupCode);
 	}
@@ -36,7 +36,7 @@ public class IOSDeviceController {
 	
 	
 	@ResponseBody
-	@RequestMapping(value = "/test/delete/device", method = RequestMethod.GET)
+	@RequestMapping(value = "/test/delete/device.do", method = RequestMethod.GET)
 	public int delete(@RequestParam("serialNumber") String serialNumber) {
 		return deviceNapper.testDeleteDevice(serialNumber);
 	}
@@ -44,7 +44,7 @@ public class IOSDeviceController {
 	
 	
 	@ResponseBody
-	@RequestMapping(value = "/insert/device", method = RequestMethod.POST)
+	@RequestMapping(value = "/insert/device.do", method = RequestMethod.POST)
 	public CommonResponce<Device> insert(@RequestBody Device device) {
 		CommonResponce<Device> responce;
 		GroupPetMapping mapping = groupPetMappingMapper.isEmpty(device.getGroupCode());
