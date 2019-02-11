@@ -43,7 +43,7 @@ public interface UserGroupMappingMapper extends CRUDMapper<UserGroupMapping, Def
 	@Select("SELECT g.id FROM " + TABLE_NAME + " g JOIN USER u ON g.userIdx = u.userIdx WHERE u.userIdx = #{idx}")
 	public int getUserGroupId( @Param("idx") int idx );
 	
-	@Update("UPDATE " + TABLE_NAME + " SET groupCode = ( SELECT groupCode FROM (SELECT * FROM " + TABLE_NAME +  ") AS map WHERE userIdx = #{toUserIdx} )  WHERE userIdx = #{fromUserIdx}")
+	@Update("UPDATE " + TABLE_NAME + " SET groupCode = ( SELECT groupCode FROM (SELECT * FROM " + TABLE_NAME +  ") AS map WHERE userIdx = #{toUserIdx} ), accessType = 0 WHERE userIdx = #{fromUserIdx}")
 	int invitationApproval(@Param("toUserIdx") int toUserIdx, @Param("fromUserIdx") int fromUserIdx);
 	
 	@Update("update " + TABLE_NAME + " set groupCode = #{code} where userIdx = #{idx} ")
