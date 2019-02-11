@@ -20,8 +20,8 @@ import com.google.appengine.api.appidentity.AppIdentityServicePb.AppIdentityServ
 @Controller
 public class LoginController {
 	
-	public static final String LOGIN_URL = "/login";
-	public static final String DEFAULT_TARGET_URL = "/member/list";
+	public static final String LOGIN_URL = "/login.do";
+	public static final String DEFAULT_TARGET_URL = "/member/list.do";
 
 	@Autowired
 	private LoginService loginService;
@@ -51,7 +51,7 @@ public class LoginController {
 	 * @param errors
 	 * @return
 	 */
-	@RequestMapping(value = "/login", method = RequestMethod.POST)
+	@RequestMapping(value = "/login.do", method = RequestMethod.POST)
 	public String login(Model model, HttpSession session, User user, Errors errors) {
 		/*ResultMessageGroup group = null;
 		try {
@@ -82,7 +82,7 @@ public class LoginController {
 	 * @param httpSession
 	 * @return
 	 */
-	@RequestMapping(value = "/logout", method = RequestMethod.GET)
+	@RequestMapping(value = "/logout.do", method = RequestMethod.GET)
 	public String logout(HttpSession httpSession) {
 		httpSession.invalidate();
 		return "redirect:" + LOGIN_URL;

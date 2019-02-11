@@ -25,7 +25,7 @@ public class IOSWeatherController {
 	// API KEY : 6d7dbc31ba3f4db9a278fc57fe54c82
 	@SuppressWarnings("unlikely-arg-type")
 	@ResponseBody
-	@RequestMapping(value = "/forecast/for/weatherbit", method = RequestMethod.GET)
+	@RequestMapping(value = "/forecast/for/weatherbit.do", method = RequestMethod.GET)
 	private Weatherbit forecastForWeatherbit(@RequestParam("lat") String lat, @RequestParam("lon") String lon) {
 		RestTemplate restTemplate = new RestTemplate();
 		String result = restTemplate.getForObject("https://api.weatherbit.io/v2.0/forecast/hourly?&lat=" + lat + "&lon=" + lon +"&key=6d7dbc31ba3f4db9a278fc57fe54c82f&hours=48", String.class);

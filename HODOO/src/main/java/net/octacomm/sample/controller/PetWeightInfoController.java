@@ -28,7 +28,7 @@ public class PetWeightInfoController {
 	
 	
 	@ResponseBody
-	@RequestMapping(value = "/regist", method = RequestMethod.POST)
+	@RequestMapping(value = "/regist.do", method = RequestMethod.POST)
 	public int regist(@RequestParam("petIdx") int petIdx, @RequestBody PetWeightInfo petWeightInfo) {
 		petWeightInfoMapper.insert(petWeightInfo);
 		return petMapper.registWeight(petWeightInfo.getId(), petIdx);
@@ -36,26 +36,26 @@ public class PetWeightInfoController {
 
 	
 	@ResponseBody
-	@RequestMapping(value = "/get" , method = RequestMethod.POST)
+	@RequestMapping(value = "/get.do" , method = RequestMethod.POST)
 	public PetWeightInfo get(@RequestParam("groupCode") String groupCode, @RequestParam("petIdx") int petIdx) {
 		return petWeightInfoMapper.getPetWeightInformation(groupCode, petIdx);
 	}
 	
 	@ResponseBody
-	@RequestMapping(value = "/bcs" , method = RequestMethod.POST)
+	@RequestMapping(value = "/bcs.do" , method = RequestMethod.POST)
 	public PetWeightInfo getMyBcs(@RequestParam ("basicIdx") int basicIdx) {
 		return petWeightInfoMapper.getBcs(basicIdx);
 	}
 	
 	@ResponseBody
-	@RequestMapping(value = "/info/check", method = RequestMethod.POST)
+	@RequestMapping(value = "/info/check.do", method = RequestMethod.POST)
 	public PetPhysicalInfo basicInfoCheck(@RequestParam("groupId") String groupId, @RequestParam("petId") int petId) {
 		return petWeightInfoMapper.InfoCheck(groupId, petId);
 	}
 	
 	
 	@ResponseBody
-	@RequestMapping(value = "/delete", method = RequestMethod.POST)
+	@RequestMapping(value = "/delete.do", method = RequestMethod.POST)
 	public int delete(@RequestParam("petIdx") int petIdx, @RequestParam("id") int id) {
 		petMapper.resetWeight(petIdx);
 		return petWeightInfoMapper.delete(id);

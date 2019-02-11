@@ -46,7 +46,7 @@ public class MailController {
 	private ResourceLoader resourceLoader;
 
 
-	@RequestMapping(value = "/mail/mailSending")
+	@RequestMapping(value = "/mail/mailSending.do")
 	public void mailSending() {
 		String tomail = "silverlight2017@ahqlab.com"; // 받는 사람 이메일
 		String title = "안녕하세요"; // 제목
@@ -64,7 +64,7 @@ public class MailController {
 		}
 	}
 	@ResponseBody
-	@RequestMapping(value = "/user/certified", method = RequestMethod.POST)
+	@RequestMapping(value = "/user/certified.do", method = RequestMethod.POST)
 	public int userCertifiedMailSend(
 			HttpServletRequest request,
 			@RequestParam("toMailAddr")  String toMailAddr) {

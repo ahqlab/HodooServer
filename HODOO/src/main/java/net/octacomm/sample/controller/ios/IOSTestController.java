@@ -16,7 +16,7 @@ import net.octacomm.sample.domain.User;
 public class IOSTestController {
 	
 	@ResponseBody
-	@RequestMapping(value = "/test", method = RequestMethod.POST)
+	@RequestMapping(value = "/test.do", method = RequestMethod.POST)
 	public int invitation2 (@RequestBody User user, @RequestParam ("name") String name) {
 		System.err.println("userIdx : " + user.getUserIdx());
 		System.err.println("name : " + name);

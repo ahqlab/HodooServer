@@ -30,7 +30,7 @@ public class IOSPetPhysicalInfoController {
 	private PetMapper petMapper;
 
 	@ResponseBody
-	@RequestMapping(value = "/regist", method = RequestMethod.POST)
+	@RequestMapping(value = "/regist.do", method = RequestMethod.POST)
 	public PetCommonResponse<PetPhysicalInfo> regist(@RequestBody Map<String, Object> param) {
 		PetCommonResponse<PetPhysicalInfo> commonResponse = new PetCommonResponse<PetPhysicalInfo>();
 		
@@ -55,14 +55,14 @@ public class IOSPetPhysicalInfoController {
 	}
 
 	@ResponseBody
-	@RequestMapping(value = "/delete", method = RequestMethod.POST)
+	@RequestMapping(value = "/delete.do", method = RequestMethod.POST)
 	public int delete(@RequestParam("petIdx") int petIdx, @RequestParam("id") int id) {
 		petMapper.resetPhysical(petIdx);
 		return petPhysicalInfoMapper.delete(id);
 	}
 
 	@ResponseBody
-	@RequestMapping(value = "/get", method = RequestMethod.POST)
+	@RequestMapping(value = "/get.do", method = RequestMethod.POST)
 	public PetPhysicalInfo getPetPhysicalInformation(@RequestParam("groupCode") String groupCode, @RequestParam("petIdx") int petIdx) {
 		return petPhysicalInfoMapper.getPetPhysicalInformation(groupCode, petIdx);
 	}

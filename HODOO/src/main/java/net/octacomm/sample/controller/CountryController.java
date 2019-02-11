@@ -24,7 +24,7 @@ public class CountryController {
 
 	
 	@ResponseBody
-	@RequestMapping(value = "/{language}/getAllCountry", method = RequestMethod.GET)
+	@RequestMapping(value = "/{language}/getAllCountry.do", method = RequestMethod.GET)
 	public List<Country> getAllCountry (@PathVariable("language") int language) {
 		String columnName = "";
 		switch( language ) {

@@ -45,32 +45,32 @@ public class IOSPetController {
 	
 	
 	@ResponseBody
-	@RequestMapping(value = "/my/list", method = RequestMethod.POST)
+	@RequestMapping(value = "/my/list.do", method = RequestMethod.POST)
 	public List<PetBasicInfo> myList(HttpServletRequest request, @RequestParam("groupId") int groupId) {
 		return  petBasicInfoMapper.getMyPetList(groupId);
 	}
 	
 	@ResponseBody
-	@RequestMapping(value = "/my/registered/list", method = RequestMethod.POST)
+	@RequestMapping(value = "/my/registered/list.do", method = RequestMethod.POST)
 	public List<PetBasicInfo> getMyRegisteredPetList(HttpServletRequest request, @RequestParam("groupId") String groupId) {
 		return  petBasicInfoMapper.getMyRegisteredPetList(groupId);
 	}
 	
 	@ResponseBody
-	@RequestMapping(value = "/basic/info/get", method = RequestMethod.POST)
+	@RequestMapping(value = "/basic/info/get.do", method = RequestMethod.POST)
 	public PetBasicInfo login(HttpServletRequest request, @RequestParam("id") int id) {
 		PetBasicInfo result = petBasicInfoMapper.getBasicInfoForPetId(id);
 		return result;
 	}
 	
 	@ResponseBody
-	@RequestMapping(value = "/my/pet/list", method = RequestMethod.POST)
+	@RequestMapping(value = "/my/pet/list.do", method = RequestMethod.POST)
 	public List<Pet> myPetList(@RequestParam("groupCode") String groupCode){
 		return petMapper.myPetList(groupCode);
 	}
 	
 	@ResponseBody
-	@RequestMapping(value = "/all/infos", method = RequestMethod.POST)
+	@RequestMapping(value = "/all/infos.do", method = RequestMethod.POST)
 	public PetAllInfos petAllInfos(@RequestParam("petIdx") int petIdx){
 		return petMapper.allInfoOnThePet(petIdx);
 	}

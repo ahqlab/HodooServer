@@ -34,7 +34,7 @@ public class SessionMaintenanceController {
 	private UserMapper userMapper;
 	
 	@ResponseBody
-	@RequestMapping(value = "/get")
+	@RequestMapping(value = "/get.do")
 	public SessionMaintenance get(@RequestParam("groupCode") String groupCode) {
 		SessionMaintenance maintenance = new SessionMaintenance();
 		List<User> users = userMapper.getGroupMemner(groupCode);

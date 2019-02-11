@@ -32,19 +32,19 @@ public class IOSMealHistoryController {
 	@Autowired FeedMapper feedMapper;
 
 	@ResponseBody
-	@RequestMapping(value = "/insert", method = RequestMethod.POST)
+	@RequestMapping(value = "/insert.do", method = RequestMethod.POST)
 	public int insert(@RequestBody MealHistory mealHistory) {
 		return mealHistoryMapper.insert(mealHistory);
 	}
 	
 	@ResponseBody
-	@RequestMapping(value = "/update", method = RequestMethod.POST)
+	@RequestMapping(value = "/update.do", method = RequestMethod.POST)
 	public int update(@RequestBody MealHistory mealHistory) {
 		return mealHistoryMapper.update(mealHistory);
 	}
 	
 	@ResponseBody
-	@RequestMapping(value = "/get/list", method = RequestMethod.POST)
+	@RequestMapping(value = "/get/list.do", method = RequestMethod.POST)
 	public List<MealHistoryContent> getList(@RequestParam("date") String date, @RequestParam("petIdx") int petIdx) {
 		List<MealHistoryContent> contents = new ArrayList<MealHistoryContent>();
 		for (MealHistory mealHistory : mealHistoryMapper.getContentList(date, petIdx)) {
@@ -66,7 +66,7 @@ public class IOSMealHistoryController {
 	
 	
 	@ResponseBody
-	@RequestMapping(value = "/get/this/history", method = RequestMethod.POST)
+	@RequestMapping(value = "/get/this/history.do", method = RequestMethod.POST)
 	public MealHistory getThisHistory(@RequestParam("historyIdx") int historyIdx) {
 		return mealHistoryMapper.get(historyIdx);
 	}

@@ -25,34 +25,34 @@ public class PetChronicDeseaseController {
 	private PetMapper petMapper;
 	
 	@ResponseBody
-	@RequestMapping(value = "/delete" , method = RequestMethod.POST)
+	@RequestMapping(value = "/delete.do" , method = RequestMethod.POST)
 	public int delete(@RequestParam("petIdx") int petIdx, @RequestParam("diseaseIdx") int diseaseIdx) {
 		petMapper.resetDisease(petIdx);
 		return chronicDeseaseMapper.delete(diseaseIdx);
 	}
 	
 	@ResponseBody
-	@RequestMapping(value = "/regist" , method = RequestMethod.POST)
+	@RequestMapping(value = "/regist.do" , method = RequestMethod.POST)
 	public int regist(@RequestBody PetChronicDisease chronicDesease, @RequestParam("petIdx") int petIdx) {
 		chronicDeseaseMapper.insert(chronicDesease);
 		return petMapper.registDisease(chronicDesease.getId(), petIdx);
 	}
 	
 	@ResponseBody
-	@RequestMapping(value = "/list" , method = RequestMethod.POST)
+	@RequestMapping(value = "/list.do" , method = RequestMethod.POST)
 	public List<PetChronicDisease> regist(@RequestParam("groupId") int groupId) {
 		return chronicDeseaseMapper.list(groupId);
 	}
 	
 	
 	@ResponseBody
-	@RequestMapping(value = "/info/check", method = RequestMethod.POST)
+	@RequestMapping(value = "/info/check.do", method = RequestMethod.POST)
 	public PetChronicDisease basicInfoCheck(@RequestParam("groupId") String groupId, @RequestParam("id") int petId) {
 		return chronicDeseaseMapper.InfoCheck(groupId, petId);
 	}
 	
 	@ResponseBody
-	@RequestMapping(value = "/get", method = RequestMethod.POST)
+	@RequestMapping(value = "/get.do", method = RequestMethod.POST)
 	public PetChronicDisease getBasicInformation(@RequestParam("groupCode") String groupCode, @RequestParam("petIdx") int petIdx) {
 		return chronicDeseaseMapper.getDiseaseInformation(groupCode, petIdx);
 	}

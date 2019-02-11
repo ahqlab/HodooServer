@@ -22,7 +22,7 @@ public class MealTipController {
 	private MealTipMapper mealTipMapper; 
 	
 	@ResponseBody
-	@RequestMapping(value = "/get/county/message", method = RequestMethod.POST)
+	@RequestMapping(value = "/get/county/message.do", method = RequestMethod.POST)
 	public MealTip getCountryMessage(@RequestBody MealTip mealTip) {
 		return mealTipMapper.getCountryMessage(mealTip);
 	}

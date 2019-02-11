@@ -40,7 +40,7 @@ public class IOSPetBasicInfoController {
 	private PetMapper petMapper;
 
 	@ResponseBody
-	@RequestMapping(value = "/basic/regist", method = RequestMethod.POST)
+	@RequestMapping(value = "/basic/regist.do", method = RequestMethod.POST)
 	public PetBasicInfoResponse regist(HttpServletRequest request, PetBasicInfo basicInfo) {
 		
 		PetBasicInfoResponse group = new PetBasicInfoResponse();
@@ -102,7 +102,7 @@ public class IOSPetBasicInfoController {
 
 	
 	@ResponseBody
-	@RequestMapping(value = "/basic/update", method = RequestMethod.POST)
+	@RequestMapping(value = "/basic/update.do", method = RequestMethod.POST)
 	public PetBasicInfoResponse update(HttpServletRequest request, PetBasicInfo basicInfo) {
 		
 		PetBasicInfoResponse group = new PetBasicInfoResponse();
@@ -163,13 +163,13 @@ public class IOSPetBasicInfoController {
 	}
 
 	@ResponseBody
-	@RequestMapping(value = "/basic/get", method = RequestMethod.POST)
+	@RequestMapping(value = "/basic/get.do", method = RequestMethod.POST)
 	public PetBasicInfo getBasicInformation(HttpServletRequest request, @RequestParam("groupCode") String groupCode, @RequestParam("petIdx") int petIdx) {
 		return petBasicInfoMapper.getBasicInformation(groupCode, petIdx);
 	}
 	
 	@ResponseBody
-	@RequestMapping(value = "/about/my/pet/list", method = RequestMethod.POST)
+	@RequestMapping(value = "/about/my/pet/list.do", method = RequestMethod.POST)
 	public List<PetAllInfos> aboutMyPetList(@RequestParam("groupCode") String groupCode){
 		List<PetAllInfos> list = petMapper.aboutMyPetList(groupCode);
 /*		for (PetAllInfos petAllInfos : list) {

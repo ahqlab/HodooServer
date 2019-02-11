@@ -44,7 +44,7 @@ public class MealHistoryController {
 	@Autowired FeedMapper feedMapper;
 
 	@ResponseBody
-	@RequestMapping(value = "/insert", method = RequestMethod.POST)
+	@RequestMapping(value = "/insert.do", method = RequestMethod.POST)
 	public int insert(@RequestBody MealHistory mealHistory) {
 		FCMThead thead = new FCMThead(mealHistory);
 		thead.start();
@@ -52,13 +52,13 @@ public class MealHistoryController {
 	}
 	
 	@ResponseBody
-	@RequestMapping(value = "/update", method = RequestMethod.POST)
+	@RequestMapping(value = "/update.do", method = RequestMethod.POST)
 	public int update(@RequestBody MealHistory mealHistory) {
 		return mealHistoryMapper.update(mealHistory);
 	}
 	
 	@ResponseBody
-	@RequestMapping(value = "/get/list", method = RequestMethod.POST)
+	@RequestMapping(value = "/get/list.do", method = RequestMethod.POST)
 	public List<MealHistoryContent> getList(@RequestParam("date") String date, @RequestParam("petIdx") int petIdx) {
 		List<MealHistoryContent> contents = new ArrayList<MealHistoryContent>();
 		for (MealHistory mealHistory : mealHistoryMapper.getContentList(date, petIdx)) {
@@ -73,21 +73,21 @@ public class MealHistoryController {
 	}
 	
 	@ResponseBody
-	@RequestMapping(value = "/get/today/sum/calorie", method = RequestMethod.POST)
+	@RequestMapping(value = "/get/today/sum/calorie.do", method = RequestMethod.POST)
 	public MealHistory getTodatSumCalorie(@RequestParam("petIdx") int petIdx, @RequestParam("date") String date) {
 		return mealHistoryMapper.getTodatSumCalorie(petIdx, date);
 	}
 	
 	
 	@ResponseBody
-	@RequestMapping(value = "/get/this/history", method = RequestMethod.POST)
+	@RequestMapping(value = "/get/this/history.do", method = RequestMethod.POST)
 	public MealHistory getThisHistory(@RequestParam("historyIdx") int historyIdx) {
 		return mealHistoryMapper.get(historyIdx);
 	}
 	
 	
 	@ResponseBody
-	@RequestMapping(value = "/delete", method = RequestMethod.POST)
+	@RequestMapping(value = "/delete.do", method = RequestMethod.POST)
 	public int delete(@RequestParam("historyIdx") int historyIdx) {
 		return mealHistoryMapper.delete(historyIdx);
 	}

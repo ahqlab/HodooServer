@@ -23,7 +23,7 @@ public class ColorDetectorController {
 	private StandardHsvMapper standardHsvMapper;
 
 	@ResponseBody
-	@RequestMapping(value = "/detector", method = RequestMethod.POST)
+	@RequestMapping(value = "/detector.do", method = RequestMethod.POST)
 	public HsvValue detector(@RequestBody HsvValue hsv) {
 		System.err.println("hsv : " +hsv);
 		HsvValue result = new HsvValue();
