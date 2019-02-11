@@ -28,7 +28,7 @@ public interface FeederOrderMapper extends CRUDMapper<FeedOrders, DefaultParam, 
 	
 	public String INSERT_VALUES = " ( null, #{groupCode}, #{userIdx} , #{feedIdx} , #{petIdx} , #{rer} )";
 	
-	public String TABLE_NAME = " FEED_ORDERS ";
+	public String TABLE_NAME = " feed_orders ";
 	
 	public String UPDATE_VALUES = " groupCode = #{groupCode} , userIdx = #{userIdx} , feedIdx = #{feedIdx} , petIdx = #{petIdx} , rer = #{rer}  ";
 	
