@@ -28,7 +28,7 @@ public interface WeightTipMapper extends CRUDMapper<WeightTip, DefaultParam, Int
 	
 	public String INSERT_VALUES = " ( null, #{language}, #{bcs} , #{title} , #{content} )";
 	
-	public String TABLE_NAME = " WEIGHT_TIP ";
+	public String TABLE_NAME = " weight_tip ";
 	
 	public String UPDATE_VALUES = " language = #{language} , bcs = #{bcs} , title = #{title} , content = #{content}  ";
 	
