@@ -67,7 +67,7 @@ public interface UserMapper extends CRUDMapper<User, DefaultParam, Integer>{
 	User login(User user);
 	
 	/* 2019.02.07 순서 정렬을 위한 조인 및 서브쿼리 */
-	@Select("SELECT * FROM user JOIN (SELECT m.*, r.accessDate FROM user_group_mapping m LEFT JOIN (SELECT * FROM invitation_request WHERE toUserIdx IN (SELECT userIdx FROM user_group_mapping WHERE groupCode = #{groupCode})) r ON r.fromUserIdx = m.userIdx WHERE m.groupCode = #{groupCode} GROUP BY m.userIdx) AS user_group_mapping ON user_group_mapping.groupCode = #{groupCode} AND user.userIdx = user_group_mapping.userIdx ORDER BY (CASE user_group_mapping.accessType WHEN 1 THEN 0 ELSE 1 END), user_group_mapping.accessDate ASC")
+	@Select("SELECT * FROM " + TABLE_NAME + " JOIN (SELECT m.*, r.accessDate FROM user_group_mapping m LEFT JOIN (SELECT r.* FROM invitation_request r INNER JOIN user_group_mapping m ON r.toUserIdx = m.userIdx WHERE groupCode = m.groupCode) r ON r.fromUserIdx = m.userIdx WHERE m.groupCode = m.groupCode GROUP BY m.userIdx) AS user_group_mapping ON user_group_mapping.groupCode = #{groupCode} AND user.userIdx = user_group_mapping.userIdx ORDER BY (CASE user_group_mapping.accessType WHEN 1 THEN 0 ELSE 1 END), user_group_mapping.accessDate ASC")
 	List<User> getGroupMemner(@Param("groupCode") String groupCode);
 	
 	@Update("UPDATE " + TABLE_NAME + " SET " + BASIC_INFO_UPDATE_VALUES + " WHERE userIdx =  #{userIdx} ")

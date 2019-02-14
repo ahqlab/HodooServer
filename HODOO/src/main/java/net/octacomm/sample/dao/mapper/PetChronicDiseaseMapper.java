@@ -15,7 +15,7 @@ import net.octacomm.sample.domain.PetBasicInfo;
 import net.octacomm.sample.domain.PetChronicDisease;
 import net.octacomm.sample.domain.StandardHsv;
 
-public interface PetChronicDeseaseMapper extends CRUDMapper<PetChronicDisease, DefaultParam, Integer>{
+public interface PetChronicDiseaseMapper extends CRUDMapper<PetChronicDisease, DefaultParam, Integer>{
 	
 	public String INSERT_FIELDS = " ( id, diseaseName )";
 	

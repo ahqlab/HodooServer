@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import net.octacomm.sample.dao.mapper.PetChronicDeseaseMapper;
+import net.octacomm.sample.dao.mapper.PetChronicDiseaseMapper;
 import net.octacomm.sample.dao.mapper.PetMapper;
 import net.octacomm.sample.domain.PetChronicDisease;
 
@@ -19,7 +19,7 @@ import net.octacomm.sample.domain.PetChronicDisease;
 public class PetChronicDeseaseController {
 	
 	@Autowired
-	private PetChronicDeseaseMapper chronicDeseaseMapper;
+	private PetChronicDiseaseMapper chronicDeseaseMapper;
 	
 	@Autowired
 	private PetMapper petMapper;

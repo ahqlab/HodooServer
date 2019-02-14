@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import net.octacomm.sample.dao.mapper.GroupsMapper;
 import net.octacomm.sample.dao.mapper.PetBasicInfoMapper;
-import net.octacomm.sample.dao.mapper.PetChronicDeseaseMapper;
+import net.octacomm.sample.dao.mapper.PetChronicDiseaseMapper;
 import net.octacomm.sample.dao.mapper.PetMapper;
 import net.octacomm.sample.dao.mapper.PetPhysicalInfoMapper;
 import net.octacomm.sample.dao.mapper.PetWeightInfoMapper;
@@ -37,7 +37,7 @@ public class PetController {
 	private PetBasicInfoMapper petBasicInfoMapper;
 
 	@Autowired
-	private PetChronicDeseaseMapper chronicDeseaseMapper;
+	private PetChronicDiseaseMapper chronicDeseaseMapper;
 
 	@Autowired
 	private PetPhysicalInfoMapper petPhysicalInfoMapper;
