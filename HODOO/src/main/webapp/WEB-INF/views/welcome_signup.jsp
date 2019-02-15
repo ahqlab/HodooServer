@@ -8,13 +8,13 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width, user-scalable=no">
 <title>HODOO - 회원가입을 축하합니다</title>
-<link rel="stylesheet" type="text/css" href="${ctx }/css/welcome_signup.css"/>
+<link rel="stylesheet" type="text/css" href="${ctx }/resources/css/welcome_signup.css"/>
 </head>
 <body>
 	<div id="wrap">
 		<p class="welcome">welcome</p>
 		<h1>HODOO</h1>
-		<img src="${ctx }/img/illust.png"/>
+		<img src="${ctx }/resources/images/illust.png"/>
 		<h2>회원가입을 축하합니다!</h2>
 		<p>
 			<b>HODOO</b>에 가입해주셔서 감사합니다.<br/>

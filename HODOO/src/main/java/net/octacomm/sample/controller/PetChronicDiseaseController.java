@@ -19,7 +19,7 @@ import net.octacomm.sample.domain.PetChronicDisease;
 public class PetChronicDiseaseController {
 	
 	@Autowired
-	private PetChronicDiseaseMapper chronicDeseaseMapper;
+	private PetChronicDiseaseMapper chronicDiseaseMapper;
 	
 	@Autowired
 	private PetMapper petMapper;
@@ -28,32 +28,33 @@ public class PetChronicDiseaseController {
 	@RequestMapping(value = "/delete.do" , method = RequestMethod.POST)
 	public int delete(@RequestParam("petIdx") int petIdx, @RequestParam("diseaseIdx") int diseaseIdx) {
 		petMapper.resetDisease(petIdx);
-		return chronicDeseaseMapper.delete(diseaseIdx);
+		return chronicDiseaseMapper.delete(diseaseIdx);
 	}
 	
 	@ResponseBody
 	@RequestMapping(value = "/regist.do" , method = RequestMethod.POST)
 	public int regist(@RequestBody PetChronicDisease chronicDesease, @RequestParam("petIdx") int petIdx) {
-		chronicDeseaseMapper.insert(chronicDesease);
+		System.out.println( "debug" );
+		chronicDiseaseMapper.insert(chronicDesease);
 		return petMapper.registDisease(chronicDesease.getId(), petIdx);
 	}
 	
 	@ResponseBody
 	@RequestMapping(value = "/list.do" , method = RequestMethod.POST)
 	public List<PetChronicDisease> regist(@RequestParam("groupId") int groupId) {
-		return chronicDeseaseMapper.list(groupId);
+		return chronicDiseaseMapper.list(groupId);
 	}
 	
 	
 	@ResponseBody
 	@RequestMapping(value = "/info/check.do", method = RequestMethod.POST)
 	public PetChronicDisease basicInfoCheck(@RequestParam("groupId") String groupId, @RequestParam("id") int petId) {
-		return chronicDeseaseMapper.InfoCheck(groupId, petId);
+		return chronicDiseaseMapper.InfoCheck(groupId, petId);
 	}
 	
 	@ResponseBody
 	@RequestMapping(value = "/get.do", method = RequestMethod.POST)
 	public PetChronicDisease getBasicInformation(@RequestParam("groupCode") String groupCode, @RequestParam("petIdx") int petIdx) {
-		return chronicDeseaseMapper.getDiseaseInformation(groupCode, petIdx);
+		return chronicDiseaseMapper.getDiseaseInformation(groupCode, petIdx);
 	}
 }
