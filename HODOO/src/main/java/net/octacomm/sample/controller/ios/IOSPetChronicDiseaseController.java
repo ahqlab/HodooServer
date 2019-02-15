@@ -22,7 +22,7 @@ import net.octacomm.sample.message.ResultMessage;
 
 @RequestMapping("/ios/chronic/diseases")
 @Controller
-public class IOSPetChronicDeseaseController {
+public class IOSPetChronicDiseaseController {
 
 	@Autowired
 	private PetChronicDiseaseMapper chronicDeseaseMapper;

@@ -16,7 +16,7 @@ import net.octacomm.sample.domain.PetChronicDisease;
 
 @RequestMapping("/chronic/desease")
 @Controller
-public class PetChronicDeseaseController {
+public class PetChronicDiseaseController {
 	
 	@Autowired
 	private PetChronicDiseaseMapper chronicDeseaseMapper;
