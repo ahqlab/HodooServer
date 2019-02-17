@@ -3,7 +3,7 @@
 <mapper namespace="net.octacomm.sample.dao.mapper.PetMapper">
 	<insert id="insert" parameterType="Pet" useGeneratedKeys="true"  keyProperty="petIdx" >
 		INSERT INTO  
-		PET 
+		pet 
 		( petIdx , petGroupCode , basic , disease, physical, weight, createDate ) 
 		VALUES 
 		( null , (select petGroupCode FROM group_pet_mapping where groupCode = #{petGroupCode} ) ,  #{basic} , #{disease} , #{physical} , #{weight} , now() )
