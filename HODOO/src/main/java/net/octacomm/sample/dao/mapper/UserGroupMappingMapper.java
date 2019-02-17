@@ -52,5 +52,8 @@ public interface UserGroupMappingMapper extends CRUDMapper<UserGroupMapping, Def
 	@Update("UPDATE " + TABLE_NAME + " SET accessType = 1 WHERE groupCode = #{groupCode }")
 	int setMaster( @Param("groupCode") String groupCode );
 	
+	@Select("SELECT COUNT(*) FROM user_group_mapping WHERE groupCode = #{groupCode } AND accessType = 0")
+	int getGroupCount ( @Param("groupCode") String groupCode );
+	
 
 }
