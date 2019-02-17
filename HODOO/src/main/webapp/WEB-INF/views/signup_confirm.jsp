@@ -31,7 +31,7 @@
     </c:when>
     <c:otherwise>
     	<script type="text/javascript">
-    		location.href = "${ctx}/user/welcomeSignup";
+    		location.href = "${ctx}/user/welcomeSignup.do";
     	</script>
     </c:otherwise>
 </c:choose>

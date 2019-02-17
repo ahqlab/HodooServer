@@ -725,6 +725,22 @@ public class UserController {
 		return firebaseMapper.invitationRefusal(toUser.getUserIdx(), from);
 	}
 	
+	@ResponseBody
+	@RequestMapping(value = "/checkGroupCount.do", method = RequestMethod.POST)
+	public int checkGroupCount ( @RequestParam("idx") int idx ) {
+		User user = userMapper.get(idx);
+		User loginUser = userMapper.login(user);
+		if ( loginUser.getAccessType() == HodooConstant.GROUP_NORMAL_MEMBER )
+			return HodooConstant.NOT_GROUP_MASTER;
+		
+		int groupCount = userGroupMappingMapper.getGroupCount(loginUser.getGroupCode());
+		if ( groupCount > 0 )
+			return HodooConstant.MEMBER_EXIST;
+		
+		
+		return HodooConstant.SUCCESS_CODE;
+	}
+	
 	public class FCMThead extends Thread {
 		private Message message;
 		FCMThead ( Message message ){

@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import net.octacomm.sample.dao.mapper.PetChronicDeseaseMapper;
+import net.octacomm.sample.dao.mapper.PetChronicDiseaseMapper;
 import net.octacomm.sample.dao.mapper.PetMapper;
 import net.octacomm.sample.domain.Pet;
 import net.octacomm.sample.domain.PetAllInfos;
@@ -22,10 +22,10 @@ import net.octacomm.sample.message.ResultMessage;
 
 @RequestMapping("/ios/chronic/diseases")
 @Controller
-public class IOSPetChronicDeseaseController {
+public class IOSPetChronicDiseaseController {
 
 	@Autowired
-	private PetChronicDeseaseMapper chronicDeseaseMapper;
+	private PetChronicDiseaseMapper chronicDeseaseMapper;
 
 	@Autowired
 	private PetMapper petMapper;
