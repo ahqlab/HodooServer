@@ -43,7 +43,7 @@ public interface MealHistoryMapper extends CRUDMapper<MealHistory, DefaultParam,
 	@Update("UPDATE " + TABLE_NAME + " SET  isDel = 0 WHERE historyIdx =  #{historyIdx}")
 	int delete(@Param("historyIdx") int historyIdx);
 	
-	@Select("SELECT * FROM " + TABLE_NAME + " WHERE petIdx =  #{petIdx} and substring(mear_history.createDate, 1,10) = #{date} and isDel = 1")
+	@Select("SELECT * FROM " + TABLE_NAME + " WHERE petIdx =  #{petIdx} and substring(mear_history.createDate, 1,10) = #{date} and isDel = 1 ORDER BY createDate DESC")
 	List<MealHistory> getContentList(@Param("date") String date, @Param("petIdx") int petIdx);
 
 	@Select("select "
