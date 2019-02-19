@@ -1,120 +1,142 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="net.octacomm.sample.dao.mapper.RealTimeWeightMapper">
-
-	<select id="getListofDeviceList" parameterType="java.util.List" resultType="net.octacomm.sample.domain.RealTimeWeight">
+	<select id="getListofDeviceList" parameterType="java.util.List"
+		resultType="net.octacomm.sample.domain.RealTimeWeight">
 		SELECT
-			 avg(value) as value
+			avg(value) as value
 		FROM
 			real_time_weight
+		left outer JOIN pet ON 
+			real_time_weight.tag = pet.tag and pet.petIdx = #{petIdx}
 		WHERE
 			real_time_weight.mac IN
 		<foreach collection="devices" item="device" open="(" close=")" separator=",">
 			#{device.serialNumber}
 		</foreach>
-		<!-- and date(real_time_weight.createDate) = date(now()) -->
-		and substring(real_time_weight.createDate, 1,10) = #{date} 
+		and substring(real_time_weight.createDate, 1,10) = #{date}
 		and type = #{type}
 		order by real_time_weight.createDate desc
 	</select>
-	
-	
-	<select id="getStatisticsOfTime" parameterType="hashmap" resultType="net.octacomm.sample.domain.Statistics">
+
+
+	<select id="getStatisticsOfTime" parameterType="hashmap"
+		resultType="net.octacomm.sample.domain.Statistics">
 		SELECT
-			substring(real_time_weight.createDate, 12,2) as theHour, avg(real_time_weight.value) average 
+			substring(real_time_weight.createDate, 12,2) as theHour, avg(real_time_weight.value) average
 		FROM
 			real_time_weight
+		left outer JOIN pet ON 
+			real_time_weight.tag = pet.tag and pet.petIdx = #{petIdx}
 		WHERE
 			real_time_weight.mac IN
-		<foreach collection="deviceList" item="device" open="(" close=")" separator=",">
+		<foreach collection="deviceList" item="device" open="(" close=")"
+			separator=",">
 			#{device.serialNumber}
 		</foreach>
-		and substring(real_time_weight.createDate, 1,10) = #{today} and type = #{type}
+		and substring(real_time_weight.createDate, 1,10) = #{today} and type =
+		#{type}
 		group by theHour order by theHour asc
 	</select>
-	
-	
-	<select id="getStatisticsOfDay" parameterType="hashmap" resultType="net.octacomm.sample.domain.Statistics">
-		SELECT 
-		  DATE(`createDate`) AS `date`, 
-		  CASE DAYOFWEEK(createDate)
-		  WHEN '1' THEN '일'
-		  WHEN '2' THEN '월'
-		  WHEN '3' THEN '화'
-		  WHEN '4' THEN '수'
-		  WHEN '5' THEN '목'
-		  WHEN '6' THEN '금'
-		  WHEN '7' THEN '토'
-		  END AS theDay,
-		  avg(`value`) AS 'average'
-		  FROM real_time_weight
+
+
+	<select id="getStatisticsOfDay" parameterType="hashmap"
+		resultType="net.octacomm.sample.domain.Statistics">
+		SELECT
+		DATE(real_time_weight.createDate) AS `date`,
+		CASE DAYOFWEEK(real_time_weight.createDate)
+		WHEN '1' THEN '일'
+		WHEN '2' THEN '월'
+		WHEN '3' THEN '화'
+		WHEN '4' THEN '수'
+		WHEN '5' THEN '목'
+		WHEN '6' THEN '금'
+		WHEN '7' THEN '토'
+		END AS theDay,
+		avg(`value`) AS 'average'
+		FROM real_time_weight
+		 left outer JOIN pet ON 
+			real_time_weight.tag = pet.tag and pet.petIdx = #{petIdx}
 		WHERE
-			real_time_weight.mac IN
-		<foreach collection="deviceList" item="device" open="(" close=")" separator=",">
+		real_time_weight.mac IN
+		<foreach collection="deviceList" item="device" open="(" close=")"
+			separator=",">
 			#{device.serialNumber}
 		</foreach>
 		AND
-		  type = #{type}
-		AND 
-			createDate BETWEEN DATE_ADD(NOW(), INTERVAL -1 WEEK) AND NOW()
- 		GROUP BY `date`;
-	</select>
-	
-	<select id="getStatisticsOfWeek" parameterType="hashmap" resultType="net.octacomm.sample.domain.Statistics">
-		SELECT 
-			@rownum := @rownum+1 AS theWeek,
-			DATE_FORMAT(DATE_SUB(`createDate`, INTERVAL (DAYOFWEEK(`createDate`)-1) DAY), '%Y/%m/%d') as start,
-		    DATE_FORMAT(DATE_SUB(`createDate`, INTERVAL (DAYOFWEEK(`createDate`)-7) DAY), '%Y/%m/%d') as end,
-		    DATE_FORMAT(`createDate`, '%Y%U') AS `date`,
-		    avg(`value`) as average
-		FROM 
-			real_time_weight, (SELECT @rownum :=0) AS R
-		WHERE
-			real_time_weight.mac IN
-		<foreach collection="deviceList" item="device" open="(" close=")" separator=",">
-			#{device.serialNumber}
-		</foreach>
+		type = #{type}
 		AND
-		  type = #{type}
-		AND 
-			substring(real_time_weight.createDate, 6,2) = #{month}
- 		GROUP BY date;
+		real_time_weight.createDate BETWEEN DATE_ADD(NOW(), INTERVAL -1 WEEK) AND NOW()
+		GROUP BY `date`;
 	</select>
 
-	
-	<select id="getStatisticsOfMonth"  resultType="net.octacomm.sample.domain.Statistics">
-		SELECT 
-		  substring(real_time_weight.createDate, 6,2) as theMonth,
-		  avg(real_time_weight.value) average 
-		FROM 
-		  real_time_weight 
+	<select id="getStatisticsOfWeek" parameterType="hashmap"
+		resultType="net.octacomm.sample.domain.Statistics">
+		SELECT
+		@rownum := @rownum+1 AS theWeek,
+		DATE_FORMAT(DATE_SUB(real_time_weight.createDate, INTERVAL (DAYOFWEEK(real_time_weight.createDate)-1) DAY), '%Y/%m/%d') as start,
+		DATE_FORMAT(DATE_SUB(real_time_weight.createDate, INTERVAL
+		(DAYOFWEEK(real_time_weight.createDate)-7) DAY), '%Y/%m/%d') as end,
+		DATE_FORMAT(real_time_weight.createDate, '%Y%U') AS `date`,
+		avg(`value`) as average
+		FROM
+		real_time_weight 
+		left outer JOIN pet ON 
+			real_time_weight.tag = pet.tag and pet.petIdx = #{petIdx} ,(SELECT @rownum :=0) AS R 
 		WHERE
-			real_time_weight.mac IN
-		<foreach collection="devices" item="device" open="(" close=")" separator=",">
+		real_time_weight.mac IN
+		<foreach collection="deviceList" item="device" open="(" close=")"
+			separator=",">
 			#{device.serialNumber}
 		</foreach>
 		AND
-			type = #{type}
-		AND 
-			substring(real_time_weight.createDate, 1,4) = #{year}
-		group by theMonth 
+		type = #{type}
+		AND
+		substring(real_time_weight.createDate, 6,2) = #{month}
+		GROUP BY date;
+	</select>
+
+
+	<select id="getStatisticsOfMonth" resultType="net.octacomm.sample.domain.Statistics">
+		SELECT
+		substring(real_time_weight.createDate, 6,2) as theMonth,
+		avg(real_time_weight.value) average
+		FROM
+		real_time_weight
+		left outer JOIN pet ON 
+			real_time_weight.tag = pet.tag and pet.petIdx = #{petIdx}
+		WHERE
+		real_time_weight.mac IN
+		<foreach collection="devices" item="device" open="(" close=")"
+			separator=",">
+			#{device.serialNumber}
+		</foreach>
+		AND
+		type = #{type}
+		AND
+		substring(real_time_weight.createDate, 1,4) = #{year}
+		group by theMonth
 		order by real_time_weight.createDate asc
 	</select>
-	
-	<select id="getStatisticsOfYear" parameterType="hashmap" resultType="net.octacomm.sample.domain.Statistics">
+
+	<select id="getStatisticsOfYear" parameterType="hashmap"
+		resultType="net.octacomm.sample.domain.Statistics">
 		SELECT
-			substring(real_time_weight.createDate, 1,4) as theYear,
-  			avg(real_time_weight.value) average 
+		substring(real_time_weight.createDate, 1,4) as theYear,
+		avg(real_time_weight.value) average
 		FROM
-			real_time_weight
+		real_time_weight
+		 left outer JOIN pet ON 
+			real_time_weight.tag = pet.tag and pet.petIdx = #{petIdx}
 		WHERE
-			real_time_weight.mac IN
-		<foreach collection="deviceList" item="device" open="(" close=")" separator=",">
+		real_time_weight.mac IN
+		<foreach collection="deviceList" item="device" open="(" close=")"
+			separator=",">
 			#{device.serialNumber}
 		</foreach>
 		AND
-			type = #{type}
+		type = #{type}
 		group by theYear order by real_time_weight.createDate asc
 	</select>
-	
+
 </mapper>
