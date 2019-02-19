@@ -71,12 +71,8 @@ public interface PetBasicInfoMapper extends CRUDMapper<PetBasicInfo, DefaultPara
 	/*@Select("select pet_basic_info.* from pet_basic_info where groupId = #{groupId} and id = #{id}")
 	public PetBasicInfo basicInfoCheck(@Param("groupId") String groupId, @Param("id") int id);*/
 	
-	@Select("SELECT pet_basic_info.* FROM pet " + 
-			"join group_pet_mapping on group_pet_mapping.petGroupCode = pet.petGroupCode " + 
-			"join pet_basic_info on pet.basic = pet_basic_info.id " + 
-			"WHERE group_pet_mapping.groupCode = #{groupCode} " + 
-			"and pet.petIdx = #{petIdx}")
-	public PetBasicInfo getBasicInformation(@Param("groupCode") String groupCode, @Param("petIdx") int petIdx);
+	@Select("SELECT pet_basic_info.id, pet_basic_info.profileFilePath, pet_basic_info.profileFileName, pet_basic_info.petName, b.${location }_name AS petBreed, pet_basic_info.sex, pet_basic_info.birthday, pet_basic_info.neutralization, pet_basic_info.createDate FROM pet  JOIN group_pet_mapping  ON group_pet_mapping.petGroupCode = pet.petGroupCode  JOIN pet_basic_info  ON pet.basic = pet_basic_info.id LEFT JOIN pet_breed_mapper m on pet_basic_info.id = m.basic_info_id LEFT JOIN pet_breed b ON m.breed_id = b.id WHERE group_pet_mapping.groupCode = #{groupCode} AND pet.petIdx = #{petIdx}")
+	public PetBasicInfo getBasicInformation(@Param("location") String location, @Param("groupCode") String groupCode, @Param("petIdx") int petIdx);
 	
 	
 	

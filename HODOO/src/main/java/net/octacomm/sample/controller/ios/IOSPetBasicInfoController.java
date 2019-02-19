@@ -164,8 +164,8 @@ public class IOSPetBasicInfoController {
 
 	@ResponseBody
 	@RequestMapping(value = "/basic/get.do", method = RequestMethod.POST)
-	public PetBasicInfo getBasicInformation(HttpServletRequest request, @RequestParam("groupCode") String groupCode, @RequestParam("petIdx") int petIdx) {
-		return petBasicInfoMapper.getBasicInformation(groupCode, petIdx);
+	public PetBasicInfo getBasicInformation(HttpServletRequest request, @RequestParam("location") String location, @RequestParam("groupCode") String groupCode, @RequestParam("petIdx") int petIdx) {
+		return petBasicInfoMapper.getBasicInformation(location, groupCode, petIdx);
 	}
 	
 	@ResponseBody

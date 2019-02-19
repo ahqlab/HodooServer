@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import net.octacomm.sample.dao.mapper.GroupsMapper;
 import net.octacomm.sample.dao.mapper.PetBasicInfoMapper;
+import net.octacomm.sample.dao.mapper.PetBreedMapper;
 import net.octacomm.sample.dao.mapper.PetChronicDiseaseMapper;
 import net.octacomm.sample.dao.mapper.PetMapper;
 import net.octacomm.sample.dao.mapper.PetPhysicalInfoMapper;
@@ -24,6 +25,7 @@ import net.octacomm.sample.dao.mapper.PetWeightInfoMapper;
 import net.octacomm.sample.domain.Pet;
 import net.octacomm.sample.domain.PetAllInfos;
 import net.octacomm.sample.domain.PetBasicInfo;
+import net.octacomm.sample.domain.PetBreed;
 
 
 @RequestMapping("/pet")
@@ -47,6 +49,9 @@ public class PetController {
 	
 	@Autowired
 	private PetMapper petMapper;
+	
+	@Autowired
+	private PetBreedMapper breedMapper;
 	
 	
 	@ResponseBody
@@ -77,6 +82,13 @@ public class PetController {
 	@RequestMapping(value = "/all/infos.do", method = RequestMethod.POST)
 	public PetAllInfos petAllInfos(@RequestParam("petIdx") int petIdx){
 		return petMapper.allInfoOnThePet(petIdx);
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/all/getBreed.do", method = RequestMethod.POST)
+	public List<PetBreed> getAllBreed( @RequestParam("location") String location ){
+		List<PetBreed> list = breedMapper.getAllList( location );
+		return list;
 	}
 	
 	
