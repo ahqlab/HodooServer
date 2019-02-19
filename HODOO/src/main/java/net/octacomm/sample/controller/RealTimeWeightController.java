@@ -58,63 +58,67 @@ public class RealTimeWeightController {
 
 	@ResponseBody
 	@RequestMapping(value = "/get/last/collection/data.do", method = RequestMethod.POST)
-	public RealTimeWeight getLastCollectionData(@RequestParam("date") String date, @RequestParam("groupCode") String groupCode, @RequestParam("type") int type) {
+	public RealTimeWeight getLastCollectionData(@RequestParam("date") String date, @RequestParam("groupCode") String groupCode, @RequestParam("type") int type, @RequestParam("petIdx") int petIdx) {
 		List<Device> deviceList = deviceMapper.myDeviceList(groupCode);
-		RealTimeWeight weights = RealTimeWeightMapper.getListofDeviceList(date, deviceList, type);
+		RealTimeWeight weights = RealTimeWeightMapper.getListofDeviceList(date, deviceList, type, petIdx);
 		return weights;
 	}
 
 	@ResponseBody
 	@RequestMapping(value = "/get/statistics/list/of/time.do")
-	public List<Statistics> getStatisticsOfTime(@RequestParam("groupCode") String groupCode, @RequestParam("today") String today, @RequestParam("type") int type) {
+	public List<Statistics> getStatisticsOfTime(@RequestParam("groupCode") String groupCode, @RequestParam("today") String today, @RequestParam("type") int type, @RequestParam("petIdx") int petIdx) {
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		List<Device> deviceList = deviceMapper.myDeviceList(groupCode);
 		map.put("deviceList", deviceList);
 		map.put("today", today);
 		map.put("type", type);
+		map.put("petIdx", petIdx);
 		return RealTimeWeightMapper.getStatisticsOfTime(map);
 	}
 	
 	
 	@ResponseBody
 	@RequestMapping(value = "/get/statistics/list/of/day.do")
-	public List<Statistics> getStatisticsOfDay(@RequestParam("groupCode") String groupCode, @RequestParam("type") int type) {
+	public List<Statistics> getStatisticsOfDay(@RequestParam("groupCode") String groupCode, @RequestParam("type") int type, @RequestParam("petIdx") int petIdx) {
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		List<Device> deviceList = deviceMapper.myDeviceList(groupCode);
 		map.put("deviceList", deviceList);
 		map.put("type", type);
+		map.put("petIdx", petIdx);
 		return RealTimeWeightMapper.getStatisticsOfDay(map);
 	}
 	
 	
 	@ResponseBody
 	@RequestMapping(value = "/get/statistics/list/of/week.do")
-	public List<Statistics> getStatisticsOfWeek(@RequestParam("groupCode") String groupCode, @RequestParam("month") String month, @RequestParam("type") int type) {
+	public List<Statistics> getStatisticsOfWeek(@RequestParam("groupCode") String groupCode, @RequestParam("month") String month, @RequestParam("type") int type, @RequestParam("petIdx") int petIdx) {
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		List<Device> deviceList = deviceMapper.myDeviceList(groupCode);
 		map.put("deviceList", deviceList);
 		map.put("month", month);
 		map.put("type", type);
+		map.put("petIdx", petIdx);
 		return RealTimeWeightMapper.getStatisticsOfWeek(map);
 	}
 	
 	@ResponseBody
 	@RequestMapping(value = "/get/statistics/list/of/month.do")
-	public List<Statistics> getStatisticsOfMonth(@RequestParam("groupCode") String groupCode, @RequestParam("year") String year, @RequestParam("type") int type) {
+	public List<Statistics> getStatisticsOfMonth(@RequestParam("groupCode") String groupCode, @RequestParam("year") String year, @RequestParam("type") int type, @RequestParam("petIdx") int petIdx) {
 		/*HashMap<String, Object> map = new HashMap<String, Object>();
 		map.put("deviceList", deviceList);
 		map.put("year", year);*/
 		List<Device> deviceList = deviceMapper.myDeviceList(groupCode);
-		return RealTimeWeightMapper.getStatisticsOfMonth(deviceList, year, type);
+		return RealTimeWeightMapper.getStatisticsOfMonth(deviceList, year, type, petIdx);
 	}
 	
 	@ResponseBody
 	@RequestMapping(value = "/get/statistics/list/of/year.do")
-	public List<Statistics> getStatisticsOfYear(@RequestParam("groupCode") String groupCode, @RequestParam("type") int type) {
+	public List<Statistics> getStatisticsOfYear(@RequestParam("groupCode") String groupCode, @RequestParam("type") int type, @RequestParam("petIdx") int petIdx) {
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		List<Device> deviceList = deviceMapper.myDeviceList(groupCode);
 		map.put("deviceList", deviceList);
 		map.put("type", type);
+		map.put("petIdx", petIdx);
 		return RealTimeWeightMapper.getStatisticsOfYear(map);
 	}
 	public class RealTimeThred extends Thread {
@@ -134,9 +138,12 @@ public class RealTimeWeightController {
 					message.setTo( userList.get(i).getPushToken() );
 					Map<String, Object> data = new HashMap<>();
 					data.put("notiType", HodooConstant.FIREBASE_WEIGHT_TYPE);
-					data.put("title", "체중감지");
+				/*	data.put("title", "체중감지");
 					//data.put("content", net.octacomm.sample.utils.DateUtil.getOnlyCurrentDateAndHour() + " 시 측정 결과 입니다.\n" + realTimeWeight.getType() + " : " + realTimeWeight.getValue() + "kg");
-					data.put("content", "새로운 체중이 감지되었습니다. 측정체중 : " + realTimeWeight.getValue() + "kg");
+					data.put("content", "새로운 체중이 감지되었습니다. 측정체중 : " + realTimeWeight.getValue() + "kg");*/
+					data.put("title", "Weight detection");
+					//data.put("content", net.octacomm.sample.utils.DateUtil.getOnlyCurrentDateAndHour() + " 시 측정 결과 입니다.\n" + realTimeWeight.getType() + " : " + realTimeWeight.getValue() + "kg");
+					data.put("content", "A new weight has been detected. Measured weight : " + realTimeWeight.getValue() + "kg");
 					message.setData(data);
 					FcmUtil.requestFCM(message);
 				}

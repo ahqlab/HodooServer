@@ -61,7 +61,7 @@ public class IOSPetBasicInfoController {
 				}
 				organizedfilePath = path + "/" +  randomeUUID + "_" + basicInfo.getProfile().getOriginalFilename();
 				System.err.println("organizedfilePath : " + organizedfilePath);
-				basicInfo.setProfileFilePath("/upload/profile/" + randomeUUID + "_"+ basicInfo.getProfile().getOriginalFilename());
+				basicInfo.setProfileFilePath("/resources/upload/profile/" + randomeUUID + "_"+ basicInfo.getProfile().getOriginalFilename());
 				basicInfo.setProfileFileName(basicInfo.getProfile().getOriginalFilename());
 				outputStream = new FileOutputStream(organizedfilePath);
 				int readByte = 0;
@@ -124,7 +124,7 @@ public class IOSPetBasicInfoController {
 				organizedfilePath = path + "/" + randomeUUID + "_" + basicInfo.getProfile().getOriginalFilename();
 				System.err.println("organizedfilePath : " + organizedfilePath);
 				basicInfo.setProfileFilePath(
-						"/upload/profile/" + randomeUUID + "_" + basicInfo.getProfile().getOriginalFilename());
+						"/resources/upload/profile/" + randomeUUID + "_" + basicInfo.getProfile().getOriginalFilename());
 				basicInfo.setProfileFileName(basicInfo.getProfile().getOriginalFilename());
 				outputStream = new FileOutputStream(organizedfilePath);
 				int readByte = 0;

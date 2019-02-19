@@ -58,7 +58,7 @@ public class MealHistoryController {
 	}
 	
 	@ResponseBody
-	@RequestMapping(value = "/get/list.do", method = RequestMethod.POST)
+	@RequestMapping(value = "/get/list.do")
 	public List<MealHistoryContent> getList(@RequestParam("date") String date, @RequestParam("petIdx") int petIdx) {
 		List<MealHistoryContent> contents = new ArrayList<MealHistoryContent>();
 		for (MealHistory mealHistory : mealHistoryMapper.getContentList(date, petIdx)) {
@@ -115,7 +115,7 @@ public class MealHistoryController {
 					
 					Map<String, Object> data = new HashMap<>();
 					data.put("notiType", HodooConstant.FIREBASE_FEED_TYPE);
-					data.put("title", "급식 알림");
+				/*	data.put("title", "급식 알림");
 					data.put("content", 
 							sdf.format(new Date()) + "\n" 
 							+ user.getNickname() + "님께서 " 
@@ -123,7 +123,13 @@ public class MealHistoryController {
 							+ feed.getName() + "을(를) " 
 							+ pet.getPetBasicInfo().getPetName() + "에게 "
 							+ String.valueOf(mealHistory.getCalorie()) + mealHistory.getUnitString() 
-							+ "을 주었습니다." );
+							+ "을 주었습니다." );*/
+					data.put("title", "feeding notification");
+					data.put("content", 
+							sdf.format(new Date()) + "\n" 
+									+ user.getNickname() + " gave " + feed.getBrand() + "'s '" + feed.getName() + "' to '" + pet.getPetBasicInfo().getPetName() + "' ("
+									+ String.valueOf(mealHistory.getCalorie()) + mealHistory.getUnitString() 
+									+ ")" );
 					message.setData(data);
 					FcmUtil.requestFCM(message);
 				}

@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import net.octacomm.sample.dao.mapper.FeedMapper;
 import net.octacomm.sample.domain.DefaultParam;
 import net.octacomm.sample.domain.Feed;
-import net.octacomm.sample.domain.User;
 
 @RequestMapping("/feed")
 @Controller
@@ -44,7 +43,6 @@ public class FeedController extends AbstractCRUDController<FeedMapper, Feed, Def
 	@ResponseBody
 	@RequestMapping(value = "/search/list.do", method = RequestMethod.POST)
 	public List<Feed> searchList(@RequestBody DefaultParam defaultParam, @RequestParam("language") String language) {
-		System.err.println("defaultParam : " + defaultParam.getSearchWord());
 		return mapper.getSearchList(defaultParam.getSearchWord(), language);
 	}
 	
@@ -58,6 +56,7 @@ public class FeedController extends AbstractCRUDController<FeedMapper, Feed, Def
 	@ResponseBody
 	@RequestMapping(value = "/get/radar/chart/data.do", method = RequestMethod.POST)
 	public Feed getRadarChartData(@RequestParam("date")  String date, @RequestParam("petIdx") int petIdx) {
+		System.err.println("mapper.getRadarChartData(date, petIdx) : " + mapper.getRadarChartData(date, petIdx));
 		return mapper.getRadarChartData(date, petIdx);
 	}
 	
