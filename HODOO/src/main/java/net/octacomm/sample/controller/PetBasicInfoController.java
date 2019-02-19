@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import net.octacomm.sample.dao.mapper.GroupPetMappingMapper;
 import net.octacomm.sample.dao.mapper.PetBasicInfoMapper;
+import net.octacomm.sample.dao.mapper.PetBreedMapper;
 import net.octacomm.sample.dao.mapper.PetMapper;
 import net.octacomm.sample.domain.CommonResponce;
 import net.octacomm.sample.domain.GroupPetMapping;
@@ -40,6 +41,9 @@ public class PetBasicInfoController {
 
 	@Autowired
 	private PetMapper petMapper;
+	
+	@Autowired
+	PetBreedMapper breedMapper;
 
 	@ResponseBody
 	@RequestMapping(value = "/basic/regist.do", method = RequestMethod.POST)
@@ -95,6 +99,14 @@ public class PetBasicInfoController {
 		if (result != 0) {
 			group.setResultMessage(ResultMessage.SUCCESS);
 			group.setDomain(pet);
+			
+			int breedCount = breedMapper.getBreedMapperCount(basicInfo.getId());
+			if ( breedCount > 0 ) {
+				breedMapper.updatePetBreedMapper(basicInfo.getId(), Integer.parseInt(basicInfo.getPetBreed()));
+			} else {
+				breedMapper.insertPetBreedMapper(basicInfo.getId(), Integer.parseInt(basicInfo.getPetBreed()));
+			}
+			
 		} else {
 			group.setResultMessage(ResultMessage.FAILED);
 			group.setDomain(null);
@@ -109,6 +121,17 @@ public class PetBasicInfoController {
 		String localPath = "/resources/upload/profile/";
 		String path = request.getSession().getServletContext().getRealPath(localPath);
 		System.err.println("path : " + path);
+		
+		int breedCount = breedMapper.getBreedMapperCount(basicInfo.getId());
+		if ( breedCount > 0 ) {
+			breedMapper.updatePetBreedMapper(basicInfo.getId(), Integer.parseInt(basicInfo.getPetBreed()));
+		} else {
+			breedMapper.insertPetBreedMapper(basicInfo.getId(), Integer.parseInt(basicInfo.getPetBreed()));
+		}
+		
+		 
+		
+	
 		UUID randomeUUID = UUID.randomUUID();
 		InputStream inputStream = null;
 		OutputStream outputStream = null;
@@ -156,8 +179,9 @@ public class PetBasicInfoController {
 
 	@ResponseBody
 	@RequestMapping(value = "/basic/get.do", method = RequestMethod.POST)
-	public PetBasicInfo getBasicInformation(HttpServletRequest request, @RequestParam("groupCode") String groupCode, @RequestParam("petIdx") int petIdx) {
-		return petBasicInfoMapper.getBasicInformation(groupCode, petIdx);
+	public PetBasicInfo getBasicInformation(HttpServletRequest request, @RequestParam("location") String location, @RequestParam("groupCode") String groupCode, @RequestParam("petIdx") int petIdx) {
+		PetBasicInfo info = petBasicInfoMapper.getBasicInformation(location, groupCode, petIdx);
+		return petBasicInfoMapper.getBasicInformation(location, groupCode, petIdx);
 	}
 
 	@ResponseBody

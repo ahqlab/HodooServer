@@ -325,6 +325,7 @@ import java.util.Map;
 import java.util.Random;
 
 import javax.mail.internet.MimeMessage;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -586,7 +587,9 @@ public class UserController {
 	}
 
 	@RequestMapping(value = "/checkUserCertifiedMail.do", method = RequestMethod.GET)
-	public ModelAndView checkUserCertifiedMail(@RequestParam("code") String code) {
+	public ModelAndView checkUserCertifiedMail(
+			HttpServletRequest request,
+			@RequestParam("code") String code) {
 		String codeD = "";
 		try {
 			codeD = new AES256Util().decrypt(code);
@@ -610,6 +613,7 @@ public class UserController {
 		} else {
 			state = -1;
 		}
+		
 		ModelAndView mav = new ModelAndView("signup_confirm");
 		mav.addObject("state", state);
 		return mav;
