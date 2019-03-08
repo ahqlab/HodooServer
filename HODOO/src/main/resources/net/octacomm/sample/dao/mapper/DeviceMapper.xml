@@ -12,7 +12,7 @@
 	</update>  -->
 	
 	<insert id="insert" parameterType="Device" useGeneratedKeys="true"  keyProperty="deviceIdx" >
-		INSERT INTO DEVICE ( deviceIdx , groupCode , serialNumber , createDate ) VALUES (  null , #{groupCode} , #{serialNumber} , now()  )
+		INSERT INTO device ( deviceIdx , groupCode , serialNumber , createDate ) VALUES (  null , #{groupCode} , #{serialNumber} , now()  )
 		<selectKey keyProperty="deviceIdx" resultType="Integer" order="AFTER">
 			SELECT LAST_INSERT_ID()
 		</selectKey>

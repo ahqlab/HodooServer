@@ -128,9 +128,6 @@ public class PetBasicInfoController {
 		} else {
 			breedMapper.insertPetBreedMapper(basicInfo.getId(), Integer.parseInt(basicInfo.getPetBreed()));
 		}
-		
-		 
-		
 	
 		UUID randomeUUID = UUID.randomUUID();
 		InputStream inputStream = null;

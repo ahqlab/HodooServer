@@ -126,7 +126,7 @@
 		avg(real_time_weight.value) average
 		FROM
 		real_time_weight
-		 left outer JOIN pet ON 
+		left outer JOIN pet ON 
 			real_time_weight.tag = pet.tag and pet.petIdx = #{petIdx}
 		WHERE
 		real_time_weight.mac IN
