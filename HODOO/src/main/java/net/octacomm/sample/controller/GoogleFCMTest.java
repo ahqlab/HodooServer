@@ -362,8 +362,9 @@ public class GoogleFCMTest {
 		data.put("fromUserIdx", fromUser.getUserIdx());
 		data.put("toUserIdx", toUser.getUserIdx());
 		data.put("host", "invitation");
-		data.put("title", "그룹 참여 요청");
-		data.put("content", fromUser.getEmail());
+//		data.put("title", "그룹 참여 요청");
+		data.put("title", "Group Participation Request");
+		data.put("content", fromUser.getEmail() + " request.");
 		/* 커스텀 Notification을 위한 데이터 처리(e) */
 		
 		message.setTo(toUser.getPushToken());
