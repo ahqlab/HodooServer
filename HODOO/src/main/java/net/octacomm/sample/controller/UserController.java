@@ -673,8 +673,8 @@ public class UserController {
 			
 			Map<String, Object> data = new HashMap<>();
 			data.put("notiType", HodooConstant.FIREBASE_INVITATION_ACCEPT);
-			data.put("title", "초대 승인 알림");
-			data.put("content", toUser.getNickname() + "님이 초대를 승인했습니다.");
+			data.put("title", "Invitation Approval Notice");
+			data.put("content", toUser.getNickname() + ". You have approved the invitation.");
 			/* 커스텀 Notification을 위한 데이터 처리(e) */
 			
 			message.setTo(user.getPushToken());
