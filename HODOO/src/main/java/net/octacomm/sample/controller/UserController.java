@@ -326,8 +326,11 @@ import java.util.Random;
 
 import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Controller;
@@ -336,6 +339,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.google.firebase.messaging.FirebaseMessagingException;
@@ -361,7 +365,7 @@ import net.octacomm.sample.utils.FcmUtil;
 import net.octacomm.sample.utils.MathUtil;
 
 @RequestMapping("/user")
-@Controller
+@RestController
 public class UserController {
 
 	@Autowired
@@ -472,8 +476,20 @@ public class UserController {
 	
 	@ResponseBody
 	@RequestMapping(value = "/login2.do", method = RequestMethod.POST)
-	public CommonResponce<User> login2(@RequestBody User user) {
+	public CommonResponce<User> login2(@RequestBody User user, HttpServletRequest req, HttpServletResponse resp, Exception e) throws Exception {
 		CommonResponce<User> group = loginService.login2(user);
+		StringBuilder sb = new StringBuilder("{ \n")
+	            .append("    \"timestamp\": ").append("\"").append(DateTime.now().toString()).append("\" \n")
+	            .append("    \"status\": ").append(resp.getStatus()).append(" \n")
+	            .append("    \"error\": ").append("\"").append(HttpStatus.valueOf(resp.getStatus()).name()).append("\" \n")
+	            .append("    \"exception\": ").append("\"").append(e.getClass().toString().substring(6)).append("\" \n")
+	            .append("    \"message\": ").append("\"").append(e.getMessage()).append("\" \n")
+	            .append("    \"path\": ").append("\"").append(req.getServletPath()).append("\" \n")
+	            .append("}");
+
+	    String errorMessage = String.format(sb.toString());
+		System.err.println("errorMessage : " + errorMessage);
+		
 		return group;
 	}
 

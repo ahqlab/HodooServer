@@ -1,5 +1,6 @@
 package net.octacomm.sample.service;
 
+import java.sql.SQLSyntaxErrorException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -90,7 +91,7 @@ public class LoginServiceImpl implements LoginService{
 	}
 
 	@Override
-	public CommonResponce<User> login2(User user) throws NotFoundUserException, InvalidPasswordException{
+	public CommonResponce<User> login2(User user){
 		CommonResponce<User> group = null;
 		if (userMapper.getUser(user) == null) {
 			group = new CommonResponce<User>();
@@ -105,7 +106,6 @@ public class LoginServiceImpl implements LoginService{
 			group.setDomain(null);
 			return group;
 		}
-		
 		if ( result.getPushToken() != null ) {
 			if ( userMapper.getFCMTokenOverlapCheck(result) <= 1  ) {
 				result.setPushToken(user.getPushToken());
@@ -119,8 +119,6 @@ public class LoginServiceImpl implements LoginService{
 			result.setPushToken(user.getPushToken());
 			userMapper.saveFCMToken(result);
 		}
-		
-		
 		group = new CommonResponce<User>();
 		group.setResultMessage(ResultMessage.SUCCESS);
 		group.setDomain(result);
