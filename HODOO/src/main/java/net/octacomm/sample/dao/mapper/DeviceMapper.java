@@ -46,6 +46,9 @@ public interface DeviceMapper extends CRUDMapper<Device, DefaultParam, Integer> 
 	@Select("select * FROM " + TABLE_NAME + " where device.groupCode = #{groupCode} and device.isDel = 'CONNECTED'")
 	public List<Device> myDeviceList(@Param("groupCode") String groupCode);
 	
+	@Select("select count(*) FROM " + TABLE_NAME + " where device.groupCode = #{groupCode} and device.isDel = 'CONNECTED'")
+	public int myDeviceListCount(@Param("groupCode") String groupCode);
+	
 	
 	/*@Select("select device.* from user join user_group_mapping on user.userIdx = user_group_mapping.userIdx join device on user_group_mapping.groupCode = device.groupCode where user_group_mapping.groupCode = #{groupCode}")*/
 	@Select("select * FROM " + TABLE_NAME + " where device.groupCode = #{groupCode}  and device.isDel = 'CONNECTED'")

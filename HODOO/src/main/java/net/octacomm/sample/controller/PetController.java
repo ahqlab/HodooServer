@@ -14,7 +14,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.google.appengine.repackaged.com.google.gson.JsonArray;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 
+import net.octacomm.sample.constant.HodooConstant;
 import net.octacomm.sample.dao.mapper.GroupsMapper;
 import net.octacomm.sample.dao.mapper.PetBasicInfoMapper;
 import net.octacomm.sample.dao.mapper.PetBreedMapper;
@@ -81,6 +85,9 @@ public class PetController {
 	@ResponseBody
 	@RequestMapping(value = "/all/infos.do", method = RequestMethod.POST)
 	public PetAllInfos petAllInfos(@RequestParam("petIdx") int petIdx){
+		
+		System.out.println( "petIdx : " + petIdx );
+		
 		return petMapper.allInfoOnThePet(petIdx);
 	}
 	

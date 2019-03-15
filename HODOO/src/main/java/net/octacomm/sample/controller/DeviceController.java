@@ -37,6 +37,12 @@ public class DeviceController {
 	public List<Device> myDeviceList(@RequestParam("groupCode") String groupCode) {
 		return deviceNapper.myDeviceList(groupCode);
 	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/my/device/listResult.do", method = RequestMethod.POST)
+	public int myDeviceListResult(@RequestParam("groupCode") String groupCode) {
+		return deviceNapper.myDeviceListCount(groupCode);
+	}
 
 	@ResponseBody
 	@RequestMapping(value = "/change/connect/status.do", method = RequestMethod.POST)
