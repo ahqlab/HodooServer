@@ -12,10 +12,10 @@
 		<junit.version>4.11</junit.version>
 
 		<!-- Spring : test, core, context, aop, jdbc -->
-		<springframework.version>3.2.3.RELEASE</springframework.version>
+		<springframework.version>4.3.13.RELEASE</springframework.version>
 
 		<!-- Spring Security -->
-		<spring.security-version>3.1.4.RELEASE</spring.security-version>
+		<spring.security-version>4.2.11.RELEASE</spring.security-version>
 
 		<!-- AspectJ AOP -->
 		<aspectj.version>1.7.2</aspectj.version>
