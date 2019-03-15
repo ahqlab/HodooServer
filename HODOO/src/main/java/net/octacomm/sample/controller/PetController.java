@@ -85,6 +85,9 @@ public class PetController {
 	@ResponseBody
 	@RequestMapping(value = "/all/infos.do", method = RequestMethod.POST)
 	public PetAllInfos petAllInfos(@RequestParam("petIdx") int petIdx){
+		
+		System.out.println( "petIdx : " + petIdx );
+		
 		return petMapper.allInfoOnThePet(petIdx);
 	}
 	
