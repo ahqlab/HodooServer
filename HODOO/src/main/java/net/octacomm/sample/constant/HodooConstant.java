@@ -32,11 +32,11 @@ public class HodooConstant {
     public static final String PET_IDX_KEY = "PET_IDX_KEY";
     
     public static final int PET_REGIST_SUCESS = 1;
-    public static final int NOT_REGIST_PET = 0;
+    public static final int PET_NOT_REGIST_PET = 0;
     public static final int PET_REGIST_FAILED = -1;
-    public static final int NOT_REGIST_DISEASES = -2;
-    public static final int NOT_REGIST_PHYSICAL = -3;
-    public static final int NOT_REGIST_WEIGHT = -4;
+    public static final int PET_NOT_REGIST_DISEASES = -2;
+    public static final int PET_NOT_REGIST_PHYSICAL = -3;
+    public static final int PET_NOT_REGIST_WEIGHT = -4;
     /* pet 관련 등록 여부 체크 (s) */
 	
 	
