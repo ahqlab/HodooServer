@@ -83,6 +83,45 @@ public class PetController {
 	}
 	
 	@ResponseBody
+	@RequestMapping(value = "/my/pet/listResult.do", method = RequestMethod.POST)
+	public int[] myPetListResult(@RequestParam("groupCode") String groupCode){
+		List<Pet> pets = petMapper.myPetList(groupCode);
+		int resultCode = HodooConstant.PET_REGIST_FAILED;
+		if ( !pets.isEmpty() ) {
+			if ( pets.size() == 1 ) {
+				if ( pets.get(0).getBasic() == 0 )
+					resultCode = HodooConstant.PET_REGIST_FAILED;
+				else if ( pets.get(0).getDisease() == 0 )
+					resultCode = HodooConstant.PET_NOT_REGIST_DISEASES;
+				else if ( pets.get(0).getPhysical() == 0 )
+					resultCode = HodooConstant.PET_NOT_REGIST_PHYSICAL;
+				else if ( pets.get(0).getWeight() == 0 )
+					resultCode = HodooConstant.PET_NOT_REGIST_WEIGHT;
+				else 
+					resultCode = HodooConstant.PET_REGIST_SUCESS;
+			} else {
+				resultCode = HodooConstant.PET_REGIST_SUCESS;
+			}
+		}
+		
+		int result[] = new int[1];
+		
+		switch (resultCode) {
+		case HodooConstant.PET_REGIST_SUCESS:
+		case HodooConstant.PET_REGIST_FAILED:
+			result[0] = resultCode;
+			break;
+		default:
+			result = new int[2];
+			result[0] = resultCode;
+			result[1] = pets.get(0).getPetIdx();
+			break;
+		}
+
+		return result;
+	}
+	
+	@ResponseBody
 	@RequestMapping(value = "/all/infos.do", method = RequestMethod.POST)
 	public PetAllInfos petAllInfos(@RequestParam("petIdx") int petIdx){
 		
