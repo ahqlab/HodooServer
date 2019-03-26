@@ -48,6 +48,9 @@ public interface PetMapper extends CRUDMapper<Pet, DefaultParam, Integer> {
 	@Select("SELECT pet.* FROM " + TABLE_NAME + " join group_pet_mapping on group_pet_mapping.petGroupCode = pet.petGroupCode  WHERE group_pet_mapping.groupCode = #{groupCode} ")
 	public List<Pet> myPetList(String groupCode);
 	
+	@Select("select * from group_pet_mapping join pet on group_pet_mapping.petGroupCode = pet.petGroupCode join pet_basic_info on pet_basic_info.id = pet.basic join pet_weight_info on pet_weight_info.id = pet.weight where group_pet_mapping.groupCode = #{groupCode} AND pet.petIdx = #{petIdx}")
+	public Pet aboutMyPet(String groupCode, int petIdx);
+	
 	
 	@Update("UPDATE " + TABLE_NAME + " SET disease = 0 WHERE petIdx =  #{petIdx} ")
 	public void resetDisease(int petIdx);

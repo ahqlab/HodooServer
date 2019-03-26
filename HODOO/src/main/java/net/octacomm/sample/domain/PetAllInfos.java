@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Data
-public class PetAllInfos {
+public class PetAllInfos implements Domain {
 	
 	
 	@Getter
