@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="net.octacomm.sample.dao.mapper.MealHistoryMapper">
+
+	<select id="getTodatSumCalorie" resultType="net.octacomm.sample.domain.MealHistory">
+		select
+		sum(tb.calorie) as calorie
+		from
+		(select CASE mear_history.unitString
+			WHEN 'g' THEN (feed.calculationCalories * 0.01) * mear_history.calorie
+			WHEN '개' THEN (feed.calculationCalories) * mear_history.calorie
+			WHEN '컵' THEN (feed.calculationCalories) * mear_history.calorie
+			WHEN 'EA' THEN (feed.calculationCalories) * mear_history.calorie
+			WHEN 'Cup' THEN (feed.calculationCalories) * mear_history.calorie
+		END AS calorie from mear_history
+		join feed on mear_history.feedIdx = feed.id
+		where
+		substring(mear_history.createDate, 1,10) = #{date}
+		and
+		mear_history.petIdx = #{petIdx} and isDel = 1
+		) as tb
+	</select>
+
+</mapper>

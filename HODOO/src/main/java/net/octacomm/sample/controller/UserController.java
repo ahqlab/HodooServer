@@ -392,17 +392,6 @@ public class UserController {
 	@ResponseBody
 	@RequestMapping(value = "/regist.do", method = RequestMethod.POST)
 	public ResultMessageGroup regist(@RequestBody User param) throws FirebaseMessagingException {
-		
-		// 그룹을 만든다 (그룹아이디를 가져온다)
-		/*
-		 * if (!FirebaseApp.getApps().isEmpty()) {
-		 * FirebaseDatabase.getInstance().setPersistenceEnabled(true); } List<String>
-		 * registrationTokens = Arrays.asList(param.getPushToken());
-		 * TopicManagementResponse response =
-		 * FirebaseMessaging.getInstance().subscribeToTopic(registrationTokens, "ALL");
-		 * System.out.println(response.getSuccessCount() +
-		 * " tokens were subscribed successfully");
-		 */
 
 		String grougCode = MathUtil.getGroupId();
 		List<User> findUser = userMapper.getUserList(param);

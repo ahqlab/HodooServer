@@ -37,20 +37,8 @@ import net.octacomm.sample.domain.PetBreed;
 public class PetController {
 	
 	@Autowired
-	private GroupsMapper groupsMapper;
-
-	@Autowired
 	private PetBasicInfoMapper petBasicInfoMapper;
 
-	@Autowired
-	private PetChronicDiseaseMapper chronicDeseaseMapper;
-
-	@Autowired
-	private PetPhysicalInfoMapper petPhysicalInfoMapper;
-
-	@Autowired
-	private PetWeightInfoMapper petWeightInfoMapper;
-	
 	@Autowired
 	private PetMapper petMapper;
 	
@@ -117,16 +105,12 @@ public class PetController {
 			result[1] = pets.get(0).getPetIdx();
 			break;
 		}
-
 		return result;
 	}
 	
 	@ResponseBody
 	@RequestMapping(value = "/all/infos.do", method = RequestMethod.POST)
 	public PetAllInfos petAllInfos(@RequestParam("petIdx") int petIdx){
-		
-		System.out.println( "petIdx : " + petIdx );
-		
 		return petMapper.allInfoOnThePet(petIdx);
 	}
 	

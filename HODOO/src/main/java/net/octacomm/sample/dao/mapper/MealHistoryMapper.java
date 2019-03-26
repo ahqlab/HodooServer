@@ -46,7 +46,7 @@ public interface MealHistoryMapper extends CRUDMapper<MealHistory, DefaultParam,
 	@Select("SELECT * FROM " + TABLE_NAME + " WHERE petIdx =  #{petIdx} and substring(mear_history.createDate, 1,10) = #{date} and isDel = 1 ORDER BY createDate DESC")
 	List<MealHistory> getContentList(@Param("date") String date, @Param("petIdx") int petIdx);
 
-	@Select("select "
+	/*@Select("select "
 			+ "	sum(tb.calorie) as calorie "
 			+ " from "
 			+ "(select " 
@@ -59,8 +59,8 @@ public interface MealHistoryMapper extends CRUDMapper<MealHistory, DefaultParam,
 			+"   where "
 			+"   substring(mear_history.createDate, 1,10) = #{date} "
 			+"   and mear_history.petIdx = #{petIdx} and isDel = 1" 
-			+") as tb")
-	MealHistory getTodatSumCalorie(@Param("petIdx") int petIdx, @Param("date") String date);
+			+") as tb")*/
+	MealHistory getTodatSumCalorie(@Param("petIdx") int petIdx, @Param("date") String date,  @Param("language") String language);
 	
 
 

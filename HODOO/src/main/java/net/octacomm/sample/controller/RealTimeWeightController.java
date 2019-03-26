@@ -125,7 +125,6 @@ public class RealTimeWeightController {
 		}
 		@Override
 		public void run() {
-			// TODO Auto-generated method stub
 			super.run();
 			List<User> userList = RealTimeWeightMapper.getUserList(realTimeWeight.getMac());
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
