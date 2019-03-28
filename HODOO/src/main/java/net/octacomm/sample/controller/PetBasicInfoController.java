@@ -111,6 +111,7 @@ public class PetBasicInfoController {
 			group.setResultMessage(ResultMessage.FAILED);
 			group.setDomain(null);
 		}
+		System.err.println(group.toString());
 		return group;
 	}
 

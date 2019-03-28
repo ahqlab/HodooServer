@@ -38,7 +38,7 @@ public interface PetBreedMapper extends CRUDMapper<PetBreed, DefaultParam, Integ
 	List<PetBreed> getList();
 	
 	
-	@Select("SELECT id, ${location}_name as name FROM pet_breed")
+	@Select("SELECT id, ${location}_name as name FROM pet_breed where typeIdx = 1 order by name asc")
 	List<PetBreed> getAllList( @Param("location") String location );
 	
 	@Insert("insert into " + MAPPER_TABLE_NAME + " (basic_info_id, breed_id) values (#{basicInfoId }, #{breedId })")

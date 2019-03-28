@@ -746,7 +746,6 @@ public class UserController {
 		if ( groupCount > 0 )
 			return HodooConstant.MEMBER_EXIST;
 		
-		
 		return HodooConstant.SUCCESS_CODE;
 	}
 	
