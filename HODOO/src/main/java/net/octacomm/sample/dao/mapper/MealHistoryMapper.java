@@ -60,7 +60,7 @@ public interface MealHistoryMapper extends CRUDMapper<MealHistory, DefaultParam,
 			+"   substring(mear_history.createDate, 1,10) = #{date} "
 			+"   and mear_history.petIdx = #{petIdx} and isDel = 1" 
 			+") as tb")*/
-	MealHistory getTodatSumCalorie(@Param("petIdx") int petIdx, @Param("date") String date,  @Param("language") String language);
+	MealHistory getTodatSumCalorie(@Param("petIdx") int petIdx, @Param("date") String date);
 	
 
 
