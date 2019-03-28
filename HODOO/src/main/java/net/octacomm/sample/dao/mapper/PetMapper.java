@@ -80,11 +80,11 @@ public interface PetMapper extends CRUDMapper<Pet, DefaultParam, Integer> {
 	/*			"join pet_chronic_disease on pet_chronic_disease.id = pet.disease " + 
 */
 	
-	@Select("select * " + 
+	@Select("select pet.*, pet_basic_info.*, pet_physical_info.weight AS physicalWeignt, pet_weight_info.*  " + 
 			"from group_pet_mapping " + 
 			"join pet on group_pet_mapping.petGroupCode = pet.petGroupCode and pet.visible = 0 " + 
 			"join pet_basic_info on pet_basic_info.id = pet.basic " + 
-			/*"join pet_physical_info on pet_physical_info.id = pet.physical " + */
+			"join pet_physical_info on pet_physical_info.id = pet.physical " +
 			"join pet_weight_info on pet_weight_info.id = pet.weight " + 
 			"where group_pet_mapping.groupCode = #{groupCode} ")
 	@Results({
@@ -103,10 +103,11 @@ public interface PetMapper extends CRUDMapper<Pet, DefaultParam, Integer> {
 		@Result(column="sex", property="petBasicInfo.sex"),
 		@Result(column="birthday", property="petBasicInfo.birthday"),
 		@Result(column="neutralization", property="petBasicInfo.neutralization"),
+		@Result(column="physicalWeignt", property="petPhysicalInfo.weight"),
 		
 	/*	@Result(column="diseaseName", property="petChronicDisease.diseaseName"),
 		
-		@Result(column="width", property="petPhysicalInfo.width"),
+		
 		@Result(column="height", property="petPhysicalInfo.height"),
 		@Result(column="weight", property="petPhysicalInfo.weight"),*/
 		
