@@ -1,9 +1,6 @@
 package net.octacomm.sample.controller;
 
-import java.time.LocalDate;
-import java.time.Period;
 import java.util.List;
-import java.time.format.DateTimeFormatter;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -14,18 +11,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.google.appengine.repackaged.com.google.gson.JsonArray;
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 
 import net.octacomm.sample.constant.HodooConstant;
-import net.octacomm.sample.dao.mapper.GroupsMapper;
 import net.octacomm.sample.dao.mapper.PetBasicInfoMapper;
 import net.octacomm.sample.dao.mapper.PetBreedMapper;
-import net.octacomm.sample.dao.mapper.PetChronicDiseaseMapper;
 import net.octacomm.sample.dao.mapper.PetMapper;
-import net.octacomm.sample.dao.mapper.PetPhysicalInfoMapper;
-import net.octacomm.sample.dao.mapper.PetWeightInfoMapper;
+import net.octacomm.sample.domain.CommonResponce;
 import net.octacomm.sample.domain.Pet;
 import net.octacomm.sample.domain.PetAllInfos;
 import net.octacomm.sample.domain.PetBasicInfo;
@@ -121,5 +112,13 @@ public class PetController {
 		return list;
 	}
 	
+	@ResponseBody
+	@RequestMapping(value = "/make/it/invisible.do", method = RequestMethod.POST)
+	public CommonResponce<Integer> makeItInvisible( @RequestParam("petIdx") int petIdx ){
+		CommonResponce<Integer> responce = new CommonResponce<Integer>();
+		responce.setDomain(petMapper.makeItInvisible(petIdx));
+		responce.setStatus("200");
+		return responce;
+	}
 	
 }

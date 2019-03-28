@@ -74,8 +74,8 @@ public class MealHistoryController {
 	
 	@ResponseBody
 	@RequestMapping(value = "/get/today/sum/calorie.do", method = RequestMethod.POST)
-	public MealHistory getTodatSumCalorie(@RequestParam("petIdx") int petIdx, @RequestParam("date") String date, @RequestParam("language") String language) {
-		return mealHistoryMapper.getTodatSumCalorie(petIdx, date, language);
+	public MealHistory getTodatSumCalorie(@RequestParam("petIdx") int petIdx, @RequestParam("date") String date) {
+		return mealHistoryMapper.getTodatSumCalorie(petIdx, date);
 	}
 	
 	
@@ -115,7 +115,7 @@ public class MealHistoryController {
 					
 					Map<String, Object> data = new HashMap<>();
 					data.put("notiType", HodooConstant.FIREBASE_FEED_TYPE);
-				/*	data.put("title", "급식 알림");
+					data.put("title", "급식 알림");
 					data.put("content", 
 							sdf.format(new Date()) + "\n" 
 							+ user.getNickname() + "님께서 " 
@@ -123,13 +123,14 @@ public class MealHistoryController {
 							+ feed.getName() + "을(를) " 
 							+ pet.getPetBasicInfo().getPetName() + "에게 "
 							+ String.valueOf(mealHistory.getCalorie()) + mealHistory.getUnitString() 
-							+ "을 주었습니다." );*/
-					data.put("title", "feeding notification");
+							+ "을 주었습니다." );
+					
+					/*data.put("title", "feeding notification");
 					data.put("content", 
 							sdf.format(new Date()) + "\n" 
 									+ user.getNickname() + " gave " + feed.getBrand() + "'s '" + feed.getName() + "' to '" + pet.getPetBasicInfo().getPetName() + "' ("
 									+ String.valueOf(mealHistory.getCalorie()) + mealHistory.getUnitString() 
-									+ ")" );
+									+ ")" );*/
 					message.setData(data);
 					FcmUtil.requestFCM(message);
 				}

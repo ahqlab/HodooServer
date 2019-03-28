@@ -23,7 +23,7 @@
 	<select id="getStatisticsOfTime" parameterType="hashmap"
 		resultType="net.octacomm.sample.domain.Statistics">
 		SELECT
-			substring(real_time_weight.createDate, 12,2) as theHour, avg(real_time_weight.value) average
+			substring(real_time_weight.createDate, 12,2) as theHour,  ROUND(avg(real_time_weight.value), 1)  average
 		FROM
 			real_time_weight
 		left outer JOIN pet ON 
@@ -53,7 +53,7 @@
 		WHEN '6' THEN '금'
 		WHEN '7' THEN '토'
 		END AS theDay,
-		avg(`value`) AS 'average'
+		ROUND(avg(`value`), 1) as 'average'
 		FROM real_time_weight
 		 left outer JOIN pet ON 
 			real_time_weight.tag = pet.tag and pet.petIdx = #{petIdx}
@@ -78,7 +78,7 @@
 		DATE_FORMAT(DATE_SUB(real_time_weight.createDate, INTERVAL
 		(DAYOFWEEK(real_time_weight.createDate)-7) DAY), '%Y/%m/%d') as end,
 		DATE_FORMAT(real_time_weight.createDate, '%Y%U') AS `date`,
-		avg(`value`) as average
+		ROUND(avg(`value`), 1) as average
 		FROM
 		real_time_weight 
 		left outer JOIN pet ON 
@@ -100,7 +100,7 @@
 	<select id="getStatisticsOfMonth" resultType="net.octacomm.sample.domain.Statistics">
 		SELECT
 		substring(real_time_weight.createDate, 6,2) as theMonth,
-		avg(real_time_weight.value) average
+		ROUND(avg(real_time_weight.value), 1) average
 		FROM
 		real_time_weight
 		left outer JOIN pet ON 
@@ -123,7 +123,7 @@
 		resultType="net.octacomm.sample.domain.Statistics">
 		SELECT
 		substring(real_time_weight.createDate, 1,4) as theYear,
-		avg(real_time_weight.value) average
+		ROUND(avg(real_time_weight.value), 1) average
 		FROM
 		real_time_weight
 		left outer JOIN pet ON 

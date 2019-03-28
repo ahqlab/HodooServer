@@ -37,7 +37,7 @@ public class IOSPetChronicDiseaseController {
 		return chronicDeseaseMapper.delete(diseaseIdx);
 	}
 
-	@ResponseBody
+	/*@ResponseBody
 	@RequestMapping(value = "/regist.do", method = RequestMethod.POST)
 	public PetDiseaseResponse regist(@RequestBody Map<String, Object> param) {
 		PetDiseaseResponse commonResponse = new PetDiseaseResponse();
@@ -56,11 +56,24 @@ public class IOSPetChronicDiseaseController {
 			commonResponse.setResultMessage(ResultMessage.FAILED);
 		}
 		return commonResponse;
+	}*/
+	
+	@ResponseBody
+	@RequestMapping(value = "/regist.do", method = RequestMethod.POST)
+	public int regist(@RequestParam("petIdx") int petIdx, @RequestBody PetChronicDisease chronicDesease) {
+		if(chronicDesease.getId() != 0) {
+			//update
+			return chronicDeseaseMapper.update(chronicDesease);
+		}else {
+			//regist
+			chronicDeseaseMapper.insert(chronicDesease);
+			return petMapper.registDisease(chronicDesease.getId(), petIdx);
+		}
 	}
 
 	@ResponseBody
 	@RequestMapping(value = "/list.do", method = RequestMethod.POST)
-	public List<PetChronicDisease> regist(@RequestParam("groupId") int groupId) {
+	public List<PetChronicDisease> list(@RequestParam("groupId") int groupId) {
 		return chronicDeseaseMapper.list(groupId);
 	}
 

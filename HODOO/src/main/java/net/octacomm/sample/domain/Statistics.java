@@ -17,5 +17,5 @@ public class Statistics implements Domain {
     
     private String theYear;
 
-    private int average;
+    private float average;
 }

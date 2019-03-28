@@ -29,7 +29,7 @@ public class IOSPetPhysicalInfoController {
 	@Autowired
 	private PetMapper petMapper;
 
-	@ResponseBody
+	/*@ResponseBody
 	@RequestMapping(value = "/regist.do", method = RequestMethod.POST)
 	public PetCommonResponse<PetPhysicalInfo> regist(@RequestBody Map<String, Object> param) {
 		PetCommonResponse<PetPhysicalInfo> commonResponse = new PetCommonResponse<PetPhysicalInfo>();
@@ -52,7 +52,22 @@ public class IOSPetPhysicalInfoController {
 			commonResponse.setResultMessage(ResultMessage.FAILED);
 		}
 		return commonResponse;
+	}*/
+		
+	
+	@ResponseBody
+	@RequestMapping(value = "/regist.do", method = RequestMethod.POST)
+	public int regist(@RequestParam("petIdx") int petIdx, @RequestBody PetPhysicalInfo petPhysicalInfo) {
+		System.err.println("petPhysicalInfo : " + petPhysicalInfo);
+		if(petPhysicalInfo.getId() != 0) {
+			return petPhysicalInfoMapper.update(petPhysicalInfo);
+		}else {
+			petPhysicalInfoMapper.insert(petPhysicalInfo);
+			return petMapper.registPhysical(petPhysicalInfo.getId(), petIdx);
+		}
 	}
+	
+	
 
 	@ResponseBody
 	@RequestMapping(value = "/delete.do", method = RequestMethod.POST)

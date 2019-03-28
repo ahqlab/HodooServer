@@ -134,15 +134,19 @@ public class RealTimeWeightController {
 					message.setTo( userList.get(i).getPushToken() );
 					Map<String, Object> data = new HashMap<>();
 					data.put("notiType", HodooConstant.FIREBASE_WEIGHT_TYPE);
-				/*	data.put("title", "체중감지");
-					//data.put("content", net.octacomm.sample.utils.DateUtil.getOnlyCurrentDateAndHour() + " 시 측정 결과 입니다.\n" + realTimeWeight.getType() + " : " + realTimeWeight.getValue() + "kg");
-					data.put("content", "새로운 체중이 감지되었습니다. 측정체중 : " + realTimeWeight.getValue() + "kg");*/
-					data.put("title", "Weight detection");
-					//data.put("content", net.octacomm.sample.utils.DateUtil.getOnlyCurrentDateAndHour() + " 시 측정 결과 입니다.\n" + realTimeWeight.getType() + " : " + realTimeWeight.getValue() + "kg");
-					data.put("content", "A new weight has been detected. Measured weight : " + realTimeWeight.getValue() + "kg");
+					data.put("title", "체중감지");
+					data.put("content", "새로운 체중이 감지되었습니다. 측정체중 : " + realTimeWeight.getValue() + "kg");
+				
+					
+					//data.put("title", "Weight detection");
+					//data.put("content", "A new weight has been detected. Measured weight : " + realTimeWeight.getValue() + "kg");
 					message.setData(data);
+					
 					FcmUtil.requestFCM(message);
 				}
+				
+				//data.put("content", net.octacomm.sample.utils.DateUtil.getOnlyCurrentDateAndHour() + " 시 측정 결과 입니다.\n" + realTimeWeight.getType() + " : " + realTimeWeight.getValue() + "kg");
+				//data.put("content", net.octacomm.sample.utils.DateUtil.getOnlyCurrentDateAndHour() + " 시 측정 결과 입니다.\n" + realTimeWeight.getType() + " : " + realTimeWeight.getValue() + "kg");
 			}
 		}
 		

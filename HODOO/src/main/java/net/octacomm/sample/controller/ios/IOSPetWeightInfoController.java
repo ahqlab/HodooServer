@@ -32,7 +32,7 @@ public class IOSPetWeightInfoController {
 	private PetMapper petMapper;
 	
 	
-	@ResponseBody
+	/*@ResponseBody
 	@RequestMapping(value = "/regist.do", method = RequestMethod.POST)
 	public PetCommonResponse<PetWeightInfo> regist(@RequestBody Map<String, Object> param) {
 		
@@ -52,6 +52,20 @@ public class IOSPetWeightInfoController {
 			commonResponse.setResultMessage(ResultMessage.FAILED);
 		}
 		return commonResponse;
+	}*/
+	
+	
+	@ResponseBody
+	@RequestMapping(value = "/regist.do", method = RequestMethod.POST)
+	public int regist(@RequestParam("petIdx") int petIdx, @RequestBody PetWeightInfo petWeightInfo) {
+		System.err.println("petWeightInfo : " + petWeightInfo);
+		if(petWeightInfo.getId() != 0) {
+			return petWeightInfoMapper.update(petWeightInfo);
+		}else {
+			petWeightInfoMapper.insert(petWeightInfo);
+			return petMapper.registWeight(petWeightInfo.getId(), petIdx);
+		}
+	
 	}
 
 	
