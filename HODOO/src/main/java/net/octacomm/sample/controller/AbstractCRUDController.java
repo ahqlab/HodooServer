@@ -52,11 +52,11 @@ public abstract class AbstractCRUDController<M extends CRUDMapper<D, P, PK>, D e
 	@RequestMapping(value = URL_LIST)
 	public void list(Model model, @ModelAttribute("domainParam") P param, BindingResult result) {
 	
-		logger.debug("Search Param : {}", param);
+		System.err.println("Search Param : {}" +  param);
 		
 		int totalCount = mapper.getCountByParam(param);
 		
-		logger.debug("Total Count : {}", totalCount);
+		System.err.println("Total Count : {}" +  totalCount);
 	
 		Pagination page;
 		
@@ -68,7 +68,7 @@ public abstract class AbstractCRUDController<M extends CRUDMapper<D, P, PK>, D e
 		
 		List<D> domainList = mapper.getListByParam(page.getStartRow(), page.getPageSize(), param);
 	
-		logger.debug("Domain List Size : {}", domainList.size());
+		System.err.println("Domain List Size : {}" +  domainList.size());
 		
 		model.addAttribute("page", page);		
 		model.addAttribute("domainList", domainList);

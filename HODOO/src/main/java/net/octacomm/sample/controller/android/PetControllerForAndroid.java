@@ -1,4 +1,4 @@
-package net.octacomm.sample.controller;
+package net.octacomm.sample.controller.android;
 
 import java.util.List;
 
@@ -23,9 +23,9 @@ import net.octacomm.sample.domain.PetBasicInfo;
 import net.octacomm.sample.domain.PetBreed;
 
 
-@RequestMapping("/pet")
+@RequestMapping("/android/pet")
 @Controller
-public class PetController {
+public class PetControllerForAndroid {
 	
 	@Autowired
 	private PetBasicInfoMapper petBasicInfoMapper;
@@ -60,6 +60,23 @@ public class PetController {
 	public List<Pet> myPetList(@RequestParam("groupCode") String groupCode){
 		return petMapper.myPetList(groupCode);
 	}
+	
+	
+	@ResponseBody
+	@RequestMapping(value = "/exist/my/pet.do", method = RequestMethod.POST)
+	public CommonResponce<Integer> existMyPet(@RequestParam("groupCode") String groupCode){
+		CommonResponce<Integer> responce = new CommonResponce<Integer>();
+		int result = petMapper.myRegistedPetCount(groupCode);	
+		if(result >  0) {
+			responce.setDomain(result);
+			responce.setStatus(HodooConstant.OK_RESPONSE);
+		}else {
+			responce.setDomain(result);
+			responce.setStatus(HodooConstant.SQL_ERROR_RESPONSE);
+		}
+		return responce;
+	}
+	
 	
 	@ResponseBody
 	@RequestMapping(value = "/my/pet/listResult.do", method = RequestMethod.POST)
@@ -117,7 +134,7 @@ public class PetController {
 	public CommonResponce<Integer> makeItInvisible( @RequestParam("petIdx") int petIdx ){
 		CommonResponce<Integer> responce = new CommonResponce<Integer>();
 		responce.setDomain(petMapper.makeItInvisible(petIdx));
-		//responce.setStatus("200");
+		responce.setStatus(200);
 		return responce;
 	}
 	

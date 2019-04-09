@@ -26,5 +26,6 @@ public class Feed implements Domain {
 	private float omega3;
 	private float omega6;
 	private String mainIngredient;
+	private String language;
 
 }

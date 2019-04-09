@@ -1,6 +1,7 @@
 package net.octacomm.sample.utils;
 
 import java.util.Random;
+import java.util.UUID;
 
 public class MathUtil {
 
@@ -22,7 +23,14 @@ public class MathUtil {
 				tempPassword += (char) (rndVal + 55);
 			}
 		}
-		//out.println("tempPassword : " + tempPassword);
 		return tempPassword;
+	}
+	
+	public static String artificialPetGroupCode() {
+		return UUID.randomUUID().toString().replace("-", "");
+	}
+	
+	public static String artificialSerialNumber() {
+		return UUID.randomUUID().toString().replace("-", "");
 	}
 }

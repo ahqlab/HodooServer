@@ -50,6 +50,12 @@ public interface PetMapper extends CRUDMapper<Pet, DefaultParam, Integer> {
 			+ " WHERE group_pet_mapping.groupCode = #{groupCode} ")
 	public List<Pet> myPetList(String groupCode);
 	
+	
+	@Select("SELECT COUNT(*) FROM " + TABLE_NAME + 
+			" join group_pet_mapping on group_pet_mapping.petGroupCode = pet.petGroupCode  and pet.visible = 0 "
+			+ " WHERE group_pet_mapping.groupCode = #{groupCode} ")
+	public int myRegistedPetCount(String groupCode);
+	
 	@Select("select * from group_pet_mapping join "
 			+ "pet on group_pet_mapping.petGroupCode = pet.petGroupCode and pet.visible = 0 "
 			+ "join pet_basic_info on pet_basic_info.id = pet.basic join pet_weight_info on pet_weight_info.id = pet.weight where group_pet_mapping.groupCode = #{groupCode} AND pet.petIdx = #{petIdx}")

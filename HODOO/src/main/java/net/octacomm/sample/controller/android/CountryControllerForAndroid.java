@@ -1,4 +1,4 @@
-package net.octacomm.sample.controller;
+package net.octacomm.sample.controller.android;
 
 import java.util.List;
 
@@ -13,19 +13,21 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import net.octacomm.sample.constant.HodooConstant;
 import net.octacomm.sample.dao.mapper.CountryMapper;
+import net.octacomm.sample.domain.CommonResponce;
 import net.octacomm.sample.domain.Country;
 import net.octacomm.sample.service.CountryService;
 
-@RequestMapping("/country")
+@RequestMapping("/android/country")
 @Controller
-public class CountryController {
+public class CountryControllerForAndroid {
 	
 	@Autowired
 	CountryService service;
 	
 	@ResponseBody
 	@RequestMapping(value = "/{language}/getAllCountry.do", method = RequestMethod.GET)
-	public List<Country> getAllCountry (@PathVariable("language") int language) {
+	public CommonResponce<List<Country>> getAllCountry (@PathVariable("language") int language) {
+		CommonResponce<List<Country>> responce = new CommonResponce<List<Country>>();
 		String columnName = "";
 		switch( language ) {
 			case HodooConstant.KO_CODE:
@@ -44,7 +46,14 @@ public class CountryController {
 				columnName = "ko_name";
 				break;
 		}
-		return service.getAllCountry( columnName );
+		List<Country> list = service.getAllCountry( columnName );
+		responce.setDomain(list);
+		if(service.getAllCountry( columnName ) != null) {
+			responce.setStatus(200);
+		}else {
+			responce.setStatus(203);
+		}
+		return responce;
 	}
 }
 

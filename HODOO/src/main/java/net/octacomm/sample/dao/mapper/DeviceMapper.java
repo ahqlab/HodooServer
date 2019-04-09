@@ -28,6 +28,9 @@ public interface DeviceMapper extends CRUDMapper<Device, DefaultParam, Integer> 
 	//@Insert("INSERT INTO " + TABLE_NAME + INSERT_FIELDS + " VALUES " + INSERT_VALUES)
 	//@Override
 	public int insert(Device device);
+	
+	@Insert("INSERT INTO " + TABLE_NAME + " ( deviceIdx , mode, groupCode , serialNumber , createDate )" + " VALUES " + " ( null , #{mode} , #{groupCode} , #{serialNumber} , now() )")
+	public int artificialDeviceInsert(Device device);
 
 	@Delete("DELETE FROM " + TABLE_NAME + " WHERE deviceIdx =  #{deviceIdx}")
 	@Override

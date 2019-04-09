@@ -21,7 +21,6 @@ public class MealHistory implements Domain {
 	
 	private String unitString;
 	
-	
 	private String createDate;
 
 }
