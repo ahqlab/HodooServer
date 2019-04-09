@@ -36,6 +36,8 @@ public class PetBasicInfo implements Domain{
 
 	private int currentMonth;
 	
+	private int petType;
+	
 	
 	public int getCurrentYear() {
 		return currentYear();
