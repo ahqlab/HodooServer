@@ -21,7 +21,7 @@ import com.google.appengine.api.appidentity.AppIdentityServicePb.AppIdentityServ
 public class LoginController {
 	
 	public static final String LOGIN_URL = "/login.do";
-	public static final String DEFAULT_TARGET_URL = "/member/list.do";
+	public static final String DEFAULT_TARGET_URL = "/notice/list.do";
 
 	@Autowired
 	private LoginService loginService;

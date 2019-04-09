@@ -6,6 +6,8 @@ import lombok.Data;
 public class Device implements Domain{
 
 	private int deviceIdx;
+	
+	private int mode;
 
 	private String groupCode;
 

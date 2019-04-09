@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import net.octacomm.sample.dao.mapper.WeightTipMapper;
 import net.octacomm.sample.domain.WeightTip;
 
-@RequestMapping(value= {"/tip"})
+@RequestMapping("/tip")
 @Controller
 public class WeightTipController {
 	
@@ -20,6 +20,7 @@ public class WeightTipController {
 	@ResponseBody
 	@RequestMapping(value = "/get/county/message.do", method = RequestMethod.POST)
 	public WeightTip getCountryMessage(@RequestBody WeightTip weightTip ) {
+		System.err.println("weightTip : " + weightTip);
 		return weightTipMapper.getCountryMessage(weightTip);
 	}
 }

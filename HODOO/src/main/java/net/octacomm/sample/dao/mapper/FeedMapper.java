@@ -14,9 +14,9 @@ import net.octacomm.sample.domain.Feed;
 
 public interface FeedMapper extends CRUDMapper<Feed, DefaultParam, Integer>{
 
-	public String INSERT_FIELDS = " ( id , animalType , tag, name , manufacturer, age, calorie, calculationCalories,  crudeProtein, crudeFat, carbohydrate, crudeAsh, crudeFiber, taurine, moisture, calcium, phosphorus, omega3, omega6, mainIngredient )";
+	public String INSERT_FIELDS = " ( id , animalType , name , brand, manufacturer, age, calorie, calculationCalories,  crudeProtein, crudeFat, carbohydrate, crudeAsh, crudeFiber, taurine, moisture, calcium, phosphorus, omega3, omega6 , language )";
 
-	public String INSERT_VALUES = " ( null , #{animalType} , #{tag}, #{name} , #{manufacturer}, #{age}, #{calorie}, #{calculationCalories},  #{crudeProtein}, #{crudeFat}, #{carbohydrate}, #{crudeAsh}, #{crudeFiber}, #{taurine}, #{moisture}, #{calcium}, #{phosphorus}, #{omega3}, #{omega6} , #{mainIngredient} )";
+	public String INSERT_VALUES = " ( null , #{animalType} , #{name} , #{brand} , #{manufacturer}, #{age}, #{calorie}, #{calculationCalories},  #{crudeProtein}, #{crudeFat}, #{carbohydrate}, #{crudeAsh}, #{crudeFiber}, #{taurine}, #{moisture}, #{calcium}, #{phosphorus}, #{omega3}, #{omega6} , #{language} )";
 
 	public String TABLE_NAME = " feed ";
 
@@ -40,7 +40,7 @@ public interface FeedMapper extends CRUDMapper<Feed, DefaultParam, Integer>{
 	@Override
 	public Feed get(Integer id);
 
-	@Select("SELECT * FROM " + TABLE_NAME)
+	@Select("SELECT * FROM " + TABLE_NAME + " where animalType = 'CAT' order by id desc")
 	@Override
 	List<Feed> getList();
 	
@@ -50,7 +50,6 @@ public interface FeedMapper extends CRUDMapper<Feed, DefaultParam, Integer>{
 	@Select("SELECT * FROM " + TABLE_NAME +  " WHERE NAME LIKE CONCAT('%', #{text}, '%')")
 	public List<Feed> getFeedInfo(int id);
 	
-	/*value * (mear_history.calorie * 0.01)*/
 	@Select("SELECT char_length(feed.crudeProtein) as id, sum(feed.crudeProtein) as crudeProtein, sum(feed.crudeFat) as crudeFat, sum(feed.crudeFiber) as crudeFiber, sum(feed.crudeAsh) as crudeAsh, sum(feed.carbohydrate) as carbohydrate FROM  mear_history  join feed on mear_history.feedIdx = feed.id WHERE petIdx =  #{petIdx} and substring(mear_history.createDate, 1,10) = #{date} and mear_history.isDel = 1")
 	public Feed getRadarChartData(@Param("date") String date, @Param("petIdx") int petIdx);
 	

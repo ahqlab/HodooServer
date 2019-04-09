@@ -1,4 +1,4 @@
-package net.octacomm.sample.controller;
+package net.octacomm.sample.controller.android;
 
 import java.util.List;
 
@@ -22,14 +22,17 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 
+import net.octacomm.sample.constant.HodooConstant;
+import net.octacomm.sample.controller.AbstractCRUDController;
 import net.octacomm.sample.dao.mapper.FeedMapper;
+import net.octacomm.sample.domain.CommonResponce;
 import net.octacomm.sample.domain.DefaultParam;
 import net.octacomm.sample.domain.Feed;
 import net.octacomm.sample.domain.User;
 
-@RequestMapping("/feed")
+@RequestMapping("/android/feed")
 @Controller
-public class FeedController extends AbstractCRUDController<FeedMapper, Feed, DefaultParam, Integer> {
+public class FeedControllerForAndroid extends AbstractCRUDController<FeedMapper, Feed, DefaultParam, Integer> {
 
 	@Autowired
 	@Override
@@ -47,24 +50,42 @@ public class FeedController extends AbstractCRUDController<FeedMapper, Feed, Def
 		return "redirect:/feed/list.do";
 	}
 	
+	/* Used at the 호두야 밥먹자 App */
 	@ResponseBody
 	@RequestMapping(value = "/regist2.do", method = RequestMethod.POST)
 	public int regist(@RequestBody Feed feed) {
 		return mapper.insert(feed);
 	}
 
+	/* Used at the 호두야 밥먹자 App */
 	@ResponseBody
 	@RequestMapping(value = "/all/list.do", method = RequestMethod.POST)
 	public List<Feed> allList() {
 		return mapper.getList();
 	}
 
+	
+	
 	@ResponseBody
 	@RequestMapping(value = "/search/list.do", method = RequestMethod.POST)
-	public List<Feed> searchList(@RequestBody DefaultParam defaultParam, @RequestParam("language") String language) {
-		return mapper.getSearchList(defaultParam.getSearchWord(), language);
+	public CommonResponce<List<Feed>> searchList(@RequestBody DefaultParam defaultParam, @RequestParam("language") String language) {
+		CommonResponce<List<Feed>> responce  = new CommonResponce<>(); 
+		List<Feed> list =  mapper.getSearchList(defaultParam.getSearchWord(), language);
+		if(list == null) {
+			responce.setStatus(HodooConstant.NO_CONTENT_RESPONSE);
+			responce.setDomain(null);	
+		}else if(list.size() == 0) {
+			responce.setStatus(HodooConstant.NO_CONTENT_RESPONSE);
+			responce.setDomain(null);
+		}else {
+			responce.setStatus(HodooConstant.OK_RESPONSE);
+			responce.setDomain(list);
+		}
+		return responce;
 	}
 
+	
+	/* ??????? */
 	@ResponseBody
 	@RequestMapping(value = "/search/listStr.do", method = RequestMethod.POST)
 	public String searchIds(@RequestBody DefaultParam defaultParam, @RequestParam("language") String language) {
@@ -79,43 +100,49 @@ public class FeedController extends AbstractCRUDController<FeedMapper, Feed, Def
 
 	@ResponseBody
 	@RequestMapping(value = "/search/get.do", method = RequestMethod.POST)
-	public Feed searchIds(@RequestParam("idx") int idx) {
-		return mapper.get(idx);
+	public CommonResponce<Feed> searchIds(@RequestParam("idx") int idx) {
+		CommonResponce<Feed> response = new CommonResponce<Feed>();
+		Feed obj = mapper.get(idx);
+		if(obj != null) {
+			response.setStatus(HodooConstant.OK_RESPONSE);
+			response.setDomain(obj);	
+		}else {
+			response.setStatus(HodooConstant.NO_CONTENT_RESPONSE);
+			response.setDomain(null);	
+		}
+		return response;
 	}
-
+	
+	
+	
 	@ResponseBody
 	@RequestMapping(value = "/get/info.do", method = RequestMethod.POST)
-	public Feed getFeedInfo(@RequestParam("feedId") int id) {
-		return mapper.get(id);
+	public CommonResponce<Feed> getFeedInfo(@RequestParam("feedId") int id) {
+		CommonResponce<Feed> response = new CommonResponce<Feed>();
+		Feed obj = mapper.get(id);
+		if(obj != null) {
+			response.setStatus(HodooConstant.OK_RESPONSE);
+			response.setDomain(obj);	
+		}else {
+			response.setStatus(HodooConstant.NO_CONTENT_RESPONSE);
+			response.setDomain(null);	
+		}
+		return response;
 	}
 
 	@ResponseBody
 	@RequestMapping(value = "/get/radar/chart/data.do", method = RequestMethod.POST)
-	public Feed getRadarChartData(@RequestParam("date") String date, @RequestParam("petIdx") int petIdx) {
-		return mapper.getRadarChartData(date, petIdx);
-	}
-
-	@ResponseBody
-	@RequestMapping(value = "/tetest.do")
-	public ResponseEntity<User> test(HttpServletResponse servletResponse, @RequestParam("date") String date,
-			@RequestParam("petIdx") int petIdx, BindingResult bindingResult) {
-
-		try {
-			/*
-			 * if (bindingResult.hasErrors()) { System.err.println("servletResponse 1 : " +
-			 * servletResponse.getStatus()); return new User(); } return new User();
-			 */
-		} catch (Exception e) {
-			System.err.println("servletResponse : " + servletResponse.getStatus());
-
+	public CommonResponce<Feed> getRadarChartData(@RequestParam("date") String date, @RequestParam("petIdx") int petIdx) {
+		CommonResponce<Feed> response = new CommonResponce<Feed>();
+		Feed obj = mapper.getRadarChartData(date, petIdx);
+		if(obj != null) {
+			response.setStatus(HodooConstant.OK_RESPONSE);
+			response.setDomain(obj);	
+		}else {
+			response.setStatus(HodooConstant.NO_CONTENT_RESPONSE);
+			response.setDomain(null);	
 		}
-		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-	}
-
-	@ResponseStatus(value = HttpStatus.CONFLICT, reason = "Data integrity violation") // 409
-	@ExceptionHandler(DataIntegrityViolationException.class)
-	public void conflict() { // Nothing to do
-
+		return response;
 	}
 
 }
