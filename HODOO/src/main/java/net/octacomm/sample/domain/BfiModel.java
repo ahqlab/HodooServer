@@ -11,4 +11,8 @@ public class BfiModel implements Domain {
     private String answerIds;
     private List<BfiAnswer> answers;
     private int additionalId;
+    
+    private String title;
+    private String info;
+    private String image;
 }

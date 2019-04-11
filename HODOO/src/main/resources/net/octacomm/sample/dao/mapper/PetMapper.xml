@@ -4,7 +4,7 @@
 	<insert id="insert" parameterType="Pet" useGeneratedKeys="true"  keyProperty="petIdx" >
 		INSERT INTO  
 		pet 
-		( petIdx , petGroupCode , basic , disease, physical, weight, createDate, petType ) 
+		( petIdx , petGroupCode , basic , disease, physical, weight, createDate ) 
 		VALUES 
 		( null , (select petGroupCode FROM group_pet_mapping where groupCode = #{petGroupCode} ) ,  #{basic} , #{disease} , #{physical} , #{weight} , now() )
 		<selectKey keyProperty="petIdx" resultType="Integer" order="AFTER">

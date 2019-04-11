@@ -164,6 +164,7 @@ public class PetBasicInfoController {
 				}
 			}
 		}
+	
 		int result = petBasicInfoMapper.update(basicInfo);
 		if (result != 0) {
 			group.setResultMessage(ResultMessage.SUCCESS);
