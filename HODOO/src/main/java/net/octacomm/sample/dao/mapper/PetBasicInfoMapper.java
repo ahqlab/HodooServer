@@ -22,7 +22,7 @@ public interface PetBasicInfoMapper extends CRUDMapper<PetBasicInfo, DefaultPara
 
 	public String TABLE_NAME = " pet_basic_info ";
 
-	public String UPDATE_VALUES = " profileFilePath = #{profileFilePath} , profileFileName = #{profileFileName} , petName = #{petName} , sex = #{sex} ,petBreed = #{petBreed} , birthday = #{birthday} , neutralization = #{neutralization} , createDate = now() ";
+	public String UPDATE_VALUES = " profileFilePath = #{profileFilePath} , profileFileName = #{profileFileName} , petName = #{petName} , sex = #{sex} ,petBreed = #{petBreed} , birthday = #{birthday} , neutralization = #{neutralization} , createDate = now(), petType = #{petType }, selectedBfi = #{selectedBfi } ";
 
 	public String SELECT_FIELDS = "  id, userId, profileFilePath, profileFileName, petName, sex, petBreed , birthday, neutralization, createDate  ";
 
@@ -71,10 +71,11 @@ public interface PetBasicInfoMapper extends CRUDMapper<PetBasicInfo, DefaultPara
 	/*@Select("select pet_basic_info.* from pet_basic_info where groupId = #{groupId} and id = #{id}")
 	public PetBasicInfo basicInfoCheck(@Param("groupId") String groupId, @Param("id") int id);*/
 	
-	@Select("SELECT pet_basic_info.id, pet_basic_info.profileFilePath, pet_basic_info.profileFileName, pet_basic_info.petName, b.${location }_name AS petBreed, pet_basic_info.sex, pet_basic_info.birthday, pet_basic_info.neutralization, pet_basic_info.createDate FROM pet  JOIN group_pet_mapping  ON group_pet_mapping.petGroupCode = pet.petGroupCode  JOIN pet_basic_info  ON pet.basic = pet_basic_info.id LEFT JOIN pet_breed_mapper m on pet_basic_info.id = m.basic_info_id LEFT JOIN pet_breed b ON m.breed_id = b.id WHERE group_pet_mapping.groupCode = #{groupCode} AND pet.petIdx = #{petIdx}")
+	@Select("SELECT pet_basic_info.id, pet_basic_info.profileFilePath, pet_basic_info.profileFileName, pet_basic_info.petName, b.${location }_name AS petBreed, pet_basic_info.sex, pet_basic_info.birthday, pet_basic_info.neutralization, pet_basic_info.createDate, pet_basic_info.selectedBfi, pet_basic_info.petType FROM pet  JOIN group_pet_mapping  ON group_pet_mapping.petGroupCode = pet.petGroupCode  JOIN pet_basic_info  ON pet.basic = pet_basic_info.id LEFT JOIN pet_breed_mapper m on pet_basic_info.id = m.basic_info_id LEFT JOIN pet_breed b ON m.breed_id = b.id WHERE group_pet_mapping.groupCode = #{groupCode} AND pet.petIdx = #{petIdx}")
 	public PetBasicInfo getBasicInformation(@Param("location") String location, @Param("groupCode") String groupCode, @Param("petIdx") int petIdx);
 	
-	
+	@Select("select i.petType from pet p join pet_basic_info i on p.basic = i.id where p.petIdx = #{petIdx}")
+	public int getPetType( @Param("petIdx") int petIdx );
 	
 	
 }

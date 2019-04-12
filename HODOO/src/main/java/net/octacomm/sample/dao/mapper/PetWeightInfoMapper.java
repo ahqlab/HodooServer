@@ -7,6 +7,8 @@ import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
 import net.octacomm.sample.dao.CRUDMapper;
+import net.octacomm.sample.domain.BfiModel;
+import net.octacomm.sample.domain.BfiQuestion;
 import net.octacomm.sample.domain.DefaultParam;
 import net.octacomm.sample.domain.PetBasicInfo;
 import net.octacomm.sample.domain.PetPhysicalInfo;
@@ -44,8 +46,7 @@ public interface PetWeightInfoMapper extends CRUDMapper<PetWeightInfo, DefaultPa
 			"join pet_weight_info on pet_weight_info.id = pet.weight " + 
 			"where pet_basic_info.id = #{basicIdx} ")
 	public PetWeightInfo getBcs(@Param("basicIdx") int basicIdx);
-	
-	
+
 	@Select("select pet_weight_info.* from pet_weight_info join groups on pet_weight_info.petId = groups.petId where groups.groupId = #{groupId} and pet_weight_info.petId = #{petId}")
 	public PetPhysicalInfo InfoCheck(String groupId, int petId);
 	
@@ -55,6 +56,9 @@ public interface PetWeightInfoMapper extends CRUDMapper<PetWeightInfo, DefaultPa
 			"WHERE group_pet_mapping.groupCode = #{groupCode} " + 
 			"and pet.petIdx = #{petIdx}")
 	public PetWeightInfo getPetWeightInformation(@Param("groupCode") String groupCode, @Param("petIdx") int petIdx);
+	
+	@Select("SELECT id, question FROM bfi_question where id = 1")
+	public BfiQuestion test();
 	
 	
 }

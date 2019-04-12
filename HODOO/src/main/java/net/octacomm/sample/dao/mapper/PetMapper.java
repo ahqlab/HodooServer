@@ -202,4 +202,5 @@ public interface PetMapper extends CRUDMapper<Pet, DefaultParam, Integer> {
 	@Update("UPDATE " + TABLE_NAME + " SET visible = 1 WHERE petIdx =  #{petIdx} ")
 	public Integer makeItInvisible(@Param("petIdx") int petIdx);
 	
+	
 }
