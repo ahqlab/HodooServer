@@ -113,6 +113,12 @@ public class PetController {
 	}
 	
 	@ResponseBody
+	@RequestMapping(value = "/get/type.do", method = RequestMethod.POST)
+	public int getPetType( @RequestParam("petIdx") int petIdx ){
+		return petBasicInfoMapper.getPetType(petIdx);
+	}
+	
+	@ResponseBody
 	@RequestMapping(value = "/make/it/invisible.do", method = RequestMethod.POST)
 	public CommonResponce<Integer> makeItInvisible( @RequestParam("petIdx") int petIdx ){
 		CommonResponce<Integer> responce = new CommonResponce<Integer>();
