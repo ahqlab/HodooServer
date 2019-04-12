@@ -184,6 +184,15 @@ public class UserControllerForAndroid {
 	@RequestMapping(value = "/login2.do", method = RequestMethod.POST)
 	public CommonResponce<User> login2(@RequestBody User user) {
 		CommonResponce<User> group = loginService.login2(user);
+		if(group.getStatus() == HodooConstant.OK_RESPONSE) {
+			int checkResult = firebaseMapper.checkInvitationState(group.getDomain().getUserIdx());
+			if(checkResult > 0) {
+				//보낸게 있어.
+				group.setResultMessage(ResultMessage.WAIT_INVITATION);
+				group.setStatus(HodooConstant.OK_RESPONSE);
+				group.setDomain(group.getDomain());
+			}
+		}
 		return group;
 	}
 

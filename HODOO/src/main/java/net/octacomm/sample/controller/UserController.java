@@ -464,22 +464,22 @@ public class UserController {
 	
 	@ResponseBody
 	@RequestMapping(value = "/login2.do", method = RequestMethod.POST)
-	public CommonResponce<User> login2(@RequestBody User user, HttpServletRequest req, HttpServletResponse resp, Exception e) throws Exception {
+	public CommonResponce<User> login2(@RequestBody User user) {
 		CommonResponce<User> group = loginService.login2(user);
-	/*	StringBuilder sb = new StringBuilder("{ \n")
-	            .append("    \"timestamp\": ").append("\"").append(DateTime.now().toString()).append("\" \n")
-	            .append("    \"status\": ").append(resp.getStatus()).append(" \n")
-	            .append("    \"error\": ").append("\"").append(HttpStatus.valueOf(resp.getStatus()).name()).append("\" \n")
-	            .append("    \"exception\": ").append("\"").append(e.getClass().toString().substring(6)).append("\" \n")
-	            .append("    \"message\": ").append("\"").append(e.getMessage()).append("\" \n")
-	            .append("    \"path\": ").append("\"").append(req.getServletPath()).append("\" \n")
-	            .append("}");
-
-	    String errorMessage = String.format(sb.toString());
-		System.err.println("errorMessage : " + errorMessage);*/
+		if(group.getStatus() == HodooConstant.OK_RESPONSE) {
+			int checkResult = firebaseMapper.checkInvitationState(group.getDomain().getUserIdx());
+			if(checkResult > 0) {
+				//보낸게 있어.
+				group.setResultMessage(ResultMessage.WAIT_INVITATION);
+				group.setStatus(HodooConstant.OK_RESPONSE);
+				group.setDomain(group.getDomain());
+			}
+		}
 		
+		System.err.println("ResultMessage.WAIT_INVITATION : " + ResultMessage.WAIT_INVITATION);
 		return group;
 	}
+
 
 	@ResponseBody
 	@RequestMapping(value = "/get/group/member.do", method = RequestMethod.POST)

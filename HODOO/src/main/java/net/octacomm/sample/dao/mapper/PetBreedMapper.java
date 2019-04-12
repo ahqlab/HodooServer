@@ -49,5 +49,9 @@ public interface PetBreedMapper extends CRUDMapper<PetBreed, DefaultParam, Integ
 	
 	@Select("select count(*) from " + MAPPER_TABLE_NAME + " where basic_info_id = #{basicInfoId }")
 	int getBreedMapperCount( @Param("basicInfoId") int basicInfoId);
+	
+	
+	@Select("SELECT id, ${location}_name as name FROM pet_breed where typeIdx = ${typeIdx} order by name asc")
+	List<PetBreed> getAllBreedOfType(@Param("location") String location, @Param("typeIdx") int typeIdx );
 
 }

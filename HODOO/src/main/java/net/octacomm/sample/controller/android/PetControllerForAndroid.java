@@ -67,13 +67,8 @@ public class PetControllerForAndroid {
 	public CommonResponce<Integer> existMyPet(@RequestParam("groupCode") String groupCode){
 		CommonResponce<Integer> responce = new CommonResponce<Integer>();
 		int result = petMapper.myRegistedPetCount(groupCode);	
-		if(result >  0) {
-			responce.setDomain(result);
-			responce.setStatus(HodooConstant.OK_RESPONSE);
-		}else {
-			responce.setDomain(result);
-			responce.setStatus(HodooConstant.SQL_ERROR_RESPONSE);
-		}
+		responce.setDomain(result);
+		responce.setStatus(HodooConstant.OK_RESPONSE);
 		return responce;
 	}
 	
@@ -128,6 +123,22 @@ public class PetControllerForAndroid {
 		List<PetBreed> list = breedMapper.getAllList( location );
 		return list;
 	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/get/breed/of/type.do", method = RequestMethod.POST)
+	public CommonResponce<List<PetBreed>> getAllBreedOfType( @RequestParam("location") String location, @RequestParam("typeIdx") int typeIdx ){
+		CommonResponce<List<PetBreed>> responce = new CommonResponce<List<PetBreed>>();
+		List<PetBreed> list = breedMapper.getAllBreedOfType( location, typeIdx );
+		if(list != null) {
+			responce.setDomain(list);
+			responce.setStatus(HodooConstant.OK_RESPONSE);
+		}else {
+			responce.setDomain(list);
+			responce.setStatus(HodooConstant.NO_CONTENT_RESPONSE);
+		}
+		return responce;
+	}
+	
 	
 	@ResponseBody
 	@RequestMapping(value = "/make/it/invisible.do", method = RequestMethod.POST)
