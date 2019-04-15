@@ -26,6 +26,15 @@ public class HodooConstant {
 
 	public static final int GROUP_NORMAL_MEMBER = 0;
 	public static final int GROUP_MASTER_MEMBER = 1;
+	
+	/* 그룹 초대 관련 (s) */
+	public static int NOT_TO_DEVICE = -2;
+	public static int NOT_TO_USER = -1;
+	public static int ERROR = 0;
+	
+	public static int EXISTENCE_USER = 2;
+	public static int OVERLAB_INVITATION = 3;
+	/* 그룹 초대 관련 (e) */
 
 	/* pet 관련 등록 여부 체크 (s) */
 	public static final String PET_REGIST_RESULT_KEY = "PET_REGIST_RESULT_KEY";
