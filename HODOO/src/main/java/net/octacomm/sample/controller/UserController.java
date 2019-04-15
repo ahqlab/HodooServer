@@ -636,6 +636,8 @@ public class UserController {
 		}
 		return userService.saveFCMToken(user);
 	}
+	
+	//그룹 초대를 승인하는 api
 	@ResponseBody
 	@RequestMapping(value = "/invitation/approval.do", method = RequestMethod.POST)
 	public int invitationApproval( 
@@ -643,6 +645,8 @@ public class UserController {
 			@RequestParam("fromUserIdx") int fromUserIdx) {
 		return userGroupMappingMapper.invitationApproval(toUserIdx, fromUserIdx);
 	}
+	
+	//그룹 초대를 거절하는 api
 	@ResponseBody
 	@RequestMapping(value = "/invitation/refusal.do", method = RequestMethod.POST)
 	public int invitationRefusal( 
@@ -650,6 +654,8 @@ public class UserController {
 			@RequestParam("fromUserIdx") int fromUserIdx) {
 		return firebaseMapper.invitationRefusal(toUserIdx, fromUserIdx);
 	}
+	
+	//그룹초대된 리스트를 보여주는 api
 	@ResponseBody
 	@RequestMapping(value = "/invitation/getInvitationUser.do", method = RequestMethod.POST)
 	public List<InvitationRequest> getInvitationList( 
@@ -657,6 +663,9 @@ public class UserController {
 		return firebaseMapper.getInvitationList(userIdx);
 	}
 	
+	/*
+	 * 그룹 초대의 상태를 바꿔주는 api (invitationApproval 메소드와 invitationRefusal가 합쳐진 타입)
+	 */
 	@ResponseBody
 	@RequestMapping(value = "/invitation/setInvitationType.do", method = RequestMethod.POST)
 	public int setInvitationType( 
@@ -689,6 +698,8 @@ public class UserController {
 		
 		return result;
 	}
+	
+	//회원 탈퇴시 사용하는 api
 	@ResponseBody
 	@RequestMapping(value = "/setUserCode.do", method = RequestMethod.POST)
 	public int setInvitationType(
@@ -704,6 +715,8 @@ public class UserController {
 		}
 		return result;
 	}
+	
+	//그룹 탈퇴를 시키는 api
 	@ResponseBody
 	@RequestMapping(value = "/withdrawGroup.do", method = RequestMethod.POST)
 	public int withdrawGroup(
@@ -720,6 +733,8 @@ public class UserController {
 		
 		return result;
 	}
+	
+	//그룹 초대를 취소하는 api
 	@ResponseBody
 	@RequestMapping(value = "/invitation/cancelInvitation.do", method = RequestMethod.POST)
 	public int cancelInvitation (
@@ -733,6 +748,7 @@ public class UserController {
 		return firebaseMapper.invitationRefusal(toUser.getUserIdx(), from);
 	}
 	
+	//초대된 유저의 카운트를 안드로이드 내부 DB와 Mysql DB를 비교하는 api
 	@ResponseBody
 	@RequestMapping(value = "/checkGroupCount.do", method = RequestMethod.POST)
 	public int checkGroupCount ( @RequestParam("idx") int idx ) {
