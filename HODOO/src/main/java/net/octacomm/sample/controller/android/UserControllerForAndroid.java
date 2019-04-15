@@ -403,24 +403,28 @@ public class UserControllerForAndroid {
 	}
 	
 	
-	/* 여기부터 설명이 에매모호함....*/
+	//그룹 초대를 승인하는 api
 	@ResponseBody
 	@RequestMapping(value = "/invitation/approval.do", method = RequestMethod.POST)
 	public CommonResponce<Integer> invitationApproval( 
 			@RequestParam("toUserIdx") int toUserIdx,
 			@RequestParam("fromUserIdx") int fromUserIdx) {
-		CommonResponce<Integer> response = new CommonResponce<Integer>();
+		
+		CommonResponce<Integer> responce = new CommonResponce<Integer>();
+		
 		int result = userGroupMappingMapper.invitationApproval(toUserIdx, fromUserIdx);
-		if(result != 0) {
-			response.setStatus(HodooConstant.OK_RESPONSE);
-			response.setDomain(result);
+		if(result > 0) {
+			responce.setStatus(HodooConstant.OK_RESPONSE);
+			responce.setDomain(result);
 		}else {
-			response.setStatus(HodooConstant.NO_CONTENT_RESPONSE);
-			response.setDomain(result);
+			responce.setStatus(HodooConstant.SQL_ERROR_RESPONSE);
+			responce.setDomain(result);
 		}
-		return response;
+		return responce;
 	}
 	
+	
+	//그룹 초대를 거절하는 api
 	@ResponseBody
 	@RequestMapping(value = "/invitation/refusal.do", method = RequestMethod.POST)
 	public CommonResponce<Integer> invitationRefusal( 
@@ -438,7 +442,7 @@ public class UserControllerForAndroid {
 		return response;
 	}
 	
-	
+	//그룹초대된 리스트를 보여주는 api
 	@ResponseBody
 	@RequestMapping(value = "/invitation/getInvitationUser.do", method = RequestMethod.POST)
 	public CommonResponce<List<InvitationRequest>> getInvitationList( 
@@ -456,6 +460,9 @@ public class UserControllerForAndroid {
 		
 	}
 	
+	/*
+	 * 그룹 초대의 상태를 바꿔주는 api (invitationApproval 메소드와 invitationRefusal가 합쳐진 타입)
+	 */
 	@ResponseBody
 	@RequestMapping(value = "/invitation/setInvitationType.do", method = RequestMethod.POST)
 	public CommonResponce<Integer> setInvitationType( 
@@ -500,6 +507,8 @@ public class UserControllerForAndroid {
 		
 		return response;
 	}
+	
+	//회원 탈퇴시 사용하는 api
 	@ResponseBody
 	@RequestMapping(value = "/setUserCode.do", method = RequestMethod.POST)
 	public int setInvitationType(
@@ -515,6 +524,8 @@ public class UserControllerForAndroid {
 		}
 		return result;
 	}
+	
+	//그룹 탈퇴를 시키는 api
 	@ResponseBody
 	@RequestMapping(value = "/withdrawGroup.do", method = RequestMethod.POST)
 	public int withdrawGroup(
@@ -531,12 +542,16 @@ public class UserControllerForAndroid {
 		
 		return result;
 	}
+	
+	//그룹 초대를 취소하는 api
 	@ResponseBody
 	@RequestMapping(value = "/invitation/cancelInvitation.do", method = RequestMethod.POST)
 	public int cancelInvitation (
 			@RequestParam("toUserEmail") String toUserEmail,
 			@RequestParam("from") int from
 			) {
+		
+		
 		int checkState = firebaseMapper.checkInvitationState(from);
 		User toUser = userMapper.getByUserEmail(toUserEmail);
 		if ( checkState == 0 )
@@ -544,9 +559,13 @@ public class UserControllerForAndroid {
 		return firebaseMapper.invitationRefusal(toUser.getUserIdx(), from);
 	}
 	
+	//초대된 유저의 카운트를 안드로이드 내부 DB와 Mysql DB를 비교하는 api
 	@ResponseBody
 	@RequestMapping(value = "/checkGroupCount.do", method = RequestMethod.POST)
 	public int checkGroupCount ( @RequestParam("idx") int idx ) {
+		
+		CommonResponce<Integer> responce = new CommonResponce<Integer>();
+		
 		User user = userMapper.get(idx);
 		User loginUser = userMapper.login(user);
 		if ( loginUser.getAccessType() == HodooConstant.GROUP_NORMAL_MEMBER )

@@ -55,6 +55,9 @@ public class PetWeightInfoController {
 	public PetWeightInfo getMyBcs(@RequestParam ("basicIdx") int basicIdx) {
 		return petWeightInfoMapper.getBcs(basicIdx);
 	}
+	
+	// 1: 강아지 2 : 고양이, and location 
+	// do) 항문 가져온다 
 	@ResponseBody
 	@RequestMapping(value = "/bfi.do" , method = RequestMethod.POST)
 	public List<BfiModel> getMyBfi(@RequestParam("location") String location, @RequestParam("type") int type) {

@@ -9,8 +9,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import net.octacomm.sample.constant.HodooConstant;
 import net.octacomm.sample.dao.mapper.PetMapper;
 import net.octacomm.sample.dao.mapper.PetPhysicalInfoMapper;
+import net.octacomm.sample.domain.CommonResponce;
+import net.octacomm.sample.domain.PetChronicDisease;
 import net.octacomm.sample.domain.PetPhysicalInfo;
 
 @RequestMapping("/android/pet/physical")
@@ -23,26 +26,80 @@ public class PetPhysicalInfoControllerForAndroid {
 	@Autowired
 	private PetMapper petMapper;
 
-	@ResponseBody
+	/*@ResponseBody
 	@RequestMapping(value = "/regist.do", method = RequestMethod.POST)
 	public int regist(@RequestParam("petIdx") int petIdx, @RequestBody PetPhysicalInfo petPhysicalInfo) {
 		petPhysicalInfoMapper.insert(petPhysicalInfo);
 		return petMapper.registPhysical(petPhysicalInfo.getId(), petIdx);
-	}
-
+	}*/
+	
 	@ResponseBody
+	@RequestMapping(value = "/regist.do" , method = RequestMethod.POST)
+	public CommonResponce<Integer> regist(@RequestParam("petIdx") int petIdx, @RequestBody PetPhysicalInfo petPhysicalInfo) {
+		CommonResponce<Integer> responce = new CommonResponce<Integer>();
+		petPhysicalInfoMapper.insert(petPhysicalInfo);
+		int obj = petMapper.registPhysical(petPhysicalInfo.getId(), petIdx);
+		if(obj > 0) {
+			responce.setStatus(HodooConstant.OK_RESPONSE);
+			responce.setDomain(obj);
+		}else {
+			responce.setStatus(HodooConstant.NO_CONTENT_RESPONSE);
+			responce.setDomain(obj);
+		}
+		return responce;
+	}
+	
+	
+	/*@ResponseBody
 	@RequestMapping(value = "/delete.do", method = RequestMethod.POST)
 	public int delete(@RequestParam("petIdx") int petIdx, @RequestParam("id") int id) {
 		petMapper.resetPhysical(petIdx);
 		return petPhysicalInfoMapper.delete(id);
+	}*/
+	
+	
+	@ResponseBody
+	@RequestMapping(value = "/delete.do" , method = RequestMethod.POST)
+	public CommonResponce<Integer> delete(@RequestParam("petIdx") int petIdx, @RequestParam("id") int id) {
+		CommonResponce<Integer> responce = new CommonResponce<Integer>();
+		petMapper.resetPhysical(petIdx);
+		int obj = petPhysicalInfoMapper.delete(id);
+		if(obj > 0) {
+			responce.setStatus(HodooConstant.OK_RESPONSE);
+			responce.setDomain(obj);
+		}else {
+			responce.setStatus(HodooConstant.NO_CONTENT_RESPONSE);
+			responce.setDomain(obj);
+		}
+		return responce;
+		
+		
 	}
 
-	@ResponseBody
+	/*@ResponseBody
 	@RequestMapping(value = "/get.do", method = RequestMethod.POST)
 	public PetPhysicalInfo getPetPhysicalInformation(@RequestParam("groupCode") String groupCode, @RequestParam("petIdx") int petIdx) {
 		return petPhysicalInfoMapper.getPetPhysicalInformation(groupCode, petIdx);
+	}*/
+	
+	
+	@ResponseBody
+	@RequestMapping(value = "/get.do", method = RequestMethod.POST)
+	public CommonResponce<PetPhysicalInfo> getBasicInformation(@RequestParam("groupCode") String groupCode, @RequestParam("petIdx") int petIdx) {
+		CommonResponce<PetPhysicalInfo> responce = new CommonResponce<PetPhysicalInfo>();
+		PetPhysicalInfo obj = petPhysicalInfoMapper.getPetPhysicalInformation(groupCode, petIdx);
+		if(obj != null) {
+			responce.setStatus(HodooConstant.OK_RESPONSE);
+			responce.setDomain(obj);
+		}else {
+			responce.setStatus(HodooConstant.NO_CONTENT_RESPONSE);
+			responce.setDomain(obj);
+		}
+	
+		return responce;
 	}
-
+	
+	
 	/*@ResponseBody
 	@RequestMapping(value = "/info/check", method = RequestMethod.POST)
 	public PetPhysicalInfo basicInfoCheck(@RequestParam("groupId") String groupId, @RequestParam("petId") int petId) {

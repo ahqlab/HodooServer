@@ -21,6 +21,7 @@ import net.octacomm.sample.domain.Pet;
 import net.octacomm.sample.domain.PetAllInfos;
 import net.octacomm.sample.domain.PetBasicInfo;
 import net.octacomm.sample.domain.PetBreed;
+import net.octacomm.sample.domain.PetPhysicalInfo;
 
 
 @RequestMapping("/android/pet")
@@ -37,28 +38,37 @@ public class PetControllerForAndroid {
 	private PetBreedMapper breedMapper;
 	
 	
-	@ResponseBody
+	/*@ResponseBody
 	@RequestMapping(value = "/my/list.do", method = RequestMethod.POST)
 	public List<PetBasicInfo> myList(HttpServletRequest request, @RequestParam("groupId") int groupId) {
 		return  petBasicInfoMapper.getMyPetList(groupId);
-	}
+	}*/
 	
-	@ResponseBody
+	/*@ResponseBody
 	@RequestMapping(value = "/my/registered/list.do", method = RequestMethod.POST)
 	public List<PetBasicInfo> getMyRegisteredPetList(HttpServletRequest request, @RequestParam("groupId") String groupId) {
 		return  petBasicInfoMapper.getMyRegisteredPetList(groupId);
-	}
+	}*/
 	
-	@ResponseBody
+	/*@ResponseBody
 	@RequestMapping(value = "/basic/info/get.do", method = RequestMethod.POST)
 	public PetBasicInfo login(HttpServletRequest request, @RequestParam("id") int id) {
 		return petBasicInfoMapper.getBasicInfoForPetId(id);
-	}
+	}*/
 	
 	@ResponseBody
 	@RequestMapping(value = "/my/pet/list.do", method = RequestMethod.POST)
-	public List<Pet> myPetList(@RequestParam("groupCode") String groupCode){
-		return petMapper.myPetList(groupCode);
+	public CommonResponce<List<Pet>> myPetList(@RequestParam("groupCode") String groupCode){
+		CommonResponce<List<Pet>> responce = new CommonResponce<List<Pet>>();
+		List<Pet> list = petMapper.myPetList(groupCode);
+		if(list != null) {
+			responce.setDomain(list);
+			responce.setStatus(HodooConstant.OK_RESPONSE);
+		}else {
+			responce.setDomain(list);
+			responce.setStatus(HodooConstant.NO_CONTENT_RESPONSE);
+		}
+		return responce;
 	}
 	
 	
@@ -66,14 +76,19 @@ public class PetControllerForAndroid {
 	@RequestMapping(value = "/exist/my/pet.do", method = RequestMethod.POST)
 	public CommonResponce<Integer> existMyPet(@RequestParam("groupCode") String groupCode){
 		CommonResponce<Integer> responce = new CommonResponce<Integer>();
-		int result = petMapper.myRegistedPetCount(groupCode);	
-		responce.setDomain(result);
-		responce.setStatus(HodooConstant.OK_RESPONSE);
+		int result = petMapper.myRegistedPetCount(groupCode);
+		if(result > 0) {
+			responce.setDomain(result);
+			responce.setStatus(HodooConstant.OK_RESPONSE);
+		}else {
+			responce.setDomain(result);
+			responce.setStatus(HodooConstant.NO_CONTENT_RESPONSE);
+		}
 		return responce;
 	}
 	
 	
-	@ResponseBody
+	/*@ResponseBody
 	@RequestMapping(value = "/my/pet/listResult.do", method = RequestMethod.POST)
 	public int[] myPetListResult(@RequestParam("groupCode") String groupCode){
 		List<Pet> pets = petMapper.myPetList(groupCode);
@@ -109,20 +124,40 @@ public class PetControllerForAndroid {
 			break;
 		}
 		return result;
-	}
+	}*/
 	
 	@ResponseBody
 	@RequestMapping(value = "/all/infos.do", method = RequestMethod.POST)
-	public PetAllInfos petAllInfos(@RequestParam("petIdx") int petIdx){
-		return petMapper.allInfoOnThePet(petIdx);
+	public CommonResponce<PetAllInfos> petAllInfos(@RequestParam("petIdx") int petIdx){
+		CommonResponce<PetAllInfos> responce = new CommonResponce<PetAllInfos>();
+		PetAllInfos obj = petMapper.allInfoOnThePet(petIdx);
+		if(obj != null) {
+			responce.setStatus(HodooConstant.OK_RESPONSE);
+			responce.setDomain(obj);
+		}else {
+			responce.setStatus(HodooConstant.NO_CONTENT_RESPONSE);
+			responce.setDomain(obj);
+		}
+	
+		return responce;
 	}
+	
 	
 	@ResponseBody
 	@RequestMapping(value = "/all/getBreed.do", method = RequestMethod.POST)
-	public List<PetBreed> getAllBreed( @RequestParam("location") String location ){
+	public CommonResponce<List<PetBreed>> getAllBreed( @RequestParam("location") String location ){
+		CommonResponce<List<PetBreed>> responce = new CommonResponce<List<PetBreed>>();
 		List<PetBreed> list = breedMapper.getAllList( location );
-		return list;
+		if(list != null) {
+			responce.setDomain(list);
+			responce.setStatus(HodooConstant.OK_RESPONSE);
+		}else {
+			responce.setDomain(list);
+			responce.setStatus(HodooConstant.NO_CONTENT_RESPONSE);
+		}
+		return responce;
 	}
+	
 	
 	@ResponseBody
 	@RequestMapping(value = "/get/breed/of/type.do", method = RequestMethod.POST)
