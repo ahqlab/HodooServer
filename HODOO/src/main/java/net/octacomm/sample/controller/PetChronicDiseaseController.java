@@ -45,7 +45,6 @@ public class PetChronicDiseaseController {
 		return chronicDiseaseMapper.list(groupId);
 	}
 	
-	
 	@ResponseBody
 	@RequestMapping(value = "/info/check.do", method = RequestMethod.POST)
 	public PetChronicDisease basicInfoCheck(@RequestParam("groupId") String groupId, @RequestParam("id") int petId) {

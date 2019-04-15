@@ -598,10 +598,8 @@ public class UserController {
 		try {
 			codeD = new AES256Util().decrypt(code);
 		} catch (UnsupportedEncodingException | GeneralSecurityException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		String split[] = codeD.split("day");
@@ -628,6 +626,7 @@ public class UserController {
 		ModelAndView mav = new ModelAndView("welcome_signup");
 		return mav;
 	}
+	
 	@ResponseBody
 	@RequestMapping(value = "/update/fcmToken.do", method = RequestMethod.POST)
 	public int saveFCMToken( @RequestBody User user ) {
@@ -636,6 +635,9 @@ public class UserController {
 		}
 		return userService.saveFCMToken(user);
 	}
+	
+	
+	//승인
 	@ResponseBody
 	@RequestMapping(value = "/invitation/approval.do", method = RequestMethod.POST)
 	public int invitationApproval( 
@@ -643,6 +645,7 @@ public class UserController {
 			@RequestParam("fromUserIdx") int fromUserIdx) {
 		return userGroupMappingMapper.invitationApproval(toUserIdx, fromUserIdx);
 	}
+	
 	@ResponseBody
 	@RequestMapping(value = "/invitation/refusal.do", method = RequestMethod.POST)
 	public int invitationRefusal( 
@@ -650,6 +653,7 @@ public class UserController {
 			@RequestParam("fromUserIdx") int fromUserIdx) {
 		return firebaseMapper.invitationRefusal(toUserIdx, fromUserIdx);
 	}
+	
 	@ResponseBody
 	@RequestMapping(value = "/invitation/getInvitationUser.do", method = RequestMethod.POST)
 	public List<InvitationRequest> getInvitationList( 

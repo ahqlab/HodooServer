@@ -18,7 +18,6 @@ public class AppVersionController {
 	@Autowired
 	private AppVersionMapper AppVersionMapper;
 	
-	
 	@ResponseBody
 	@RequestMapping(value = "/import.do", method = RequestMethod.POST)
 	public CommonResponce<AppVersion> doGet() {
