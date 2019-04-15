@@ -636,12 +636,7 @@ public class UserController {
 		return userService.saveFCMToken(user);
 	}
 	
-<<<<<<< HEAD
-	
-	//승인
-=======
 	//그룹 초대를 승인하는 api
->>>>>>> refs/remotes/hjlee/master
 	@ResponseBody
 	@RequestMapping(value = "/invitation/approval.do", method = RequestMethod.POST)
 	public int invitationApproval( 
@@ -650,10 +645,7 @@ public class UserController {
 		return userGroupMappingMapper.invitationApproval(toUserIdx, fromUserIdx);
 	}
 	
-<<<<<<< HEAD
-=======
 	//그룹 초대를 거절하는 api
->>>>>>> refs/remotes/hjlee/master
 	@ResponseBody
 	@RequestMapping(value = "/invitation/refusal.do", method = RequestMethod.POST)
 	public int invitationRefusal( 
@@ -662,10 +654,7 @@ public class UserController {
 		return firebaseMapper.invitationRefusal(toUserIdx, fromUserIdx);
 	}
 	
-<<<<<<< HEAD
-=======
 	//그룹초대된 리스트를 보여주는 api
->>>>>>> refs/remotes/hjlee/master
 	@ResponseBody
 	@RequestMapping(value = "/invitation/getInvitationUser.do", method = RequestMethod.POST)
 	public List<InvitationRequest> getInvitationList( 

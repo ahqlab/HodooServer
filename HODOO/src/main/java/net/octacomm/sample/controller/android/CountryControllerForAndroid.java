@@ -49,9 +49,9 @@ public class CountryControllerForAndroid {
 		List<Country> list = service.getAllCountry( columnName );
 		responce.setDomain(list);
 		if(service.getAllCountry( columnName ) != null) {
-			responce.setStatus(200);
+			responce.setStatus(HodooConstant.OK_RESPONSE);
 		}else {
-			responce.setStatus(203);
+			responce.setStatus(HodooConstant.NO_CONTENT_RESPONSE);
 		}
 		return responce;
 	}

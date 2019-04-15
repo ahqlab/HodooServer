@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import net.octacomm.sample.constant.HodooConstant;
 import net.octacomm.sample.dao.mapper.GroupPetMappingMapper;
 import net.octacomm.sample.dao.mapper.PetBasicInfoMapper;
 import net.octacomm.sample.dao.mapper.PetBreedMapper;
@@ -41,15 +42,15 @@ public class PetBasicInfoControllerForAndroid {
 
 	@Autowired
 	private PetMapper petMapper;
-	
+
 	@Autowired
 	PetBreedMapper breedMapper;
 
 	@ResponseBody
 	@RequestMapping(value = "/basic/regist.do", method = RequestMethod.POST)
-	public ResultMessageGroup regist(HttpServletRequest request, PetBasicInfo basicInfo) {
+	public CommonResponce<Pet> regist(HttpServletRequest request, PetBasicInfo basicInfo) {
 		System.err.println("basicInfo : " + basicInfo);
-		ResultMessageGroup group = new ResultMessageGroup();
+		CommonResponce<Pet> group = new CommonResponce<Pet>();
 		String localPath = "/resources/upload/profile/";
 		String path = request.getSession().getServletContext().getRealPath(localPath);
 		System.err.println("path : " + path);
@@ -66,8 +67,8 @@ public class PetBasicInfoControllerForAndroid {
 				}
 				organizedfilePath = path + "/" + randomeUUID + "_" + basicInfo.getProfile().getOriginalFilename();
 				System.err.println("organizedfilePath : " + organizedfilePath);
-				basicInfo.setProfileFilePath(
-						"/resources/upload/profile/" + randomeUUID + "_" + basicInfo.getProfile().getOriginalFilename());
+				basicInfo.setProfileFilePath("/resources/upload/profile/" + randomeUUID + "_"
+						+ basicInfo.getProfile().getOriginalFilename());
 				basicInfo.setProfileFileName(basicInfo.getProfile().getOriginalFilename());
 				outputStream = new FileOutputStream(organizedfilePath);
 				int readByte = 0;
@@ -99,37 +100,36 @@ public class PetBasicInfoControllerForAndroid {
 		if (result != 0) {
 			group.setResultMessage(ResultMessage.SUCCESS);
 			group.setDomain(pet);
-			
+
 			int breedCount = breedMapper.getBreedMapperCount(basicInfo.getId());
-			if ( breedCount > 0 ) {
+			if (breedCount > 0) {
 				breedMapper.updatePetBreedMapper(basicInfo.getId(), Integer.parseInt(basicInfo.getPetBreed()));
 			} else {
 				breedMapper.insertPetBreedMapper(basicInfo.getId(), Integer.parseInt(basicInfo.getPetBreed()));
 			}
-			
+
 		} else {
 			group.setResultMessage(ResultMessage.FAILED);
 			group.setDomain(null);
 		}
-		System.err.println(group.toString());
 		return group;
 	}
 
 	@ResponseBody
 	@RequestMapping(value = "/basic/update.do", method = RequestMethod.POST)
-	public ResultMessageGroup update(HttpServletRequest request, PetBasicInfo basicInfo) {
-		ResultMessageGroup group = new ResultMessageGroup();
+	public CommonResponce<Integer> update(HttpServletRequest request, PetBasicInfo basicInfo) {
+		CommonResponce<Integer> group = new CommonResponce<Integer>();
 		String localPath = "/resources/upload/profile/";
 		String path = request.getSession().getServletContext().getRealPath(localPath);
 		System.err.println("path : " + path);
-		
+
 		int breedCount = breedMapper.getBreedMapperCount(basicInfo.getId());
-		if ( breedCount > 0 ) {
+		if (breedCount > 0) {
 			breedMapper.updatePetBreedMapper(basicInfo.getId(), Integer.parseInt(basicInfo.getPetBreed()));
 		} else {
 			breedMapper.insertPetBreedMapper(basicInfo.getId(), Integer.parseInt(basicInfo.getPetBreed()));
 		}
-	
+
 		UUID randomeUUID = UUID.randomUUID();
 		InputStream inputStream = null;
 		OutputStream outputStream = null;
@@ -143,8 +143,8 @@ public class PetBasicInfoControllerForAndroid {
 				}
 				organizedfilePath = path + "/" + randomeUUID + "_" + basicInfo.getProfile().getOriginalFilename();
 				System.err.println("organizedfilePath : " + organizedfilePath);
-				basicInfo.setProfileFilePath(
-						"/resources/upload/profile/" + randomeUUID + "_" + basicInfo.getProfile().getOriginalFilename());
+				basicInfo.setProfileFilePath("/resources/upload/profile/" + randomeUUID + "_"
+						+ basicInfo.getProfile().getOriginalFilename());
 				basicInfo.setProfileFileName(basicInfo.getProfile().getOriginalFilename());
 				outputStream = new FileOutputStream(organizedfilePath);
 				int readByte = 0;
@@ -177,22 +177,42 @@ public class PetBasicInfoControllerForAndroid {
 
 	@ResponseBody
 	@RequestMapping(value = "/basic/get.do", method = RequestMethod.POST)
-	public PetBasicInfo getBasicInformation(HttpServletRequest request, @RequestParam("location") String location, @RequestParam("groupCode") String groupCode, @RequestParam("petIdx") int petIdx) {
-		PetBasicInfo info = petBasicInfoMapper.getBasicInformation(location, groupCode, petIdx);
-		return petBasicInfoMapper.getBasicInformation(location, groupCode, petIdx);
+	public CommonResponce<PetBasicInfo> getBasicInformation(HttpServletRequest request,
+			@RequestParam("location") String location, @RequestParam("groupCode") String groupCode,
+			@RequestParam("petIdx") int petIdx) {
+		// PetBasicInfo info = petBasicInfoMapper.getBasicInformation(location,
+		// groupCode, petIdx);
+		CommonResponce<PetBasicInfo> responce = new CommonResponce<PetBasicInfo>();
+		PetBasicInfo obj = petBasicInfoMapper.getBasicInformation(location, groupCode, petIdx);
+		if (obj != null) {
+			responce.setStatus(HodooConstant.OK_RESPONSE);
+			responce.setDomain(obj);
+		} else {
+			responce.setStatus(HodooConstant.NO_CONTENT_RESPONSE);
+			responce.setDomain(obj);
+		}
+		return responce;
 	}
 
 	@ResponseBody
 	@RequestMapping(value = "/about/my/pet/list.do")
-	public List<PetAllInfos> aboutMyPetList(@RequestParam("groupCode") String groupCode) {
+	public CommonResponce<List<PetAllInfos>> aboutMyPetList(@RequestParam("groupCode") String groupCode) {
+		CommonResponce<List<PetAllInfos>> responce = new CommonResponce<List<PetAllInfos>>();
 		List<PetAllInfos> list = petMapper.aboutMyPetList(groupCode);
 		for (PetAllInfos petAllInfos : list) {
 			petAllInfos.getPetBasicInfo().setCurrentMonth(petAllInfos.getPetBasicInfo().currentMonth());
 			petAllInfos.getPetBasicInfo().setCurrentYear(petAllInfos.getPetBasicInfo().currentYear());
 		}
-		return list;
+		if(list.size() > 0) {
+			responce.setStatus(HodooConstant.OK_RESPONSE);
+			responce.setDomain(list);
+		}else {
+			responce.setStatus(HodooConstant.NO_CONTENT_RESPONSE);
+			responce.setDomain(list);
+		}
+		return responce;
 	}
-	
+
 	@ResponseBody
 	@RequestMapping(value = "/test/image/upload.do", method = RequestMethod.POST)
 	public CommonResponce<User> IosMultiPartTest(@RequestParam("profile") MultipartFile profile) {
@@ -201,7 +221,5 @@ public class PetBasicInfoControllerForAndroid {
 		responce.setResultMessage(ResultMessage.SUCCESS);
 		return responce;
 	}
-	
-	
-	
+
 }

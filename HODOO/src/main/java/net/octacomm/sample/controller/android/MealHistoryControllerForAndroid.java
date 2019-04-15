@@ -54,7 +54,7 @@ public class MealHistoryControllerForAndroid {
 			response.setDomain(result);
 		}else {
 			response.setStatus(HodooConstant.NO_CONTENT_RESPONSE);
-			response.setDomain(null);
+			response.setDomain(result);
 			FCMThead thead = new FCMThead(mealHistory);
 			thead.start();
 		}
@@ -71,7 +71,7 @@ public class MealHistoryControllerForAndroid {
 			response.setDomain(result);
 		}else {
 			response.setStatus(HodooConstant.NO_CONTENT_RESPONSE);
-			response.setDomain(null);
+			response.setDomain(result);
 		}
 		return response;
 	}
@@ -95,7 +95,7 @@ public class MealHistoryControllerForAndroid {
 			response.setDomain(contents);
 		}else {
 			response.setStatus(HodooConstant.NO_CONTENT_RESPONSE);
-			response.setDomain(null);
+			response.setDomain(contents);
 		}
 		
 		return response;
@@ -111,7 +111,7 @@ public class MealHistoryControllerForAndroid {
 			response.setDomain(obj);
 		}else {
 			response.setStatus(HodooConstant.NO_CONTENT_RESPONSE);
-			response.setDomain(null);
+			response.setDomain(obj);
 		}
 		return response;
 	}
