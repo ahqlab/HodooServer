@@ -267,6 +267,7 @@ public class GoogleFCMTest {
 	public int NOT_TO_USER = -1;
 	public int ERROR = 0;
 	public int SUCESS = 1;
+	
 	public int EXISTENCE_USER = 2;
 	public int OVERLAB_INVITATION = 3;
 	
@@ -339,6 +340,10 @@ public class GoogleFCMTest {
 
 		return response.toString();
 	}
+	
+	/* 유저 초대 관련 api
+	 * 데이터베이스처리와 노티요청을 한다. 
+     */
 	@ResponseBody
 	@RequestMapping(value = "/mobile/send/invitation.do", method = RequestMethod.POST)
 	public int invitation (
@@ -390,18 +395,11 @@ public class GoogleFCMTest {
 		return result;
 		
 	}
-	@ResponseBody
-	@RequestMapping("/register.do")
-	public int register ( 
-			@RequestParam("toUserIdx") int toUserIdx,
-			@RequestParam("fromUserIdx") int fromUserIdx
-			) {
-		
-		InvitationRequest request = new InvitationRequest();
-		request.setToUserIdx(toUserIdx);
-		request.setFromUserIdx(fromUserIdx);
-		return firebaseMapper.insert(request);
-	}
+	
+	/*
+	 * 일반 노티를 보내는 api
+	 * 초대 관련 노티와 다르게 타이틀과 컨텐츠로 노티를 생성한다.
+	 */
 	@ResponseBody
 	@RequestMapping(value = "/mobile/send/normal.do", method = RequestMethod.POST)
 	public int normalPush (
@@ -431,6 +429,8 @@ public class GoogleFCMTest {
 		return result;
 	}
 	
+	
+	//실제 노티를 요청하는 메서드
 	private int requestFCM ( Message message ) {
 		int result = 0;
 		try {
@@ -476,6 +476,7 @@ public class GoogleFCMTest {
 		return result;
 	}
 	
+	/* 초대관련 노티를 보내는 스레드 */
 	public class InvitationFCM extends Thread {
 		private Message message;
 		InvitationRequest request;

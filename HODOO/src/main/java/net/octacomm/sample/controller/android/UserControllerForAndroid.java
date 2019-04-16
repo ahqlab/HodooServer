@@ -31,6 +31,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.google.firebase.messaging.FirebaseMessagingException;
 
 import net.octacomm.sample.constant.HodooConstant;
+import net.octacomm.sample.controller.GoogleFCMTest.InvitationFCM;
 import net.octacomm.sample.dao.mapper.DeviceMapper;
 import net.octacomm.sample.dao.mapper.FirebaseMapper;
 import net.octacomm.sample.dao.mapper.GroupPetMappingMapper;
@@ -464,7 +465,7 @@ public class UserControllerForAndroid {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/invitation/setInvitationType.do", method = RequestMethod.POST)
-	public int setInvitationType( 
+	public CommonResponce<Integer> setInvitationType( 
 			@RequestParam("type") int type,
 			@RequestParam("toUserIdx") int toUserIdx,
 			@RequestParam("fromUserIdx") int fromUserIdx) {
@@ -472,27 +473,39 @@ public class UserControllerForAndroid {
 		Date date = new Date();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		
+		CommonResponce<Integer> response = new CommonResponce<>();		
+		
 		int result = firebaseMapper.setInvitationType(type, toUserIdx, fromUserIdx);
+		
 		if ( result > 0 && type == HodooConstant.ACCEPT_TYPE ) {
-			firebaseMapper.updateInvitationDate(toUserIdx, fromUserIdx, sdf.format(date));
-			User toUser = userMapper.get(toUserIdx);
-			
-			User user = userMapper.get(fromUserIdx);
-			Message message = new Message();
-			
-			Map<String, Object> data = new HashMap<>();
-			data.put("notiType", HodooConstant.FIREBASE_INVITATION_ACCEPT);
-			data.put("title", "Invitation Approval Notice");
-			data.put("content", toUser.getNickname() + ". You have approved the invitation.");
-			/* 커스텀 Notification을 위한 데이터 처리(e) */
-			
-			message.setTo(user.getPushToken());
-			message.setData(data);
-			new FCMThead(message).start();
+			if ( result > 0 ) {
+				response.setDomain(result);
+				response.setStatus(HodooConstant.OK_RESPONSE);
+				
+				firebaseMapper.updateInvitationDate(toUserIdx, fromUserIdx, sdf.format(date));
+				User toUser = userMapper.get(toUserIdx);
+				
+				User user = userMapper.get(fromUserIdx);
+				Message message = new Message();
+				
+				Map<String, Object> data = new HashMap<>();
+				data.put("notiType", HodooConstant.FIREBASE_INVITATION_ACCEPT);
+				data.put("title", "Invitation Approval Notice");
+				data.put("content", toUser.getNickname() + ". You have approved the invitation.");
+				/* 커스텀 Notification을 위한 데이터 처리(e) */
+				
+				message.setTo(user.getPushToken());
+				message.setData(data);
+				new FCMThead(message).start();
+				
+			} else {
+				response.setDomain(result);
+				response.setStatus(HodooConstant.NO_CONTENT_RESPONSE);
+			}
 			
 		}
 		
-		return result;
+		return response;
 	}
 	
 	//회원 탈퇴시 사용하는 api
@@ -565,6 +578,61 @@ public class UserControllerForAndroid {
 		return HodooConstant.SUCCESS_CODE;
 	}
 	
+	@ResponseBody
+	@RequestMapping(value = "/invitation/invitation.do", method = RequestMethod.POST)
+	public CommonResponce<Integer> invitation (
+			@RequestParam("toUserEmail") String toUserEmail,
+			@RequestParam("fromUserEmail") String fromUserEmail
+			) {
+		
+		CommonResponce<Integer> response = new CommonResponce<>();
+		
+		int result = 0;
+		User toUser = userMapper.getByUserEmail(toUserEmail);
+		User fromUser = userMapper.getByUserEmail(fromUserEmail);
+		
+		toUser.setGroupCode( userMapper.getGroupCode(toUser.getUserIdx()) );
+		
+		Message message = new Message();
+		message.setTo(toUser.getPushToken());
+
+		
+		/* 커스텀 Notification을 위한 데이터 처리(s) */
+		Map<String, Object> data = new HashMap<>();
+		data.put("notiType", HodooConstant.FIREBASE_INVITATION_TYPE);
+		data.put("fromUserEmail", fromUser.getEmail());
+		data.put("fromUserIdx", fromUser.getUserIdx());
+		data.put("toUserIdx", toUser.getUserIdx());
+		data.put("host", "invitation");
+		data.put("title", "그룹 참여 요청");
+		//data.put("title", "Group Participation Request");
+		data.put("content", fromUser.getEmail() + " request.");
+		/* 커스텀 Notification을 위한 데이터 처리(e) */
+		
+		message.setTo(toUser.getPushToken());
+		message.setData(data);
+		
+		InvitationRequest request = new InvitationRequest();
+		request.setToUserIdx(toUser.getUserIdx());
+		request.setFromUserIdx(fromUser.getUserIdx());
+		request.setCreated(new Date().getTime());
+		int count = firebaseMapper.getAcceptCount(request);
+		if ( count > 0 ) {
+			InvitationRequest invitationUser = firebaseMapper.getInvitationUser(request);
+			if ( invitationUser != null && invitationUser.getState() == 1 ) {
+				response.setDomain(HodooConstant.EXISTENCE_USER);
+			} else {
+				response.setDomain(HodooConstant.OVERLAB_INVITATION);
+			}
+		}
+		response.setDomain(HodooConstant.SUCCESS_CODE);
+		response.setStatus(HodooConstant.OK_RESPONSE);
+		new InvitationFCM(request, message).start(); 
+		
+		return response;
+		
+	}
+	
 	public class FCMThead extends Thread {
 		private Message message;
 		FCMThead ( Message message ){
@@ -574,6 +642,35 @@ public class UserControllerForAndroid {
 		public void run() {
 			FcmUtil.requestFCM(message);
 		}
+	}
+	/* 초대관련 노티를 보내는 스레드 */
+	public class InvitationFCM extends Thread {
+		private Message message;
+		InvitationRequest request;
+		public InvitationFCM(InvitationRequest request, Message message) {
+			// TODO Auto-generated constructor stub
+			this.message = message;
+			this.request = request;
+		}
+		@Override
+		public void run() {
+			// TODO Auto-generated method stub
+			super.run();
+			
+			int result = FcmUtil.requestFCM(message);
+			if ( result == HodooConstant.SUCCESS_CODE ) {
+				if ( firebaseMapper.getCount(request) > 0 ) {
+					request = firebaseMapper.getInvitationUserFrom(request);
+					Date date = new Date();
+					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+					request.setCreated( sdf.format(date) );
+					firebaseMapper.updateUser(request);
+				} else {
+					firebaseMapper.insert(request);
+				}
+			}
+		}
+		
 	}
 
 }

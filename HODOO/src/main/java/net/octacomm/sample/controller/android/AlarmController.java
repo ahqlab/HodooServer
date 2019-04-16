@@ -34,4 +34,13 @@ public class AlarmController {
 		}
 		return responce;
 	}
+	@ResponseBody
+	@RequestMapping(value="/get/alarm.do", method = RequestMethod.POST)
+	public CommonResponce<Integer> getAlarm( @RequestParam("userIdx") int userIdx ) {
+		CommonResponce<Integer> response = new CommonResponce<>();
+		int result = alarmMapper.getAlarm(userIdx);
+		response.setDomain(result);
+		response.setStatus(HodooConstant.OK_RESPONSE);
+		return response;
+	}
 }
