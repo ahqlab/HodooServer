@@ -19,6 +19,9 @@ public interface AlarmMapper extends CRUDMapper<AlarmItem, DefaultParam, Integer
 
 	@Select("select *, ${language}_name as name FROM alarm_item")
 	List<AlarmItem> getAlarmList(@Param("language") String language);
+	
+	@Select("SELECT number FROM alarm_mapper WHERE userIdx = #{userIdx }")
+	int getAlarm(@Param("userIdx") int userIdx);
 
 
 }
