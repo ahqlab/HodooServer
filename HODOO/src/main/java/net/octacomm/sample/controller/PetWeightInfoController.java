@@ -82,5 +82,5 @@ public class PetWeightInfoController {
 		petMapper.resetWeight(petIdx);
 		return petWeightInfoMapper.delete(id);
 	}
-
+	
 }
