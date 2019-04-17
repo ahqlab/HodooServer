@@ -43,4 +43,21 @@ public class AlarmController {
 		response.setStatus(HodooConstant.OK_RESPONSE);
 		return response;
 	}
+	@ResponseBody
+	@RequestMapping(value="/save/alarm.do", method = RequestMethod.POST)
+	public CommonResponce<Integer> saveAlarm( @RequestParam("userIdx") int userIdx, @RequestParam("number") int number ) {
+		
+		int editState = alarmMapper.checkAlarmMapper(userIdx);
+		CommonResponce<Integer> response = new CommonResponce<>();
+		if ( editState > 0 )
+			response.setDomain( alarmMapper.updateAlarmMapper(userIdx, number) );
+		else
+			response.setDomain( alarmMapper.saveAlarmMapper(userIdx, number) );
+		
+		if ( response.domain > 0 )
+			response.setStatus(HodooConstant.OK_RESPONSE);
+		else 
+			response.setStatus(HodooConstant.NO_CONTENT_RESPONSE);
+		return response;
+	}
 }
