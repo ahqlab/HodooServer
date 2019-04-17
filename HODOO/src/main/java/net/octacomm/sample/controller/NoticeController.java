@@ -12,9 +12,11 @@ import net.octacomm.sample.domain.param.NoticeParam;
 
 @RequestMapping("/notice")
 @Controller
-public class NoticeController extends AbstractCRUDController<NoticeMapper, Notice, NoticeParam, Integer>{
+public class NoticeController
+/*extends AbstractCRUDController<NoticeMapper, Notice, NoticeParam, Integer>*/
+{
 	
-	@Autowired
+	/*@Autowired
 	@Override
 	public void setCRUDMapper(NoticeMapper mapper) {
 		this.mapper = mapper;
@@ -34,6 +36,6 @@ public class NoticeController extends AbstractCRUDController<NoticeMapper, Notic
 	@RequestMapping("ex.do")
 	public void test() {
 		System.err.println("asdasdlkajsdlkajsd");
-	}
+	}*/
 
 }
