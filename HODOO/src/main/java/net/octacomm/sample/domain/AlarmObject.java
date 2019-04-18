@@ -5,8 +5,8 @@ import java.io.Serializable;
 import lombok.Data;
 
 @Data
-public class AlarmMapper implements Serializable {
-	private int id;
+public class AlarmObject implements Domain {
+	private int idx;
 	private int userIdx;
 	private int number;
 }
