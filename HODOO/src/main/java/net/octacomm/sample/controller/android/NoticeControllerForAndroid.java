@@ -30,9 +30,9 @@ public class NoticeControllerForAndroid {
 	
 	@ResponseBody
 	@RequestMapping(value = "/list.do", method = RequestMethod.POST)
-	public CommonResponce<List<Notice>> searchList(@RequestParam("language") String language) {
+	public CommonResponce<List<Notice>> searchList(@RequestParam("language") String language, @RequestParam("startRow") int startRow, @RequestParam("pageSize") int pageSize) {
 		CommonResponce<List<Notice>> responce  = new CommonResponce<List<Notice>>(); 
-		List<Notice> list =  noticeMapper.geNoticetList(language);
+		List<Notice> list =  noticeMapper.geNoticetList(language, startRow, pageSize);
 		responce.setDomain(list);
 		if(list.size() > 0) {
 			responce.setStatus(HodooConstant.OK_RESPONSE);
