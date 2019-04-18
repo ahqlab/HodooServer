@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import net.octacomm.sample.constant.HodooConstant;
+import net.octacomm.sample.dao.mapper.AlarmMapper;
+import net.octacomm.sample.dao.mapper.AlarmObjectMapper;
 import net.octacomm.sample.dao.mapper.DeviceMapper;
 import net.octacomm.sample.domain.Device;
 import net.octacomm.sample.domain.Message;
@@ -30,13 +32,18 @@ public class RealTimeWeightController {
 
 	@Autowired
 	private net.octacomm.sample.dao.mapper.RealTimeWeightMapper RealTimeWeightMapper;
+	
+	@Autowired
+	AlarmObjectMapper alarmObjectMapper;
 
 	@ResponseBody
 	@RequestMapping(value = "/realtime/get.do")
 	public String regist(RealTimeWeight realTimeWeight) {
 		RealTimeWeightMapper.insert(realTimeWeight);
+		
 		RealTimeThred thred = new RealTimeThred(realTimeWeight);
 		thred.start();
+		
 		return "HELLO";
 	}
 	
@@ -130,6 +137,11 @@ public class RealTimeWeightController {
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 			for (int i = 0; i < userList.size(); i++) {
 				if ( userList.get(i).getPushToken() != null ) {
+					
+					int number = alarmObjectMapper.getAlarm(userList.get(i).getUserIdx());
+					if ( number != 1 && (number & (0x01 << HodooConstant.WEIGNT_ALARM)) == 0 )
+						continue;
+					
 					Message message = new Message();
 					message.setTo( userList.get(i).getPushToken() );
 					Map<String, Object> data = new HashMap<>();

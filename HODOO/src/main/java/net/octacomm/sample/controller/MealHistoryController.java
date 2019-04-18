@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import net.octacomm.sample.constant.HodooConstant;
+import net.octacomm.sample.dao.mapper.AlarmMapper;
+import net.octacomm.sample.dao.mapper.AlarmObjectMapper;
 import net.octacomm.sample.dao.mapper.FeedMapper;
 import net.octacomm.sample.dao.mapper.MealHistoryMapper;
 import net.octacomm.sample.dao.mapper.PetMapper;
@@ -42,12 +44,20 @@ public class MealHistoryController {
 	@Autowired UserMapper userMapper;
 	
 	@Autowired FeedMapper feedMapper;
+	
+	@Autowired
+	AlarmMapper alarmMapper;
+	
+	@Autowired
+	AlarmObjectMapper alarmObjectMapper;
 
 	@ResponseBody
 	@RequestMapping(value = "/insert.do", method = RequestMethod.POST)
 	public int insert(@RequestBody MealHistory mealHistory) {
+		
 		FCMThead thead = new FCMThead(mealHistory);
 		thead.start();
+	
 		return mealHistoryMapper.insert(mealHistory);
 	}
 	
@@ -110,6 +120,14 @@ public class MealHistoryController {
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 			for (int i = 0; i < groupUsers.size(); i++) {
 				if ( groupUsers.get(i).getPushToken() != null ) {
+					
+					int number = alarmObjectMapper.getAlarm(groupUsers.get(i).getUserIdx());
+					if ( number != 1 && (number & (0x01 << HodooConstant.FEED_ALARM)) == 0 )
+						continue;
+					
+					if ( user == groupUsers.get(i) )
+						continue;
+					
 					Message message = new Message();
 					message.setTo( groupUsers.get(i).getPushToken() );
 					

@@ -236,6 +236,7 @@ import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -254,8 +255,11 @@ import net.octacomm.sample.domain.Notification;
 import net.octacomm.sample.domain.User;
 import net.octacomm.sample.service.UserService;
 import net.octacomm.sample.constant.HodooConstant;
+import net.octacomm.sample.dao.mapper.AlarmMapper;
+import net.octacomm.sample.dao.mapper.AlarmObjectMapper;
 import net.octacomm.sample.dao.mapper.FirebaseMapper;
 import net.octacomm.sample.dao.mapper.UserMapper;
+import net.octacomm.sample.domain.AlarmItem;
 import net.octacomm.sample.domain.InvitationRequest;
 import net.octacomm.sample.domain.Message;
 
@@ -270,12 +274,16 @@ public class GoogleFCMTest {
 	
 	public int EXISTENCE_USER = 2;
 	public int OVERLAB_INVITATION = 3;
+	public int ALARM_DISABLE = 4;
 	
 	@Autowired
 	UserMapper mapper;
 	
 	@Autowired
 	FirebaseMapper firebaseMapper;
+	
+	@Autowired
+	AlarmObjectMapper alarmMapper;
 
 	@ResponseBody
 	@RequestMapping(value = "/mobile/send.do")
@@ -390,6 +398,11 @@ public class GoogleFCMTest {
 		}
 		
 		result = 1;
+		
+		int number = alarmMapper.getAlarm(toUser.getUserIdx());
+		if ( number != 1 && (number & (0x01 << HodooConstant.GROUP_ALARM)) == 0 )
+			return ALARM_DISABLE;
+		
 		new InvitationFCM(request, message).start(); 
 		
 		return result;

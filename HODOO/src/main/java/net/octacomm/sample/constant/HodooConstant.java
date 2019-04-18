@@ -59,4 +59,12 @@ public class HodooConstant {
 	public static final int BAD_REQUEST = 400;
 	public static final int SERVER_ERROR = 500;
 	public static final int SQL_ERROR_RESPONSE = 500;
+	
+	
+	/* ALARM */
+	public static final int ALL_ALARM = 0;
+	public static final int FEED_ALARM = 1;
+	public static final int WEIGNT_ALARM = 2;
+	public static final int GROUP_ALARM = 3;
+	
 }

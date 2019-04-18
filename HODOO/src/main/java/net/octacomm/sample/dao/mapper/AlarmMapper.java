@@ -3,6 +3,7 @@ package net.octacomm.sample.dao.mapper;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Delete;
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
@@ -20,8 +21,5 @@ public interface AlarmMapper extends CRUDMapper<AlarmItem, DefaultParam, Integer
 	@Select("select *, ${language}_name as name FROM alarm_item")
 	List<AlarmItem> getAlarmList(@Param("language") String language);
 	
-	@Select("SELECT number FROM alarm_mapper WHERE userIdx = #{userIdx }")
-	int getAlarm(@Param("userIdx") int userIdx);
-
-
+	
 }
