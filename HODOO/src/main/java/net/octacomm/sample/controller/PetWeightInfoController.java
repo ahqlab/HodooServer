@@ -27,7 +27,6 @@ public class PetWeightInfoController {
 	
 	@Autowired
 	private PetWeightInfoMapper petWeightInfoMapper;
-
 	
 	@Autowired
 	private PetMapper petMapper;
@@ -65,7 +64,6 @@ public class PetWeightInfoController {
 		for ( int i = 0; i < bfiModel.size(); i++ ) {
 			bfiModel.get(i).setAnswers(bfiMapper.getBfiAnswer(bfiModel.get(i).getId()));
 		}
-		
 		return bfiModel;
 	}
 	
@@ -82,5 +80,4 @@ public class PetWeightInfoController {
 		petMapper.resetWeight(petIdx);
 		return petWeightInfoMapper.delete(id);
 	}
-	
 }

@@ -57,8 +57,7 @@ public interface NoticeMapper extends CRUDMapper<Notice, NoticeParam, Integer> {
 	@Override
 	List<Notice> getList();
 	
-	
-	@Select("SELECT * FROM " + TABLE_NAME + " WHERE noticeIdx =  #{noticeIdx}")
-	List<Notice> geNoticetList(@Param("language") String language);
+	@Select("SELECT noticeIdx , ${language}_title as title , ${language}_content as content , createDate  FROM " + TABLE_NAME + " LIMIT #{pageSize}  OFFSET #{startRow}")
+	List<Notice> geNoticetList(@Param("language") String language, @Param("startRow") int startRow, @Param("pageSize") int pageSize);
 
 }

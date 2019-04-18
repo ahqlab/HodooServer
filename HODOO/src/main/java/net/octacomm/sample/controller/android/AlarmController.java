@@ -39,6 +39,7 @@ public class AlarmController {
 		}
 		return responce;
 	}
+	
 	@ResponseBody
 	@RequestMapping(value="/get/alarm.do", method = RequestMethod.POST)
 	public CommonResponce<Integer> getAlarm( @RequestParam("userIdx") int userIdx ) {

@@ -1,9 +1,5 @@
 package net.octacomm.sample.controller;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -89,6 +85,7 @@ public class ColorDetectorController {
 		int sg = getNear(colors, strSpriterOfV(value));
 		return getIndexOf(sg, colors);
 	}
+	
 	public static int getIndexOf(int toSearch, int[] tab) {
 		int i = 0;
 		while (!(tab[i] == toSearch)) {
