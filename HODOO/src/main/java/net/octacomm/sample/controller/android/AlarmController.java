@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -51,7 +52,7 @@ public class AlarmController {
 	}
 	@ResponseBody
 	@RequestMapping(value="/save/alarm.do", method = RequestMethod.POST)
-	public CommonResponce<Integer> saveAlarm( AlarmObject item ) {
+	public CommonResponce<Integer> saveAlarm( @RequestBody AlarmObject item ) {
 		
 		int editState = alarmObjectMapper.checkAlarmMapper(item.getUserIdx());
 		CommonResponce<Integer> response = new CommonResponce<>();
