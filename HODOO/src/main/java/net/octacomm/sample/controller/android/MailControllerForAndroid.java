@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import net.octacomm.sample.constant.HodooConstant;
 import net.octacomm.sample.dao.mapper.UserMapper;
+import net.octacomm.sample.domain.CommonResponce;
 import net.octacomm.sample.domain.User;
 import net.octacomm.sample.utils.AES256Util;
 import net.octacomm.sample.utils.RSA;
@@ -63,12 +64,13 @@ public class MailControllerForAndroid {
 			System.out.println(e);
 		}
 	}
+	
 	@ResponseBody
 	@RequestMapping(value = "/user/certified.do", method = RequestMethod.POST)
-	public int userCertifiedMailSend(
+	public CommonResponce<Integer> userCertifiedMailSend(
 			HttpServletRequest request,
 			@RequestParam("toMailAddr")  String toMailAddr) {
-		
+		CommonResponce<Integer> response = new CommonResponce<Integer>();	
 
 		String tomail = toMailAddr; // 받는 사람 이메일
 		String title = "안녕하세요"; // 제목
@@ -126,10 +128,14 @@ public class MailControllerForAndroid {
 			res = new FileSystemResource(img);
 			messageHelper.addInline("illust", res);
 			mailSender.send(message);
-			return 1;
+			response.setDomain(1);
+			response.setStatus(HodooConstant.OK_RESPONSE);
+			return response;
 		} catch (Exception e) {
 			System.out.println(e);
 		}
-		return 0;
+		response.setDomain(0);
+		response.setStatus(HodooConstant.SERVER_ERROR);
+		return response;
 	}
 }

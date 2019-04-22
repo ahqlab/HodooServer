@@ -43,7 +43,7 @@
 
 	<select id="getStatisticsOfDay" parameterType="hashmap"
 		resultType="net.octacomm.sample.domain.Statistics">
-		SELECT
+		<!-- SELECT
 		DATE(real_time_weight.createDate) AS `date`,
 		CASE DAYOFWEEK(real_time_weight.createDate)
 		WHEN '1' THEN '일'
@@ -68,7 +68,22 @@
 		type = #{type}
 		AND
 		real_time_weight.createDate BETWEEN DATE_ADD(NOW(), INTERVAL -1 WEEK) AND NOW()
-		GROUP BY `date`;
+		GROUP BY `date`; -->
+		
+		SELECT 
+		  DATE(m_table.createDate) AS `date`,
+		  CASE DAYOFWEEK(m_table.createDate) 
+		  WHEN '1' THEN '일' WHEN '2' THEN '월' WHEN '3' THEN '화' WHEN '4' THEN '수' WHEN '5' THEN '목' WHEN '6' THEN '금' WHEN '7' THEN '토' END AS theDay,
+		  (select ROUND(avg(`value`), 1) as 'average' FROM real_time_weight 
+		  left outer JOIN pet ON real_time_weight.tag = pet.tag and pet.petIdx = #{petIdx}
+		  WHERE
+			real_time_weight.mac IN
+			<foreach collection="deviceList" item="device" open="(" close=")"
+				separator=",">
+				#{device.serialNumber}
+			</foreach>
+		  AND type = #{type} and DATE_FORMAT(real_time_weight.createDate, '%Y-%m-%d') = DATE_FORMAT(date, '%Y-%m-%d')) as 'average'
+		FROM real_time_weight as m_table WHERE  m_table.createDate BETWEEN DATE_ADD(NOW(), INTERVAL -1 WEEK) AND NOW() GROUP BY `date`
 	</select>
 
 	<select id="getStatisticsOfWeek" parameterType="hashmap"
