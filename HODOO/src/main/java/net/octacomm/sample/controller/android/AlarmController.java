@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -51,24 +52,15 @@ public class AlarmController {
 	}
 	@ResponseBody
 	@RequestMapping(value="/save/alarm.do", method = RequestMethod.POST)
-	public CommonResponce<Integer> saveAlarm( @RequestParam("userIdx") int userIdx, @RequestParam("number") int number ) {
+	public CommonResponce<Integer> saveAlarm( @RequestBody AlarmObject item ) {
 		
-		int editState = alarmObjectMapper.checkAlarmMapper(userIdx);
-//		int editState = 0;
+		int editState = alarmObjectMapper.checkAlarmMapper(item.getUserIdx());
 		CommonResponce<Integer> response = new CommonResponce<>();
-		AlarmObject obj = new AlarmObject();
-		obj.setUserIdx(userIdx);
-		obj.setNumber(number);
+
 		
-		if ( editState > 0 )
-			response.setDomain( alarmObjectMapper.updateAlarmMapper(userIdx, number) );
-		else
-			response.setDomain( alarmObjectMapper.saveAlarmMapper(obj) );
-		
-		if ( response.domain > 0 )
-			response.setStatus(HodooConstant.OK_RESPONSE);
-		else 
-			response.setStatus(HodooConstant.NO_CONTENT_RESPONSE);
+		response.setDomain( editState > 0 ? alarmObjectMapper.updateAlarmMapper(item.getUserIdx(), item.getNumber()) : alarmObjectMapper.saveAlarmMapper(item) );
+		response.setStatus( response.domain > 0 ? HodooConstant.OK_RESPONSE : HodooConstant.NO_CONTENT_RESPONSE);
+
 		return response;
 	}
 }
