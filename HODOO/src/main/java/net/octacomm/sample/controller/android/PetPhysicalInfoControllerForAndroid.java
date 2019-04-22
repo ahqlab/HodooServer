@@ -10,11 +10,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import net.octacomm.sample.constant.HodooConstant;
+import net.octacomm.sample.dao.mapper.DeviceMapper;
 import net.octacomm.sample.dao.mapper.PetMapper;
 import net.octacomm.sample.dao.mapper.PetPhysicalInfoMapper;
+import net.octacomm.sample.dao.mapper.RealTimeWeightMapper;
 import net.octacomm.sample.domain.CommonResponce;
+import net.octacomm.sample.domain.Device;
 import net.octacomm.sample.domain.PetChronicDisease;
 import net.octacomm.sample.domain.PetPhysicalInfo;
+import net.octacomm.sample.domain.RealTimeWeight;
 
 @RequestMapping("/android/pet/physical")
 @Controller
@@ -25,6 +29,10 @@ public class PetPhysicalInfoControllerForAndroid {
 
 	@Autowired
 	private PetMapper petMapper;
+	
+	@Autowired private RealTimeWeightMapper realTimeWeightMapper; 
+	
+	@Autowired private DeviceMapper deviceMapper;
 
 	/*@ResponseBody
 	@RequestMapping(value = "/regist.do", method = RequestMethod.POST)
@@ -35,8 +43,11 @@ public class PetPhysicalInfoControllerForAndroid {
 	
 	@ResponseBody
 	@RequestMapping(value = "/regist.do" , method = RequestMethod.POST)
-	public CommonResponce<Integer> regist(@RequestParam("petIdx") int petIdx, @RequestBody PetPhysicalInfo petPhysicalInfo) {
+	public CommonResponce<Integer> regist(@RequestParam("petIdx") int petIdx, @RequestParam("groupCode") String groupCode,  @RequestBody PetPhysicalInfo petPhysicalInfo) {
 		CommonResponce<Integer> responce = new CommonResponce<Integer>();
+		if(petPhysicalInfo.getId() == 0) {
+			addRealTimeWeight(petIdx, petPhysicalInfo.getWeight(), groupCode);
+		}
 		petPhysicalInfoMapper.insert(petPhysicalInfo);
 		int obj = petMapper.registPhysical(petPhysicalInfo.getId(), petIdx);
 		if(obj > 0) {
@@ -47,6 +58,18 @@ public class PetPhysicalInfoControllerForAndroid {
 			responce.setDomain(obj);
 		}
 		return responce;
+	}
+	
+	
+
+	public int addRealTimeWeight(int petIdx, String weight, String groupCode) {
+		Device device = deviceMapper.getDeviceInfoByGroupCode(groupCode);
+		RealTimeWeight realTimeWeight = new RealTimeWeight();
+		realTimeWeight.setValue(Float.parseFloat(weight));
+		realTimeWeight.setMac(device.getSerialNumber());
+		realTimeWeight.setType(0);
+		realTimeWeight.setTag(String.valueOf(petIdx));
+		return realTimeWeightMapper.insert(realTimeWeight);
 	}
 	
 	

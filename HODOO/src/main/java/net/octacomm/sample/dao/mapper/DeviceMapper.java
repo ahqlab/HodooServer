@@ -73,5 +73,9 @@ public interface DeviceMapper extends CRUDMapper<Device, DefaultParam, Integer> 
 	@Delete("DELETE FROM " + TABLE_NAME + " WHERE serialNumber =  #{serialNumber}")
 	public int testDeleteDevice(@Param("serialNumber") String serialNumber);
 
+	
+	@Select("select * FROM " + TABLE_NAME + " where device.groupCode = #{groupCode} and device.isDel = 'CONNECTED'  and mode = 1 ")
+	public Device getDeviceInfoByGroupCode(@Param("groupCode") String groupCode);
+
 
 }

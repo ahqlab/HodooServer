@@ -12,12 +12,16 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import net.octacomm.sample.constant.HodooConstant;
 import net.octacomm.sample.dao.mapper.BfiMapper;
+import net.octacomm.sample.dao.mapper.DeviceMapper;
 import net.octacomm.sample.dao.mapper.PetMapper;
 import net.octacomm.sample.dao.mapper.PetWeightInfoMapper;
+import net.octacomm.sample.dao.mapper.RealTimeWeightMapper;
 import net.octacomm.sample.dao.mapper.WeightGoalChartMapper;
 import net.octacomm.sample.domain.BfiModel;
 import net.octacomm.sample.domain.CommonResponce;
+import net.octacomm.sample.domain.Device;
 import net.octacomm.sample.domain.PetWeightInfo;
+import net.octacomm.sample.domain.RealTimeWeight;
 import net.octacomm.sample.domain.WeightGoalChart;
 
 @RequestMapping("/android/pet/weight")
@@ -35,6 +39,10 @@ public class PetWeightInfoControllerForAndroid {
 
 	@Autowired
 	private WeightGoalChartMapper weightGoalChartMapper;
+	
+	@Autowired private RealTimeWeightMapper realTimeWeightMapper; 
+	
+	@Autowired private DeviceMapper deviceMapper;
 
 	/*
 	 * @ResponseBody
@@ -47,8 +55,7 @@ public class PetWeightInfoControllerForAndroid {
 
 	@ResponseBody
 	@RequestMapping(value = "/regist.do", method = RequestMethod.POST)
-	public CommonResponce<Integer> regist(@RequestParam("petIdx") int petIdx,
-			@RequestBody PetWeightInfo petWeightInfo) {
+	public CommonResponce<Integer> regist(@RequestParam("petIdx") int petIdx , @RequestBody PetWeightInfo petWeightInfo) {
 		CommonResponce<Integer> responce = new CommonResponce<Integer>();
 		petWeightInfoMapper.insert(petWeightInfo);
 		int obj = petMapper.registWeight(petWeightInfo.getId(), petIdx);
@@ -60,6 +67,16 @@ public class PetWeightInfoControllerForAndroid {
 			responce.setDomain(obj);
 		}
 		return responce;
+	}
+	
+	public int addRealTimeWeight(int petIdx, float weight, String groupCode) {
+		Device device = deviceMapper.getDeviceInfoByGroupCode(groupCode);
+		RealTimeWeight realTimeWeight = new RealTimeWeight();
+		realTimeWeight.setValue(weight);
+		realTimeWeight.setMac(device.getSerialNumber());
+		realTimeWeight.setType(0);
+		realTimeWeight.setTag(String.valueOf(petIdx));
+		return realTimeWeightMapper.insert(realTimeWeight);
 	}
 
 	@ResponseBody
@@ -76,7 +93,6 @@ public class PetWeightInfoControllerForAndroid {
 			responce.setDomain(obj);
 		}
 		return responce;
-
 	}
 
 	@ResponseBody

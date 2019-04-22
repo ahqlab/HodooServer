@@ -27,11 +27,19 @@ public class PetAllInfos implements Domain {
 	@Getter
 	@Setter
 	public PetWeightInfo petWeightInfo;
+	
+	@Getter
+	@Setter
+	public PetUserSelectionQuestion petUserSelectionQuestion;
+
 
 	@Override
 	public String toString() {
 		return "PetAllInfos [pet=" + pet + ", petBasicInfo=" + petBasicInfo + ", petChronicDisease=" + petChronicDisease
-				+ ", petPhysicalInfo=" + petPhysicalInfo + ", petWeightInfo=" + petWeightInfo + "]";
+				+ ", petPhysicalInfo=" + petPhysicalInfo + ", petWeightInfo=" + petWeightInfo
+				+ ", petUserSelectionQuestion=" + petUserSelectionQuestion + "]";
 	}
+	
+	
 
 }

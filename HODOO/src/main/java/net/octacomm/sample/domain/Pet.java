@@ -18,6 +18,8 @@ public class Pet implements Domain {
 	
 	private int weight;
 	
+	private int sltQst;
+	
 	private String createDate;
 
 }

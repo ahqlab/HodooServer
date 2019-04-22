@@ -61,7 +61,7 @@ public class PetControllerForAndroid {
 	public CommonResponce<List<Pet>> myPetList(@RequestParam("groupCode") String groupCode){
 		CommonResponce<List<Pet>> responce = new CommonResponce<List<Pet>>();
 		List<Pet> list = petMapper.myPetList(groupCode);
-		if(list != null) {
+		if(list.size() > 0) {
 			responce.setDomain(list);
 			responce.setStatus(HodooConstant.OK_RESPONSE);
 		}else {
@@ -148,7 +148,7 @@ public class PetControllerForAndroid {
 	public CommonResponce<List<PetBreed>> getAllBreed( @RequestParam("location") String location ){
 		CommonResponce<List<PetBreed>> responce = new CommonResponce<List<PetBreed>>();
 		List<PetBreed> list = breedMapper.getAllList( location );
-		if(list != null) {
+		if(list.size() > 0) {
 			responce.setDomain(list);
 			responce.setStatus(HodooConstant.OK_RESPONSE);
 		}else {
@@ -164,7 +164,7 @@ public class PetControllerForAndroid {
 	public CommonResponce<List<PetBreed>> getAllBreedOfType( @RequestParam("location") String location, @RequestParam("typeIdx") int typeIdx ){
 		CommonResponce<List<PetBreed>> responce = new CommonResponce<List<PetBreed>>();
 		List<PetBreed> list = breedMapper.getAllBreedOfType( location, typeIdx );
-		if(list != null) {
+		if(list.size() > 0) {
 			responce.setDomain(list);
 			responce.setStatus(HodooConstant.OK_RESPONSE);
 		}else {

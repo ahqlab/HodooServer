@@ -20,7 +20,7 @@ public class RealTimeWeight implements Domain{
 	
 	private float value;
 	
-	private String type;
+	private int type;
 	
 	private String tag;
 	

@@ -72,6 +72,9 @@ public interface PetMapper extends CRUDMapper<Pet, DefaultParam, Integer> {
 	@Update("UPDATE " + TABLE_NAME + " SET weight = 0 WHERE petIdx =  #{petIdx} ")
 	public void resetWeight(int petIdx);
 	
+	@Update("UPDATE " + TABLE_NAME + " SET sltQst = 0 WHERE petIdx =  #{petIdx} ")
+	public void resetSltQst(int petIdx);
+	
 	
 	@Update("UPDATE " + TABLE_NAME + " SET disease = #{disease} WHERE petIdx =  #{petIdx} ")
 	public int registDisease(@Param("disease") int disease, @Param("petIdx") int petIdx);
@@ -83,16 +86,27 @@ public interface PetMapper extends CRUDMapper<Pet, DefaultParam, Integer> {
 	@Update("UPDATE " + TABLE_NAME + " SET weight = #{weight} WHERE petIdx =  #{petIdx} ")
 	public int registWeight(@Param("weight") int weight, @Param("petIdx") int petIdx);
 	
+	@Update("UPDATE " + TABLE_NAME + " SET sltQst = #{questionIdx} WHERE petIdx =  #{petIdx} ")
+	public int registSltQst(@Param("questionIdx") int questionIdx, @Param("petIdx") int petIdx);
+	
 	
 	/*			"join pet_chronic_disease on pet_chronic_disease.id = pet.disease " + 
 */
 	
-	@Select("select pet.*, pet_basic_info.*, pet_physical_info.weight AS physicalWeignt, pet_weight_info.*  " + 
+	@Select("select "
+			+ "pet.*, "
+			+ "pet_basic_info.*, "
+			+ "pet_chronic_disease.*, "
+			+ "pet_physical_info.weight AS physicalWeignt , "
+			+ "pet_user_selection_question.* , "
+			+ "pet_weight_info.*  " + 
 			"from group_pet_mapping " + 
 			"join pet on group_pet_mapping.petGroupCode = pet.petGroupCode and pet.visible = 0 " + 
 			"join pet_basic_info on pet_basic_info.id = pet.basic " + 
+			"join pet_chronic_disease on pet_chronic_disease.id = pet.disease " + 
 			"join pet_physical_info on pet_physical_info.id = pet.physical " +
 			"join pet_weight_info on pet_weight_info.id = pet.weight " + 
+			"left outer join pet_user_selection_question on pet_user_selection_question.questionIdx = pet.sltQst " + 
 			"where group_pet_mapping.groupCode = #{groupCode} ")
 	@Results({
 		@Result(column="petIdx", property="pet.petIdx"),
@@ -101,6 +115,7 @@ public interface PetMapper extends CRUDMapper<Pet, DefaultParam, Integer> {
 		@Result(column="disease", property="pet.disease"),
 		@Result(column="physical", property="pet.physical"),
 		@Result(column="weight", property="pet.weight"),
+		@Result(column="sltQst", property="pet.sltQst"),
 		
 		@Result(column="pet_basic_info.id", property="petBasicInfo.id"),
 		@Result(column="profileFilePath", property="petBasicInfo.profileFilePath"),
@@ -112,8 +127,14 @@ public interface PetMapper extends CRUDMapper<Pet, DefaultParam, Integer> {
 		@Result(column="neutralization", property="petBasicInfo.neutralization"),
 		@Result(column="physicalWeignt", property="petPhysicalInfo.weight"),
 		
-	/*	@Result(column="diseaseName", property="petChronicDisease.diseaseName"),
 		
+		@Result(column="questionIdx", property="petUserSelectionQuestion.questionIdx"),
+		@Result(column="bodyFat", property="petUserSelectionQuestion.bodyFat"),
+		@Result(column="playTime", property="petUserSelectionQuestion.playTime"),
+		@Result(column="active", property="petUserSelectionQuestion.active"),
+		
+		@Result(column="diseaseName", property="petChronicDisease.diseaseName"),
+	/*	,
 		
 		@Result(column="height", property="petPhysicalInfo.height"),
 		@Result(column="weight", property="petPhysicalInfo.weight"),*/
@@ -142,6 +163,7 @@ public interface PetMapper extends CRUDMapper<Pet, DefaultParam, Integer> {
 		@Result(column="disease", property="pet.disease"),
 		@Result(column="physical", property="pet.physical"),
 		@Result(column="weight", property="pet.weight"),
+		@Result(column="sltQst", property="pet.sltQst"),
 		
 		@Result(column="basicId", property="petBasicInfo.id"),
 		@Result(column="profileFilePath", property="petBasicInfo.profileFilePath"),
@@ -172,6 +194,7 @@ public interface PetMapper extends CRUDMapper<Pet, DefaultParam, Integer> {
 			"	join pet_chronic_disease on pet_chronic_disease.id = pet.disease " + 
 			"	join pet_physical_info on pet_physical_info.id = pet.physical " + 
 			"	join pet_weight_info on pet_weight_info.id = pet.weight " + 
+			"	left outer join pet_user_selection_question on pet_user_selection_question.questionIdx = pet.sltQst " + 
 			"	where pet.petIdx = ${petIdx}")
 	@Results({
 		@Result(column="petIdx", property="pet.petIdx"),
@@ -180,6 +203,7 @@ public interface PetMapper extends CRUDMapper<Pet, DefaultParam, Integer> {
 		@Result(column="disease", property="pet.disease"),
 		@Result(column="physical", property="pet.physical"),
 		@Result(column="weight", property="pet.weight"),
+		@Result(column="sltQst", property="pet.sltQst"),
 		
 		@Result(column="profileFilePath", property="petBasicInfo.profileFilePath"),
 		@Result(column="profileFileName", property="petBasicInfo.profileFileName"),
@@ -188,6 +212,7 @@ public interface PetMapper extends CRUDMapper<Pet, DefaultParam, Integer> {
 		@Result(column="sex", property="petBasicInfo.sex"),
 		@Result(column="birthday", property="petBasicInfo.birthday"),
 		@Result(column="neutralization", property="petBasicInfo.neutralization"),
+		@Result(column="petType", property="petBasicInfo.petType"),
 		
 		@Result(column="diseaseName", property="petChronicDisease.diseaseName"),
 		
@@ -196,6 +221,13 @@ public interface PetMapper extends CRUDMapper<Pet, DefaultParam, Integer> {
 		@Result(column="weight", property="petPhysicalInfo.weight"),
 		
 		@Result(column="bcs", property="petWeightInfo.bcs"),
+		
+		@Result(column="questionIdx", property="petUserSelectionQuestion.questionIdx"),
+		@Result(column="bodyFat", property="petUserSelectionQuestion.bodyFat"),
+		@Result(column="playTime", property="petUserSelectionQuestion.playTime"),
+		@Result(column="active", property="petUserSelectionQuestion.active"),
+		
+		
 	})
 	public PetAllInfos allInfoOnThePet(@Param("petIdx") int petIdx);
 
