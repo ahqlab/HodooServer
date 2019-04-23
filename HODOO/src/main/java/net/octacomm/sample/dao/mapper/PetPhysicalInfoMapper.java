@@ -49,5 +49,7 @@ public interface PetPhysicalInfoMapper extends CRUDMapper<PetPhysicalInfo, Defau
 			"WHERE group_pet_mapping.groupCode = #{groupCode} " + 
 			"and pet.petIdx = #{petIdx}")
 	public PetPhysicalInfo getPetPhysicalInformation(@Param("groupCode") String groupCode, @Param("petIdx") int petIdx);
+	
+	public int updatePhysical(@Param("petIdx") int petIdx, @Param("weight") String weight );
 
 }

@@ -128,5 +128,23 @@ public class PetPhysicalInfoControllerForAndroid {
 	public PetPhysicalInfo basicInfoCheck(@RequestParam("groupId") String groupId, @RequestParam("petId") int petId) {
 		return petPhysicalInfoMapper.InfoCheck(groupId, petId);
 	}*/
+	
+	@ResponseBody
+	@RequestMapping(value = "/update.do", method = RequestMethod.POST)
+	public CommonResponce<Integer> updatePhysical(@RequestBody PetPhysicalInfo petPhysicalInfo) {
+		CommonResponce<Integer> responce = new CommonResponce<Integer>();
+		
+		int result = petPhysicalInfoMapper.update(petPhysicalInfo);
+		if ( result > 0 ) {
+			responce.setStatus(HodooConstant.OK_RESPONSE);
+			responce.setDomain(result);
+		}
+		else {
+			responce.setStatus(HodooConstant.NO_CONTENT_RESPONSE);
+			responce.setDomain(result);
+		}
+	
+		return responce;
+	}
 
 }
