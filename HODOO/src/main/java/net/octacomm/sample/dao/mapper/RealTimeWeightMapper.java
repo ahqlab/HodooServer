@@ -64,6 +64,8 @@ public interface RealTimeWeightMapper extends CRUDMapper<RealTimeWeight, Default
 	public List<Statistics> getStatisticsOfDay(HashMap<String, Object> map);
 
 	public List<Statistics> getStatisticsOfWeek(HashMap<String, Object> map);
+	
+	public Statistics getAvgOfWeek(HashMap<String, Object> map);
 
 	public List<Statistics> getStatisticsOfMonth(HashMap<String, Object> map);
 

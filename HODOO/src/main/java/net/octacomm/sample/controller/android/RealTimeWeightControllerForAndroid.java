@@ -1,6 +1,7 @@
 package net.octacomm.sample.controller.android;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -130,6 +131,7 @@ public class RealTimeWeightControllerForAndroid {
 	@RequestMapping(value = "/get/statistics/list/of/day.do")
 	public CommonResponce<List<Statistics>> getStatisticsOfDay(@RequestParam("groupCode") String groupCode, @RequestParam("type") int type, @RequestParam("petIdx") int petIdx) {
 		CommonResponce<List<Statistics>> response = new CommonResponce<List<Statistics>>();
+		System.err.println("123456789876");
 		List<Device> deviceList = deviceMapper.myDeviceList(groupCode);
 		if(deviceList.isEmpty()) {
 			response.setStatus(HodooConstant.NO_CONTENT_RESPONSE);
@@ -140,6 +142,7 @@ public class RealTimeWeightControllerForAndroid {
 			map.put("deviceList", deviceList);
 			map.put("type", type);
 			map.put("petIdx", petIdx);
+			test();
 			List<Statistics> list =  RealTimeWeightMapper.getStatisticsOfDay(map);
 			if(list.size() > 0) {
 				response.setStatus(HodooConstant.OK_RESPONSE);
@@ -168,6 +171,7 @@ public class RealTimeWeightControllerForAndroid {
 			map.put("month", month);
 			map.put("type", type);
 			map.put("petIdx", petIdx);
+			test();
 			List<Statistics> list = RealTimeWeightMapper.getStatisticsOfWeek(map);
 			if(list.size() > 0) {
 				response.setStatus(HodooConstant.OK_RESPONSE);
@@ -178,6 +182,14 @@ public class RealTimeWeightControllerForAndroid {
 			}
 		}
 		return response;
+	}
+	
+	public void test() {
+		Calendar calendar = Calendar.getInstance();
+		System.out.println("이 달의 현재 주 : "+calendar.get(Calendar.WEEK_OF_MONTH));
+		System.out.println("이 달의 마지막 날 : "+calendar.getActualMaximum(Calendar.DATE));
+		calendar.set(Calendar.YEAR, Calendar.MONTH+1, calendar.getActualMaximum(Calendar.DATE));
+		System.out.println("이 달의 마지막 주 : "+calendar.get(Calendar.WEEK_OF_MONTH));
 	}
 	
 	@ResponseBody
@@ -199,6 +211,7 @@ public class RealTimeWeightControllerForAndroid {
 				response.setDomain(null);
 			}
 		}
+		test();
 		return response;
 	}
 	
@@ -225,6 +238,7 @@ public class RealTimeWeightControllerForAndroid {
 				response.setDomain(null);
 			}
 		}
+		test();
 		return response;
 		
 	}

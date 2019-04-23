@@ -85,6 +85,25 @@
 		  AND type = #{type} and DATE_FORMAT(real_time_weight.createDate, '%Y-%m-%d') = DATE_FORMAT(date, '%Y-%m-%d')) as 'average'
 		FROM real_time_weight as m_table WHERE  m_table.createDate BETWEEN DATE_ADD(NOW(), INTERVAL -1 WEEK) AND NOW() GROUP BY `date`
 	</select>
+	
+	
+	<select id="getAvgOfWeek" parameterType="hashmap"
+		resultType="net.octacomm.sample.domain.Statistics">
+		SELECT 
+		ROUND(avg(`value`), 1) as 'average'
+		FROM real_time_weight left outer JOIN pet ON real_time_weight.tag = pet.tag and pet.petIdx = #{petIdx}
+		WHERE
+		real_time_weight.mac IN
+		<foreach collection="deviceList" item="device" open="(" close=")"
+			separator=",">
+			#{device.serialNumber}
+		</foreach>
+		AND
+			type = #{type}
+		AND
+      		DATE_FORMAT(real_time_weight.createDate, '%Y-%m-%d') BETWEEN #{startDate} and #{endDate};
+	</select>
+	
 
 	<select id="getStatisticsOfWeek" parameterType="hashmap"
 		resultType="net.octacomm.sample.domain.Statistics">

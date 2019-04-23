@@ -1,8 +1,13 @@
 package net.octacomm.sample.controller;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +26,7 @@ import net.octacomm.sample.domain.Message;
 import net.octacomm.sample.domain.RealTimeWeight;
 import net.octacomm.sample.domain.Statistics;
 import net.octacomm.sample.domain.User;
+import net.octacomm.sample.utils.DateUtil;
 import net.octacomm.sample.utils.FcmUtil;
 
 @RequestMapping("/weight")
@@ -92,17 +98,94 @@ public class RealTimeWeightController {
 		return RealTimeWeightMapper.getStatisticsOfDay(map);
 	}
 	
+	public void test() {
+		Calendar calendar = Calendar.getInstance();
+		System.out.println("이 달의 현재 주 : "+calendar.get(Calendar.WEEK_OF_MONTH));
+		System.out.println("이 달의 마지막 날 : "+calendar.getActualMaximum(Calendar.DATE));
+		calendar.set(Calendar.YEAR, Calendar.MONTH+1, calendar.getActualMaximum(Calendar.DATE));
+		System.out.println("이 달의 마지막 주 : "+calendar.get(Calendar.WEEK_OF_MONTH));
+	}
 	
 	@ResponseBody
 	@RequestMapping(value = "/get/statistics/list/of/week.do")
 	public List<Statistics> getStatisticsOfWeek(@RequestParam("groupCode") String groupCode, @RequestParam("month") String month, @RequestParam("type") int type, @RequestParam("petIdx") int petIdx) {
-		HashMap<String, Object> map = new HashMap<String, Object>();
+		List<Statistics> list = new ArrayList<Statistics>();
+		/*HashMap<String, Object> map = new HashMap<String, Object>();
 		List<Device> deviceList = deviceMapper.myDeviceList(groupCode);
 		map.put("deviceList", deviceList);
 		map.put("month", month);
 		map.put("type", type);
 		map.put("petIdx", petIdx);
-		return RealTimeWeightMapper.getStatisticsOfWeek(map);
+		
+		Calendar calendar = Calendar.getInstance();
+		calendar.set(Calendar.YEAR, Calendar.MONTH+1, calendar.getActualMaximum(Calendar.DATE));
+		String thisYear = new SimpleDateFormat("yyyy").format(new Date());
+		System.err.println("calendar.get(Calendar.DAY_OF_MONTH) : " + calendar.get(Calendar.WEEK_OF_MONTH));
+		String week = String.valueOf(calendar.get(Calendar.WEEK_OF_MONTH));
+		System.err.println("week : " + week);
+		
+		for (int i = 1; i <= calendar.get(Calendar.WEEK_OF_MONTH) - 1; i++) {
+			if(i == calendar.get(Calendar.WEEK_OF_MONTH)) {
+				//이번주
+				map.put("startDate", DateUtil.getMonday(thisYear, month, String.valueOf(i), 0));
+				map.put("endDate", thisYear + "-" + month + "-" + Calendar.getInstance().getActualMaximum(Calendar.DATE));
+				Statistics statistics = RealTimeWeightMapper.getAvgOfWeek(map);
+				System.err.println("statistics 1 : " + statistics);
+				if(statistics == null) {
+					statistics = new Statistics();
+					statistics.setAverage(0);
+					
+				}
+				statistics.setTheWeek(String.valueOf(i));
+				list.add(statistics);
+			}else {
+				if(i == 1) {
+					//첫주
+					map.put("startDate", thisYear + "-" + month + "-01");
+					map.put("endDate", DateUtil.getMonday(thisYear, month, String.valueOf(i + 1) , 1));
+					Statistics statistics = RealTimeWeightMapper.getAvgOfWeek(map);
+					System.err.println("statistics 2 : " + statistics);
+					if(statistics == null) {
+						statistics = new Statistics();
+						statistics.setAverage(0);
+						
+					}
+					statistics.setTheWeek(String.valueOf(i));
+					list.add(statistics);
+					
+					
+				}else if(i > 1 && i < calendar.get(Calendar.WEEK_OF_MONTH)){
+					//중간
+					map.put("startDate", DateUtil.getMonday(thisYear, month, String.valueOf(i), 0));
+					map.put("endDate", DateUtil.getMonday(thisYear, month, String.valueOf(i + 1) , 1));
+					Statistics statistics = RealTimeWeightMapper.getAvgOfWeek(map);
+					System.err.println("statistics 3 : " + statistics);
+					if(statistics == null) {
+						statistics = new Statistics();
+						statistics.setAverage(0);
+						
+					}
+					statistics.setTheWeek(String.valueOf(i));
+					list.add(statistics);
+				}
+			}
+		}
+		for (Statistics st : list) {
+			System.err.println(st);
+		}*/
+		
+		list.add(new Statistics("1", 0));
+		list.add(new Statistics("2", 0));
+		list.add(new Statistics("3", 0));
+		list.add(new Statistics("4", 0));
+		list.add(new Statistics("5", 0));
+		list.add(new Statistics("6", 5));
+		/*list.add(new Statistics("5", 5));
+		list.add(new Statistics("6", 6));
+		list.add(new Statistics("7", 7));
+		list.add(new Statistics("8", 8));
+		list.add(new Statistics("9", 9));*/
+		return list;
 	}
 	
 	@ResponseBody
@@ -111,6 +194,7 @@ public class RealTimeWeightController {
 		/*HashMap<String, Object> map = new HashMap<String, Object>();
 		map.put("deviceList", deviceList);
 		map.put("year", year);*/
+		test();
 		List<Device> deviceList = deviceMapper.myDeviceList(groupCode);
 		return RealTimeWeightMapper.getStatisticsOfMonth(deviceList, year, type, petIdx);
 	}
