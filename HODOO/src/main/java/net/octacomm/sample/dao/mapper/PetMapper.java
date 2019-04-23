@@ -134,10 +134,10 @@ public interface PetMapper extends CRUDMapper<Pet, DefaultParam, Integer> {
 		@Result(column="active", property="petUserSelectionQuestion.active"),
 		
 		@Result(column="diseaseName", property="petChronicDisease.diseaseName"),
-	/*	,
+	
 		
-		@Result(column="height", property="petPhysicalInfo.height"),
-		@Result(column="weight", property="petPhysicalInfo.weight"),*/
+	/*  @Result(column="height", property="petPhysicalInfo.height"),
+		@Result(column="weight", property="petPhysicalInfo.weight"), */
 		
 		@Result(column="bcs", property="petWeightInfo.bcs"),
 	})
