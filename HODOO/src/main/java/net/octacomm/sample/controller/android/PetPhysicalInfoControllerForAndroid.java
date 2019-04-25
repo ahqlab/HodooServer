@@ -65,6 +65,8 @@ public class PetPhysicalInfoControllerForAndroid {
 
 	public int addRealTimeWeight(int petIdx, String weight, String groupCode) {
 		Device device = deviceMapper.getDeviceInfoByGroupCode(groupCode);
+		if ( device == null )
+			return 0;
 		RealTimeWeight realTimeWeight = new RealTimeWeight();
 		realTimeWeight.setValue(Float.parseFloat(weight));
 		realTimeWeight.setMac(device.getSerialNumber());
@@ -132,17 +134,17 @@ public class PetPhysicalInfoControllerForAndroid {
 	
 	@ResponseBody
 	@RequestMapping(value = "/update.do", method = RequestMethod.POST)
-	public CommonResponce<Integer> updatePhysical(@RequestBody PetPhysicalInfo petPhysicalInfo) {
-		CommonResponce<Integer> responce = new CommonResponce<Integer>();
+	public CommonResponce<PetPhysicalInfo> updatePhysical(@RequestBody PetPhysicalInfo petPhysicalInfo) {
+		CommonResponce<PetPhysicalInfo> responce = new CommonResponce<PetPhysicalInfo>();
 		
 		int result = petPhysicalInfoMapper.update(petPhysicalInfo);
 		if ( result > 0 ) {
 			responce.setStatus(HodooConstant.OK_RESPONSE);
-			responce.setDomain(result);
+			responce.setDomain( petPhysicalInfoMapper.get(petPhysicalInfo.getId()) );
 		}
 		else {
 			responce.setStatus(HodooConstant.NO_CONTENT_RESPONSE);
-			responce.setDomain(result);
+			responce.setDomain(null);
 		}
 	
 		return responce;
