@@ -132,10 +132,11 @@ public class PetPhysicalInfoControllerForAndroid {
 	
 	@ResponseBody
 	@RequestMapping(value = "/update.do", method = RequestMethod.POST)
-	public CommonResponce<PetPhysicalInfo> updatePhysical(@RequestBody PetPhysicalInfo petPhysicalInfo) {
+	public CommonResponce<PetPhysicalInfo> updatePhysical(@RequestParam("petIdx") int petIdx,@RequestParam("groupCode") String groupCode, @RequestBody PetPhysicalInfo petPhysicalInfo) {
 		CommonResponce<PetPhysicalInfo> responce = new CommonResponce<PetPhysicalInfo>();
 		
 		int result = petPhysicalInfoMapper.update(petPhysicalInfo);
+		addRealTimeWeight(petIdx, petPhysicalInfo.getWeight(), groupCode);
 		if ( result > 0 ) {
 			responce.setStatus(HodooConstant.OK_RESPONSE);
 			responce.setDomain( petPhysicalInfoMapper.get(petPhysicalInfo.getId()) );
