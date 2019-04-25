@@ -105,8 +105,8 @@ public interface PetMapper extends CRUDMapper<Pet, DefaultParam, Integer> {
 			"join pet_basic_info on pet_basic_info.id = pet.basic " + 
 			"join pet_chronic_disease on pet_chronic_disease.id = pet.disease " + 
 			"join pet_physical_info on pet_physical_info.id = pet.physical " +
-			"join pet_weight_info on pet_weight_info.id = pet.weight " + 
-			"left outer join pet_user_selection_question on pet_user_selection_question.questionIdx = pet.sltQst " + 
+			"left join pet_weight_info on pet_weight_info.id = pet.weight " + 
+			"left join pet_user_selection_question on pet_user_selection_question.questionIdx = pet.sltQst " + 
 			"where group_pet_mapping.groupCode = #{groupCode} ")
 	@Results({
 		@Result(column="petIdx", property="pet.petIdx"),
@@ -125,6 +125,8 @@ public interface PetMapper extends CRUDMapper<Pet, DefaultParam, Integer> {
 		@Result(column="sex", property="petBasicInfo.sex"),
 		@Result(column="birthday", property="petBasicInfo.birthday"),
 		@Result(column="neutralization", property="petBasicInfo.neutralization"),
+		@Result(column="petType", property="petBasicInfo.petType"),
+		
 		@Result(column="physicalWeignt", property="petPhysicalInfo.weight"),
 		
 		
@@ -149,12 +151,14 @@ public interface PetMapper extends CRUDMapper<Pet, DefaultParam, Integer> {
 			+ "pet_chronic_disease.id as diseaseId ,"
 			+ "pet_physical_info.id as physicalId ,"
 			+ "pet_weight_info.id as weightId " 
+			+ "pet_user_selection_question.* "
 			+ "from group_pet_mapping " + 
 			"left join pet on group_pet_mapping.petGroupCode = pet.petGroupCode and pet.visible = 0 " + 
 			"left join pet_chronic_disease on pet_chronic_disease.id = pet.disease " + 
 			"left join pet_basic_info on pet_basic_info.id = pet.basic " + 
 			"left join pet_physical_info on pet_physical_info.id = pet.physical " + 
 			"left join pet_weight_info on pet_weight_info.id = pet.weight " + 
+			"left join pet_user_selection_question on pet_user_selection_question.questionIdx = pet.sltQst " + 
 			"where group_pet_mapping.groupCode = #{groupCode} ")
 	@Results({
 		@Result(column="petIdx", property="pet.petIdx"),
@@ -183,7 +187,12 @@ public interface PetMapper extends CRUDMapper<Pet, DefaultParam, Integer> {
 		@Result(column="weight", property="petPhysicalInfo.weight"),
 		
 		@Result(column="weightId", property="petWeightInfo.id"),
-		@Result(column="bcs", property="petWeightInfo.bcs")
+		@Result(column="bcs", property="petWeightInfo.bcs"),
+		
+		@Result(column="questionIdx", property="petUserSelectionQuestion.questionIdx"),
+		@Result(column="bodyFat", property="petUserSelectionQuestion.bodyFat"),
+		@Result(column="playTime", property="petUserSelectionQuestion.playTime"),
+		@Result(column="active", property="petUserSelectionQuestion.active"),
 	})
 	public List<PetAllInfos> aboutMyPetListForIos(String groupCode);
 	
