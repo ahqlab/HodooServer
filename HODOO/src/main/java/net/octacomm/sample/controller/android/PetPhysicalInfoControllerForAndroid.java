@@ -64,6 +64,8 @@ public class PetPhysicalInfoControllerForAndroid {
 
 	public int addRealTimeWeight(int petIdx, String weight, String groupCode) {
 		Device device = deviceMapper.getDeviceInfoByGroupCode(groupCode);
+		if ( device == null )
+			return 0;
 		RealTimeWeight realTimeWeight = new RealTimeWeight();
 		realTimeWeight.setValue(Float.parseFloat(weight));
 		realTimeWeight.setMac(device.getSerialNumber());
