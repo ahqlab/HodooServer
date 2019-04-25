@@ -109,15 +109,15 @@ public class RealTimeWeightController {
 	@ResponseBody
 	@RequestMapping(value = "/get/statistics/list/of/week.do")
 	public List<Statistics> getStatisticsOfWeek(@RequestParam("groupCode") String groupCode, @RequestParam("month") String month, @RequestParam("type") int type, @RequestParam("petIdx") int petIdx) {
-		List<Statistics> list = new ArrayList<Statistics>();
-		/*HashMap<String, Object> map = new HashMap<String, Object>();
+		//List<Statistics> list = new ArrayList<Statistics>();
+		HashMap<String, Object> map = new HashMap<String, Object>();
 		List<Device> deviceList = deviceMapper.myDeviceList(groupCode);
 		map.put("deviceList", deviceList);
 		map.put("month", month);
 		map.put("type", type);
 		map.put("petIdx", petIdx);
-		
-		Calendar calendar = Calendar.getInstance();
+		return RealTimeWeightMapper.getStatisticsOfWeek(map);
+		/*Calendar calendar = Calendar.getInstance();
 		calendar.set(Calendar.YEAR, Calendar.MONTH+1, calendar.getActualMaximum(Calendar.DATE));
 		String thisYear = new SimpleDateFormat("yyyy").format(new Date());
 		System.err.println("calendar.get(Calendar.DAY_OF_MONTH) : " + calendar.get(Calendar.WEEK_OF_MONTH));
@@ -174,18 +174,18 @@ public class RealTimeWeightController {
 			System.err.println(st);
 		}*/
 		
-		list.add(new Statistics("1", 0));
+	/*	list.add(new Statistics("1", 0));
 		list.add(new Statistics("2", 0));
 		list.add(new Statistics("3", 0));
 		list.add(new Statistics("4", 0));
 		list.add(new Statistics("5", 0));
 		list.add(new Statistics("6", 5));
-		/*list.add(new Statistics("5", 5));
+		list.add(new Statistics("5", 5));
 		list.add(new Statistics("6", 6));
 		list.add(new Statistics("7", 7));
 		list.add(new Statistics("8", 8));
-		list.add(new Statistics("9", 9));*/
-		return list;
+		list.add(new Statistics("9", 9));
+		return list;*/
 	}
 	
 	@ResponseBody
