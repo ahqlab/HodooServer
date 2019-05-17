@@ -24,6 +24,7 @@ import net.octacomm.sample.dao.mapper.UserMapper;
 import net.octacomm.sample.domain.CommonResponce;
 import net.octacomm.sample.domain.Device;
 import net.octacomm.sample.domain.Message;
+import net.octacomm.sample.domain.Pet;
 import net.octacomm.sample.domain.PetChronicDisease;
 import net.octacomm.sample.domain.PetPhysicalInfo;
 import net.octacomm.sample.domain.RealTimeWeight;
@@ -63,6 +64,10 @@ public class PetPhysicalInfoControllerForAndroid {
 		CommonResponce<Integer> responce = new CommonResponce<Integer>();
 		addRealTimeWeight(petIdx, petPhysicalInfo.getWeight(), groupCode);
 		petPhysicalInfoMapper.insert(petPhysicalInfo);
+		
+		Pet pet = petMapper.get(petIdx);
+		if ( Float.parseFloat(pet.getFixWeight()) == 0 )
+			petMapper.setFixWeight(petIdx, petPhysicalInfo.getWeight());
 		int obj = petMapper.registPhysical(petPhysicalInfo.getId(), petIdx);
 		if(obj > 0) {
 			responce.setStatus(HodooConstant.OK_RESPONSE);
@@ -149,6 +154,10 @@ public class PetPhysicalInfoControllerForAndroid {
 	@RequestMapping(value = "/update.do", method = RequestMethod.POST)
 	public CommonResponce<PetPhysicalInfo> updatePhysical(@RequestParam("petIdx") int petIdx,@RequestParam("groupCode") String groupCode, @RequestBody PetPhysicalInfo petPhysicalInfo) {
 		CommonResponce<PetPhysicalInfo> responce = new CommonResponce<PetPhysicalInfo>();
+		
+		Pet pet = petMapper.get(petIdx);
+		if ( Float.parseFloat( pet.getFixWeight() ) == 0 )
+			petMapper.setFixWeight(petIdx, petPhysicalInfo.getWeight());
 		
 		int result = petPhysicalInfoMapper.update(petPhysicalInfo);
 		addRealTimeWeight(petIdx, petPhysicalInfo.getWeight(), groupCode);
