@@ -185,8 +185,15 @@ public class PetWeightInfoControllerForAndroid {
 	public CommonResponce<Float> getWeekRate(@RequestParam("groupCode") String groupCode) {
 		Device device = deviceMapper.getDeviceInfoByGroupCode(groupCode);
 		CommonResponce<Float> responce = new CommonResponce<Float>();
-		responce.setStatus(HodooConstant.OK_RESPONSE);
-		responce.setDomain( petWeightInfoMapper.getWeekRate(device.getSerialNumber()) );
+		if ( device != null ) {
+			responce.setStatus(HodooConstant.OK_RESPONSE);
+			responce.setDomain( petWeightInfoMapper.getWeekRate(device.getSerialNumber()) );
+		} else {
+			responce.setStatus(HodooConstant.NO_CONTENT_RESPONSE);
+			responce.setDomain( null );
+		}
+		
+		
 		return responce;
 	}
 
