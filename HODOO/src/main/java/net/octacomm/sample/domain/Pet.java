@@ -21,5 +21,7 @@ public class Pet implements Domain {
 	private int sltQst;
 	
 	private String createDate;
+	
+	private String fixWeight;
 
 }
