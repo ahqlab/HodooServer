@@ -8,9 +8,10 @@
 			avg(value) as value
 		FROM
 			real_time_weight
-		left outer JOIN pet ON 
-			real_time_weight.tag = pet.tag and pet.petIdx = #{petIdx}
+		JOIN 
+			pet ON real_time_weight.tag = pet.petIdx 
 		WHERE
+			pet.petIdx = #{petIdx} and
 			real_time_weight.mac IN
 			<foreach collection="devices" item="device" open="(" close=")" separator=",">
 				#{device.serialNumber}
@@ -19,7 +20,7 @@
 		and type = #{type}
 		order by real_time_weight.createDate desc
 	</select>
-
+	<!-- left outer  -->
 
 	<select id="getStatisticsOfTime" parameterType="hashmap"
 		resultType="net.octacomm.sample.domain.Statistics">
@@ -27,9 +28,10 @@
 			substring(real_time_weight.createDate, 12,2) as theHour,  ROUND(avg(real_time_weight.value), 1)  average
 		FROM
 			real_time_weight
-		left outer JOIN pet ON 
-			real_time_weight.tag = pet.tag and pet.petIdx = #{petIdx}
+		JOIN 
+			pet ON real_time_weight.tag = pet.petIdx 
 		WHERE
+			pet.petIdx = #{petIdx} and
 			real_time_weight.mac IN
 			<foreach collection="deviceList" item="device" open="(" close=")"
 				separator=",">
@@ -56,9 +58,10 @@
 		END AS theDay,
 		ROUND(avg(`value`), 1) as 'average'
 		FROM real_time_weight
-		 left outer JOIN pet ON 
-			real_time_weight.tag = pet.tag and pet.petIdx = #{petIdx}
+		JOIN 
+			pet ON real_time_weight.tag = pet.petIdx 
 		WHERE
+		pet.petIdx = #{petIdx} and
 		real_time_weight.mac IN
 			<foreach collection="deviceList" item="device" open="(" close=")"
 				separator=",">
@@ -91,8 +94,11 @@
 		resultType="net.octacomm.sample.domain.Statistics">
 		SELECT 
 		ROUND(avg(`value`), 1) as 'average'
-		FROM real_time_weight left outer JOIN pet ON real_time_weight.tag = pet.tag and pet.petIdx = #{petIdx}
+		FROM real_time_weight 
+		JOIN 
+			pet ON real_time_weight.tag = pet.petIdx 
 		WHERE
+		pet.petIdx = #{petIdx} and
 		real_time_weight.mac IN
 		<foreach collection="deviceList" item="device" open="(" close=")"
 			separator=",">
@@ -116,9 +122,10 @@
 		ROUND(avg(`value`), 1) as average
 		FROM
 		real_time_weight 
-		left outer JOIN pet ON 
-			real_time_weight.tag = pet.tag and pet.petIdx = #{petIdx} ,(SELECT @rownum :=0) AS R 
+		JOIN 
+			pet ON real_time_weight.tag = pet.petIdx ,(SELECT @rownum :=0) AS R 
 		WHERE
+		pet.petIdx = #{petIdx} and
 		real_time_weight.mac IN
 		<foreach collection="deviceList" item="device" open="(" close=")"
 			separator=",">
@@ -138,9 +145,10 @@
 		ROUND(avg(real_time_weight.value), 1) average
 		FROM
 		real_time_weight
-		left outer JOIN pet ON 
-			real_time_weight.tag = pet.tag and pet.petIdx = #{petIdx}
+		JOIN 
+			pet ON real_time_weight.tag = pet.petIdx
 		WHERE
+		pet.petIdx = #{petIdx} and
 		real_time_weight.mac IN
 		<foreach collection="devices" item="device" open="(" close=")"
 			separator=",">
@@ -161,9 +169,10 @@
 		ROUND(avg(real_time_weight.value), 1) average
 		FROM
 		real_time_weight
-		left outer JOIN pet ON 
-			real_time_weight.tag = pet.tag and pet.petIdx = #{petIdx}
+		JOIN 
+			pet ON real_time_weight.tag = pet.petIdx
 		WHERE
+		pet.petIdx = #{petIdx} and
 		real_time_weight.mac IN
 		<foreach collection="deviceList" item="device" open="(" close=")"
 			separator=",">

@@ -38,6 +38,8 @@ public interface UserMapper extends CRUDMapper<User, DefaultParam, Integer>{
 	
 	int insert(User user);
 	
+	int snsInsert(User user);
+	
 	@Select("SELECT * FROM " + TABLE_NAME + " WHERE userIdx =  #{userIdx}")
 	@Override
 	User get(Integer id);
@@ -59,6 +61,9 @@ public interface UserMapper extends CRUDMapper<User, DefaultParam, Integer>{
 	
 	@Select("SELECT * FROM " + TABLE_NAME + " WHERE email = #{email} ")
 	List<User> getUserList(User user);
+	
+	@Select("SELECT * FROM " + TABLE_NAME + " WHERE snsId = #{snsId} ")
+	List<User> getSnsUserList(User user);
 
 	@Select("SELECT " + SELECT_FIELDS + " FROM " + TABLE_NAME + " join user_group_mapping on user_group_mapping.userIdx = user.userIdx where user.email =  #{email} AND user.password = #{password} ")
 	User getUserForAuth(User user);
@@ -99,4 +104,11 @@ public interface UserMapper extends CRUDMapper<User, DefaultParam, Integer>{
 	
 	@Select("SELECT m.groupCode FROM " + TABLE_NAME + " AS u JOIN user_group_mapping m ON u.userIdx = m.userIdx WHERE u.userIdx = #{toUserIdx }")
 	String getGroupCode( @Param("toUserIdx") int toUserIdx );
+
+	@Select("SELECT * FROM " + TABLE_NAME + " WHERE snsId = #{snsId} and snsToken = #{snsToken}")
+	User getSnsUsetInfo(User user);
+	
+	
+	@Update("UPDATE " + TABLE_NAME + " SET snsToken = #{snsToken}  WHERE snsId =  #{snsId} ")
+	int updateSnsToken(User user);
 }

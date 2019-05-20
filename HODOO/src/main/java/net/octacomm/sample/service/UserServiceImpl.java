@@ -38,4 +38,13 @@ public class UserServiceImpl implements UserService {
 		return userMapper.saveFCMToken(user);
 	}
 
+	@Override
+	public User createSnsUser(User user) {
+		if (userMapper.snsInsert(user) == SUCCESS) {
+			return user;
+		} else {
+			return null;
+		}
+	}
+
 }

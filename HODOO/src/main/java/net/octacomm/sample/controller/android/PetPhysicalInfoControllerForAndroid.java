@@ -62,6 +62,7 @@ public class PetPhysicalInfoControllerForAndroid {
 	@RequestMapping(value = "/regist.do" , method = RequestMethod.POST)
 	public CommonResponce<Integer> regist(@RequestParam("petIdx") int petIdx, @RequestParam("groupCode") String groupCode,  @RequestBody PetPhysicalInfo petPhysicalInfo) {
 		CommonResponce<Integer> responce = new CommonResponce<Integer>();
+		
 		addRealTimeWeight(petIdx, petPhysicalInfo.getWeight(), groupCode);
 		petPhysicalInfoMapper.insert(petPhysicalInfo);
 		
