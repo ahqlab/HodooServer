@@ -119,15 +119,14 @@ public class MealHistoryController {
 			PetAllInfos pet = petMapper.allInfoOnThePet(mealHistory.getPetIdx());
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 			for (int i = 0; i < groupUsers.size(); i++) {
+				if ( user == groupUsers.get(i) )
+					continue;
 				if ( groupUsers.get(i).getPushToken() != null ) {
 					
 					int number = alarmObjectMapper.getAlarm(groupUsers.get(i).getUserIdx());
 					if ( number != 1 && (number & (0x01 << HodooConstant.FEED_ALARM)) == 0 )
 						continue;
-					
-					if ( user == groupUsers.get(i) )
-						continue;
-					
+				
 					Message message = new Message();
 					message.setTo( groupUsers.get(i).getPushToken() );
 					

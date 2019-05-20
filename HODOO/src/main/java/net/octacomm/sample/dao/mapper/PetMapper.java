@@ -115,6 +115,7 @@ public interface PetMapper extends CRUDMapper<Pet, DefaultParam, Integer> {
 		@Result(column="disease", property="pet.disease"),
 		@Result(column="physical", property="pet.physical"),
 		@Result(column="weight", property="pet.weight"),
+		@Result(column="fixWeight", property="pet.fixWeight"),
 		@Result(column="sltQst", property="pet.sltQst"),
 		
 		@Result(column="pet_basic_info.id", property="petBasicInfo.id"),
@@ -250,5 +251,6 @@ public interface PetMapper extends CRUDMapper<Pet, DefaultParam, Integer> {
 	@Update("UPDATE " + TABLE_NAME + " SET visible = 1 WHERE petIdx =  #{petIdx} ")
 	public Integer makeItInvisible(@Param("petIdx") int petIdx);
 	
-	
+	@Update("UPDATE " + TABLE_NAME + " SET fixWeight = #{fixWeight } WHERE petIdx =  #{petIdx} ")
+	public int setFixWeight( @Param("petIdx") int petIdx, @Param("fixWeight") String fixWeight );
 }
