@@ -136,6 +136,75 @@ public class UserControllerForAndroid {
 		response.setDomain(null);
 		return response;
 	}
+	
+	
+	
+	@ResponseBody
+	@RequestMapping(value = "/sns/regist.do", method = RequestMethod.POST)
+	public CommonResponce<User> snsRegist(@RequestBody User user) throws FirebaseMessagingException {
+		CommonResponce<User> response = new CommonResponce<User>();	
+		//GroupId를 유니크 한 값으로 변경한다.
+		String grougCode = UUID.randomUUID().toString().replace("-", "");
+		if (userMapper.getSnsUserList(user).size() != 0) {
+			if(userMapper.getSnsUsetInfo(user) != null) {
+				response.setResultMessage(ResultMessage.ALREADY_REGISTERED);
+				response.setStatus(HodooConstant.OK_RESPONSE);
+				response.setDomain(user);
+				return response;
+			}else {
+				//snsToken값이 변경되었음.
+				int result = userMapper.updateSnsToken(user);
+				if(result == 1) {
+					response.setResultMessage(ResultMessage.ALREADY_REGISTERED);
+					response.setStatus(HodooConstant.OK_RESPONSE);
+					response.setDomain(user);
+					return response;
+				}else {
+					response.setStatus(HodooConstant.SQL_ERROR_RESPONSE);
+					response.setResultMessage(ResultMessage.FAILED);
+					response.setDomain(null);
+					return response;
+				}
+			}
+			
+		} else {
+			if(userService.createSnsUser(user) != null) {
+				user.setGroupCode(grougCode);
+				UserGroupMapping groupMapping = new UserGroupMapping();
+				groupMapping.setUserIdx(user.getUserIdx());
+				groupMapping.setGroupCode(grougCode);
+				
+				if (userGroupMappingMapper.insert(groupMapping) != 0) {
+					//여기서 더미 DEVICE 를 등록한다.
+					//신규 그룹 생성
+					GroupPetMapping groupPetMapping = new GroupPetMapping();
+					groupPetMapping.setGroupCode(grougCode);
+					groupPetMapping.setPetGroupCode(MathUtil.artificialPetGroupCode());
+					
+					if(groupPetMappingMapper.insert(groupPetMapping) != 0) {
+						Device device = new Device();
+						device.setGroupCode(grougCode);
+						device.setSerialNumber(MathUtil.artificialSerialNumber());
+						//디바이스 모드 자동 설정
+						device.setMode(1);
+						
+						if(deviceNapper.artificialDeviceInsert(device) != 0) {
+							response.setResultMessage(ResultMessage.SUCCESS);
+							response.setStatus(HodooConstant.OK_RESPONSE);
+							response.setDomain(user);
+							return response;
+						}
+						
+					}
+					
+				}
+			}
+		}
+		response.setStatus(HodooConstant.SQL_ERROR_RESPONSE);
+		response.setResultMessage(ResultMessage.FAILED);
+		response.setDomain(null);
+		return response;
+	}
 
 	/*@ResponseBody
 	@RequestMapping(value = "/regist2.do", method = RequestMethod.POST)
@@ -196,6 +265,24 @@ public class UserControllerForAndroid {
 		}
 		return group;
 	}
+	
+	
+	@ResponseBody
+	@RequestMapping(value = "/sns/login.do", method = RequestMethod.POST)
+	public CommonResponce<User> snsLogin(@RequestBody User user) {
+		CommonResponce<User> group = loginService.snsLogin(user);
+		if(group.getStatus() == HodooConstant.OK_RESPONSE) {
+			int checkResult = firebaseMapper.checkInvitationState(group.getDomain().getUserIdx());
+			if(checkResult > 0) {
+				//보낸게 있어.
+				group.setResultMessage(ResultMessage.WAIT_INVITATION);
+				group.setStatus(HodooConstant.OK_RESPONSE);
+				group.setDomain(group.getDomain());
+			}
+		}
+		return group;
+	}
+	
 
 	@ResponseBody
 	@RequestMapping(value = "/get/group/member.do", method = RequestMethod.POST)

@@ -7,5 +7,7 @@ public interface UserService {
 	
 	User createUser(User user);
 	
+	User createSnsUser(User user);
+	
 	int saveFCMToken( User user );
 }

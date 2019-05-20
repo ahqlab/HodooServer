@@ -32,6 +32,14 @@
 			SELECT LAST_INSERT_ID()
 		</selectKey>
 	</insert> 
+	
+	
+	<insert id="snsInsert" parameterType="User" useGeneratedKeys="true"  keyProperty="userIdx" >
+		INSERT INTO user ( email, nickname, sex, user.country, snsId, snsToken , loginType, userCode,  createDate ) VALUES (  #{email}, #{nickname}, #{sex}, #{country}, #{snsId}, #{snsToken} , #{loginType}, #{userCode}, now() )
+		<selectKey keyProperty="userIdx" resultType="Integer" order="AFTER">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+	</insert> 
 
 
 	<!-- <insert id="insert" parameterType="User" useGeneratedKeys="true"  keyProperty="userIdx" >

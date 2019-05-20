@@ -125,4 +125,42 @@ public class LoginServiceImpl implements LoginService {
 		group.setDomain(result);
 		return group;
 	}
+
+	@Override
+	public CommonResponce<User> snsLogin(User user) {
+		CommonResponce<User> group = null;
+		if (userMapper.getSnsUserList(user).size() == 0) {
+			group = new CommonResponce<User>();
+			group.setResultMessage(ResultMessage.NOT_FOUND_EMAIL);
+			group.setStatus(HodooConstant.NO_CONTENT_RESPONSE);
+			group.setDomain(null);
+			return group;
+		}
+		User result = userMapper.getSnsUsetInfo(user);
+		if (result == null) {
+			group = new CommonResponce<User>();
+			group.setResultMessage(ResultMessage.ID_PASSWORD_DO_NOT_MATCH);
+			group.setStatus(HodooConstant.NO_CONTENT_RESPONSE);
+			group.setDomain(null);
+			return group;
+		}
+		if (result.getPushToken() != null) {
+			if (userMapper.getFCMTokenOverlapCheck(result) <= 1) {
+				result.setPushToken(user.getPushToken());
+				userMapper.saveFCMToken(result);
+			} else {
+				userMapper.removeFCMToken(user.getPushToken());
+				result.setPushToken(user.getPushToken());
+				userMapper.saveFCMToken(result);
+			}
+		} else {
+			result.setPushToken(user.getPushToken());
+			userMapper.saveFCMToken(result);
+		}
+		group = new CommonResponce<User>();
+		group.setResultMessage(ResultMessage.SUCCESS);
+		group.setStatus(HodooConstant.OK_RESPONSE);
+		group.setDomain(result);
+		return group;
+	}
 }
