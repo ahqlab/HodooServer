@@ -105,7 +105,8 @@ public interface UserMapper extends CRUDMapper<User, DefaultParam, Integer>{
 	@Select("SELECT m.groupCode FROM " + TABLE_NAME + " AS u JOIN user_group_mapping m ON u.userIdx = m.userIdx WHERE u.userIdx = #{toUserIdx }")
 	String getGroupCode( @Param("toUserIdx") int toUserIdx );
 
-	@Select("SELECT * FROM " + TABLE_NAME + " WHERE snsId = #{snsId} and snsToken = #{snsToken}")
+	
+	@Select("SELECT " + SELECT_FIELDS + " FROM " + TABLE_NAME + " join user_group_mapping on user_group_mapping.userIdx = user.userIdx where user.snsId = #{snsId} AND user.snsToken = #{snsToken} ")
 	User getSnsUsetInfo(User user);
 	
 	

@@ -184,4 +184,58 @@ public class PetControllerForAndroid {
 		return responce;
 	}
 	
+	
+	public float getWeightStd() {
+		PetAllInfos info = new PetAllInfos();
+		if(info.getPetBasicInfo().getCurrentMonth() < 12){
+			return weigtPuppy(info);
+		}else {
+			return weigtAdult(info);
+		}
+	}
+	
+	public float weigtAdult(PetAllInfos info) {
+		int factorWeight = 1;
+		int factorBelly = 1;
+		int factorRib = 1;
+		
+		String[] word = info.getPetBasicInfo().getSelectedBfi().split(",");
+		int scoreWeist = Integer.parseInt(word[0]);  int scoreBelly = Integer.parseInt(word[1]); int scoreRib = Integer.parseInt(word[2]);
+
+		float indexHodoo = ((( factorWeight * scoreWeist ) + ( factorBelly * scoreBelly ) + ( factorRib * scoreRib)) / 3) - 1;
+		
+		float factorLoss;
+		
+		if(-1.0 <= indexHodoo && indexHodoo < 0.0) {
+			factorLoss = (float) (0.05 * indexHodoo);
+		}else {
+			factorLoss = (float) (0.05 * Math.pow(indexHodoo, 2)) + (float) ( 0.05 * indexHodoo);
+		}
+		return indexHodoo;
+	}
+	
+	public float weigtPuppy(PetAllInfos info) {
+		int factorWeight = 1;
+		int factorBelly = 1;
+		int factorRib = 1;
+		
+		String[] word = info.getPetBasicInfo().getSelectedBfi().split(",");
+		int scoreWeist = Integer.parseInt(word[0]);  int scoreBelly = Integer.parseInt(word[1]); int scoreRib = Integer.parseInt(word[2]);
+		
+		float indexHodoo = ((( factorWeight * scoreWeist ) + ( factorBelly * scoreBelly ) + ( factorRib * scoreRib)) / 3) - 1;
+
+		float factorLoss;
+		
+		if(-1.0 <= indexHodoo && indexHodoo < 0.0) {
+			factorLoss = (float) (0.05 * indexHodoo);
+		}else {
+			factorLoss = (float) (0.05 * Math.pow(indexHodoo, 2)) + (float) ( 0.05 * indexHodoo);
+		}
+		return indexHodoo;
+	}
+	
+	public void standardWeight() {
+		
+	}
+	
 }
