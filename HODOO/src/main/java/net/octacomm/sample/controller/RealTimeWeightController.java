@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import net.octacomm.sample.constant.HodooConstant;
-import net.octacomm.sample.dao.mapper.AlarmMapper;
 import net.octacomm.sample.dao.mapper.AlarmObjectMapper;
 import net.octacomm.sample.dao.mapper.DeviceMapper;
 import net.octacomm.sample.domain.Device;
@@ -26,7 +25,6 @@ import net.octacomm.sample.domain.Message;
 import net.octacomm.sample.domain.RealTimeWeight;
 import net.octacomm.sample.domain.Statistics;
 import net.octacomm.sample.domain.User;
-import net.octacomm.sample.utils.DateUtil;
 import net.octacomm.sample.utils.FcmUtil;
 
 @RequestMapping("/weight")
@@ -89,12 +87,13 @@ public class RealTimeWeightController {
 	
 	@ResponseBody
 	@RequestMapping(value = "/get/statistics/list/of/day.do")
-	public List<Statistics> getStatisticsOfDay(@RequestParam("groupCode") String groupCode, @RequestParam("type") int type, @RequestParam("petIdx") int petIdx) {
+	public List<Statistics> getStatisticsOfDay(@RequestParam("groupCode") String groupCode, @RequestParam("type") int type,  @RequestParam("date") String date,  @RequestParam("petIdx") int petIdx) {
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		List<Device> deviceList = deviceMapper.myDeviceList(groupCode);
 		map.put("deviceList", deviceList);
 		map.put("type", type);
 		map.put("petIdx", petIdx);
+		map.put("date", date);
 		return RealTimeWeightMapper.getStatisticsOfDay(map);
 	}
 	
@@ -190,13 +189,9 @@ public class RealTimeWeightController {
 	
 	@ResponseBody
 	@RequestMapping(value = "/get/statistics/list/of/month.do")
-	public List<Statistics> getStatisticsOfMonth(@RequestParam("groupCode") String groupCode, @RequestParam("year") String year, @RequestParam("type") int type, @RequestParam("petIdx") int petIdx) {
-		/*HashMap<String, Object> map = new HashMap<String, Object>();
-		map.put("deviceList", deviceList);
-		map.put("year", year);*/
-		test();
+	public List<Statistics> getStatisticsOfMonth(@RequestParam("groupCode") String groupCode, @RequestParam("year") String year, @RequestParam("month") String month, @RequestParam("type") int type, @RequestParam("petIdx") int petIdx) {
 		List<Device> deviceList = deviceMapper.myDeviceList(groupCode);
-		return RealTimeWeightMapper.getStatisticsOfMonth(deviceList, year, type, petIdx);
+		return RealTimeWeightMapper.getStatisticsOfMonth(deviceList, year, (Integer.parseInt(month) > 6 ? "up" : "down"), type, petIdx);
 	}
 	
 	@ResponseBody
