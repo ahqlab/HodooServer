@@ -91,6 +91,7 @@ public class PetBasicInfoControllerForAndroid {
 
 		petBasicInfoMapper.insert(basicInfo);
 		Pet pet = new Pet();
+		pet.setPetGroupCode(basicInfo.getGroupCode());
 		pet.setBasic(basicInfo.getId());
 		pet.setDisease(0);
 		pet.setPhysical(0);

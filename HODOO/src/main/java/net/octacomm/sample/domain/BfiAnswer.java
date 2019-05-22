@@ -6,4 +6,5 @@ import lombok.Data;
 public class BfiAnswer implements Domain {
 	private int id;
     private String answer;
+    private String answerImg;
 }
