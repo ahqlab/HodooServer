@@ -129,7 +129,7 @@ public class RealTimeWeightControllerForAndroid {
 	
 	@ResponseBody
 	@RequestMapping(value = "/get/statistics/list/of/day.do")
-	public CommonResponce<List<Statistics>> getStatisticsOfDay(@RequestParam("groupCode") String groupCode, @RequestParam("type") int type, @RequestParam("petIdx") int petIdx) {
+	public CommonResponce<List<Statistics>> getStatisticsOfDay(@RequestParam("groupCode") String groupCode, @RequestParam("type") int type, @RequestParam("date") String date,  @RequestParam("petIdx") int petIdx) {
 		CommonResponce<List<Statistics>> response = new CommonResponce<List<Statistics>>();
 		System.err.println("123456789876");
 		List<Device> deviceList = deviceMapper.myDeviceList(groupCode);
@@ -142,6 +142,7 @@ public class RealTimeWeightControllerForAndroid {
 			map.put("deviceList", deviceList);
 			map.put("type", type);
 			map.put("petIdx", petIdx);
+			map.put("date", date);
 			test();
 			List<Statistics> list =  RealTimeWeightMapper.getStatisticsOfDay(map);
 			if(list.size() > 0) {
@@ -194,7 +195,7 @@ public class RealTimeWeightControllerForAndroid {
 	
 	@ResponseBody
 	@RequestMapping(value = "/get/statistics/list/of/month.do")
-	public CommonResponce<List<Statistics>> getStatisticsOfMonth(@RequestParam("groupCode") String groupCode, @RequestParam("year") String year, @RequestParam("type") int type, @RequestParam("petIdx") int petIdx) {
+	public CommonResponce<List<Statistics>> getStatisticsOfMonth(@RequestParam("groupCode") String groupCode, @RequestParam("year") String year , @RequestParam("month") String month, @RequestParam("type") int type, @RequestParam("petIdx") int petIdx) {
 		CommonResponce<List<Statistics>> response = new CommonResponce<List<Statistics>>();
 		List<Device> deviceList = deviceMapper.myDeviceList(groupCode);
 		if(deviceList.isEmpty()) {
@@ -202,7 +203,7 @@ public class RealTimeWeightControllerForAndroid {
 			response.setDomain(null);
 			response.setResultMessage(ResultMessage.NOT_FOUND_DEVICE);
 		}else {
-			List<Statistics> list = RealTimeWeightMapper.getStatisticsOfMonth(deviceList, year, type, petIdx);
+			List<Statistics> list = RealTimeWeightMapper.getStatisticsOfMonth(deviceList, year, month, type, petIdx);
 			if(list.size() > 0) {
 				response.setStatus(HodooConstant.OK_RESPONSE);
 				response.setDomain(list);

@@ -52,7 +52,6 @@ public interface RealTimeWeightMapper extends CRUDMapper<RealTimeWeight, Default
 
 	@Select("select value from " + TABLE_NAME + " where mac = #{mac} order by createDate desc limit 4")
 	public List<Float> getRealTimeList(@Param("mac") String mac);
-
 	
 	@Select("select u.* from device d left join user_group_mapping m on d.groupCode = m.groupCode left join user u on u.userIdx = m.userIdx where d.serialNumber = #{mac} ")
 	public List<User> getUserList( @Param("mac") String mac );
@@ -69,7 +68,7 @@ public interface RealTimeWeightMapper extends CRUDMapper<RealTimeWeight, Default
 
 	public List<Statistics> getStatisticsOfMonth(HashMap<String, Object> map);
 
-	public List<Statistics> getStatisticsOfMonth(@Param("devices") List<Device> devices, @Param("year") String year, @Param("type") int type , @Param("petIdx") int petIdx);
+	public List<Statistics> getStatisticsOfMonth(@Param("devices") List<Device> devices, @Param("year") String year, @Param("month") String month ,@Param("type") int type , @Param("petIdx") int petIdx);
 
 	public List<Statistics> getStatisticsOfYear(HashMap<String, Object> map);
 

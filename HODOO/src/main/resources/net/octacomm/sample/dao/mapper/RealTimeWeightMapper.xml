@@ -70,7 +70,7 @@
 		AND
 		type = #{type}
 		AND
-		real_time_weight.createDate BETWEEN DATE_ADD(NOW(), INTERVAL -1 WEEK) AND NOW()
+		DATE_FORMAT(real_time_weight.createDate, '%Y-%m-%d') BETWEEN DATE_ADD(#{date}, INTERVAL -1 WEEK) AND #{date}
 		GROUP BY `date`; 
 		
 		<!-- SELECT 
@@ -155,11 +155,25 @@
 			#{device.serialNumber}
 		</foreach>
 		AND
-		type = #{type}
+			type = #{type}
 		AND
-		substring(real_time_weight.createDate, 1,4) = #{year}
-		group by theMonth
-		order by real_time_weight.createDate asc
+			substring(real_time_weight.createDate, 1,4) = #{year}
+			 <choose>
+				<when test="month == 'up'">
+					and 
+					<![CDATA[
+						substring(real_time_weight.createDate, 6,2) > 06
+					]]>
+				</when>
+				<otherwise>
+					and 
+					<![CDATA[
+						substring(real_time_weight.createDate, 6,2) <= 06
+					]]>
+				</otherwise>
+			</choose> 
+			group by theMonth
+			order by real_time_weight.createDate asc
 	</select>
 
 	<select id="getStatisticsOfYear" parameterType="hashmap"
