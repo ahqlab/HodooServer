@@ -12,7 +12,7 @@ import net.octacomm.sample.domain.DefaultParam;
 
 public interface AlarmObjectMapper extends CRUDMapper<AlarmObject, DefaultParam, Integer> {
 	
-	@Select("SELECT number FROM alarm_mapper WHERE userIdx = #{userIdx }")
+	@Select("select ifnull((SELECT number FROM alarm_mapper WHERE userIdx = #{userIdx }), 0) as number")
 	int getAlarm(@Param("userIdx") int userIdx);
 	
 	@Select("SELECT COUNT(*) FROM alarm_mapper WHERE userIdx = #{userIdx }")

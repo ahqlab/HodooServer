@@ -62,7 +62,7 @@ public class PetWeightInfoController {
 	public List<BfiModel> getMyBfi(@RequestParam("location") String location, @RequestParam("type") int type) {
 		List<BfiModel> bfiModel = bfiMapper.getBfi( location, type );
 		for ( int i = 0; i < bfiModel.size(); i++ ) {
-			bfiModel.get(i).setAnswers(bfiMapper.getBfiAnswer(bfiModel.get(i).getId()));
+			bfiModel.get(i).setAnswers(bfiMapper.getBfiAnswer(location, bfiModel.get(i).getId()));
 		}
 		return bfiModel;
 	}

@@ -109,6 +109,9 @@ public interface UserMapper extends CRUDMapper<User, DefaultParam, Integer>{
 	@Select("SELECT " + SELECT_FIELDS + " FROM " + TABLE_NAME + " join user_group_mapping on user_group_mapping.userIdx = user.userIdx where user.snsId = #{snsId} AND user.snsToken = #{snsToken} ")
 	User getSnsUsetInfo(User user);
 	
+	@Select("SELECT " + SELECT_FIELDS + " FROM " + TABLE_NAME + " join user_group_mapping on user_group_mapping.userIdx = user.userIdx where user.snsId = #{snsId}")
+	User getSnsUsetInfoForSnsId(@Param("snsId") long snsId);
+	
 	
 	@Update("UPDATE " + TABLE_NAME + " SET snsToken = #{snsToken}  WHERE snsId =  #{snsId} ")
 	int updateSnsToken(User user);
