@@ -24,6 +24,8 @@ public class Statistics implements Domain {
     private String theMonth;
     
     private String theYear;
+    
+    private String today;
 
     private float average;
 }

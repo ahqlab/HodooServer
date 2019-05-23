@@ -1,5 +1,6 @@
 package net.octacomm.sample.controller;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -16,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.google.appengine.api.search.DateUtil;
 
 import net.octacomm.sample.constant.HodooConstant;
 import net.octacomm.sample.dao.mapper.AlarmObjectMapper;
@@ -94,6 +97,8 @@ public class RealTimeWeightController {
 		map.put("type", type);
 		map.put("petIdx", petIdx);
 		map.put("date", date);
+		map.put("startDate", net.octacomm.sample.utils.DateUtil.getCurMonday(date));
+		map.put("endDate", net.octacomm.sample.utils.DateUtil.getCurSunday(net.octacomm.sample.utils.DateUtil.getCurMonday(date)));
 		return RealTimeWeightMapper.getStatisticsOfDay(map);
 	}
 	
@@ -105,17 +110,29 @@ public class RealTimeWeightController {
 		System.out.println("이 달의 마지막 주 : "+calendar.get(Calendar.WEEK_OF_MONTH));
 	}
 	
+	
+	//using 주별 그래프
 	@ResponseBody
 	@RequestMapping(value = "/get/statistics/list/of/week.do")
-	public List<Statistics> getStatisticsOfWeek(@RequestParam("groupCode") String groupCode, @RequestParam("month") String month, @RequestParam("type") int type, @RequestParam("petIdx") int petIdx) {
+	public List<Statistics> getStatisticsOfWeek(@RequestParam("groupCode") String groupCode, @RequestParam("year") String year , @RequestParam("month") String month, @RequestParam("type") int type, @RequestParam("petIdx") int petIdx) throws ParseException {
 		//List<Statistics> list = new ArrayList<Statistics>();
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		List<Device> deviceList = deviceMapper.myDeviceList(groupCode);
 		map.put("deviceList", deviceList);
+		map.put("year", year);
 		map.put("month", month);
 		map.put("type", type);
 		map.put("petIdx", petIdx);
-		return RealTimeWeightMapper.getStatisticsOfWeek(map);
+		List<Statistics> result = RealTimeWeightMapper.getStatisticsOfWeek(map);
+		for (Statistics statistics : result) {
+			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+			Date date = formatter.parse(statistics.getToday());
+	        Calendar cal = Calendar.getInstance();
+	        cal.setTime(date);
+	        String week = String.valueOf(cal.get(Calendar.WEEK_OF_MONTH));
+	        statistics.setTheWeek(week);
+		}
+		return result;
 		/*Calendar calendar = Calendar.getInstance();
 		calendar.set(Calendar.YEAR, Calendar.MONTH+1, calendar.getActualMaximum(Calendar.DATE));
 		String thisYear = new SimpleDateFormat("yyyy").format(new Date());
