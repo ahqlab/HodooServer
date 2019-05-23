@@ -220,6 +220,7 @@ public interface PetMapper extends CRUDMapper<Pet, DefaultParam, Integer> {
 		@Result(column="physical", property="pet.physical"),
 		@Result(column="weight", property="pet.weight"),
 		@Result(column="sltQst", property="pet.sltQst"),
+		@Result(column="fixWeight", property="pet.fixWeight"),
 		
 		@Result(column="profileFilePath", property="petBasicInfo.profileFilePath"),
 		@Result(column="profileFileName", property="petBasicInfo.profileFileName"),
@@ -229,6 +230,7 @@ public interface PetMapper extends CRUDMapper<Pet, DefaultParam, Integer> {
 		@Result(column="birthday", property="petBasicInfo.birthday"),
 		@Result(column="neutralization", property="petBasicInfo.neutralization"),
 		@Result(column="petType", property="petBasicInfo.petType"),
+		@Result(column="selectedBfi", property="petBasicInfo.selectedBfi"),
 		
 		@Result(column="diseaseName", property="petChronicDisease.diseaseName"),
 		

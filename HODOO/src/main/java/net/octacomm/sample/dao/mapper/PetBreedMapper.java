@@ -38,20 +38,20 @@ public interface PetBreedMapper extends CRUDMapper<PetBreed, DefaultParam, Integ
 	List<PetBreed> getList();
 	
 	
-	@Select("SELECT id, ${location}_name as name FROM pet_breed where typeIdx = 1 order by name asc")
+	@Select("SELECT id, ${location}_name as name FROM pet_breed where ${location}_name is not NULL and typeIdx = 1 order by name asc")
 	List<PetBreed> getAllList( @Param("location") String location );
 	
 	@Insert("insert into " + MAPPER_TABLE_NAME + " (basic_info_id, breed_id) values (#{basicInfoId }, #{breedId })")
 	int insertPetBreedMapper( @Param("basicInfoId") int basicInfoId,@Param("breedId") int breedId );
 	
 	@Update("UPDATE " + MAPPER_TABLE_NAME + " SET breed_id = #{breedId } WHERE basic_info_id = #{basicInfoId }")
-	int updatePetBreedMapper( @Param("basicInfoId") int basicInfoId,@Param("breedId") int breedId );
+	int updatePetBreedMapper( @Param("basicInfoId") int basicInfoId, @Param("breedId") int breedId );
 	
 	@Select("select count(*) from " + MAPPER_TABLE_NAME + " where basic_info_id = #{basicInfoId }")
 	int getBreedMapperCount( @Param("basicInfoId") int basicInfoId);
 	
 	
-	@Select("SELECT id, ${location}_name as name FROM pet_breed where typeIdx = ${typeIdx} order by name asc")
+	@Select("SELECT id, ${location}_name as name FROM pet_breed where ${location}_name is not NULL and typeIdx = ${typeIdx} order by name asc")
 	List<PetBreed> getAllBreedOfType(@Param("location") String location, @Param("typeIdx") int typeIdx );
 
 }
