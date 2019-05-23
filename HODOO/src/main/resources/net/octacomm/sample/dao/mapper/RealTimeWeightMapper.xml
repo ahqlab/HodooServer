@@ -16,7 +16,7 @@
 			<foreach collection="devices" item="device" open="(" close=")" separator=",">
 				#{device.serialNumber}
 			</foreach>
-		and substring(real_time_weight.createDate, 1,10) = #{date}
+		and DATE_FORMAT(real_time_weight.createDate, '%Y-%m-%d') = #{date}
 		and type = #{type}
 		order by real_time_weight.createDate desc
 	</select>
@@ -25,7 +25,7 @@
 	<select id="getStatisticsOfTime" parameterType="hashmap"
 		resultType="net.octacomm.sample.domain.Statistics">
 		SELECT
-			substring(real_time_weight.createDate, 12,2) as theHour,  ROUND(avg(real_time_weight.value), 1)  average
+			DATE_FORMAT(real_time_weight.createDate, '%d') as theHour,  ROUND(avg(real_time_weight.value), 1)  average
 		FROM
 			real_time_weight
 		JOIN 
@@ -37,7 +37,7 @@
 				separator=",">
 				#{device.serialNumber}
 			</foreach>
-		and substring(real_time_weight.createDate, 1,10) = #{today} and type =
+		and c = #{today} and type =
 		#{type}
 		group by theHour order by theHour asc
 	</select>
@@ -70,7 +70,7 @@
 		AND
 		type = #{type}
 		AND
-		DATE_FORMAT(real_time_weight.createDate, '%Y-%m-%d') BETWEEN DATE_ADD(#{date}, INTERVAL -1 WEEK) AND #{date}
+		DATE_FORMAT(real_time_weight.createDate, '%Y-%m-%d') BETWEEN #{startDate} AND #{endDate}
 		GROUP BY `date`; 
 		
 		<!-- SELECT 
@@ -115,10 +115,10 @@
 		resultType="net.octacomm.sample.domain.Statistics">
 		SELECT
 		@rownum := @rownum+1 AS theWeek,
-		DATE_FORMAT(DATE_SUB(real_time_weight.createDate, INTERVAL (DAYOFWEEK(real_time_weight.createDate)-1) DAY), '%Y/%m/%d') as start,
-		DATE_FORMAT(DATE_SUB(real_time_weight.createDate, INTERVAL
-		(DAYOFWEEK(real_time_weight.createDate)-7) DAY), '%Y/%m/%d') as end,
+		DATE_FORMAT(DATE_SUB(real_time_weight.createDate, INTERVAL (DAYOFWEEK(real_time_weight.createDate)-2) DAY), '%Y-%m-%d') as start,
+  		DATE_FORMAT(DATE_SUB(real_time_weight.createDate, INTERVAL (DAYOFWEEK(real_time_weight.createDate)-8) DAY), '%Y-%m-%d') as end,
 		DATE_FORMAT(real_time_weight.createDate, '%Y%U') AS `date`,
+		DATE_FORMAT(real_time_weight.createDate, '%Y-%m-%d') AS today , 
 		ROUND(avg(`value`), 1) as average
 		FROM
 		real_time_weight 
@@ -134,14 +134,16 @@
 		AND
 		type = #{type}
 		AND
-		substring(real_time_weight.createDate, 6,2) = #{month}
+			DATE_FORMAT(real_time_weight.createDate, '%Y') = #{year}
+		AND
+			DATE_FORMAT(real_time_weight.createDate, '%m') = #{month}
 		GROUP BY date;
 	</select>
 
 
 	<select id="getStatisticsOfMonth" resultType="net.octacomm.sample.domain.Statistics">
 		SELECT
-		substring(real_time_weight.createDate, 6,2) as theMonth,
+		DATE_FORMAT(real_time_weight.createDate, '%m') as theMonth,
 		ROUND(avg(real_time_weight.value), 1) average
 		FROM
 		real_time_weight
@@ -157,18 +159,18 @@
 		AND
 			type = #{type}
 		AND
-			substring(real_time_weight.createDate, 1,4) = #{year}
+			DATE_FORMAT(real_time_weight.createDate, '%Y') = #{year}
 			 <choose>
 				<when test="month == 'up'">
 					and 
 					<![CDATA[
-						substring(real_time_weight.createDate, 6,2) > 06
+						DATE_FORMAT(real_time_weight.createDate, '%m') > 06
 					]]>
 				</when>
 				<otherwise>
 					and 
 					<![CDATA[
-						substring(real_time_weight.createDate, 6,2) <= 06
+						DATE_FORMAT(real_time_weight.createDate, '%m') <= 06
 					]]>
 				</otherwise>
 			</choose> 
@@ -179,7 +181,7 @@
 	<select id="getStatisticsOfYear" parameterType="hashmap"
 		resultType="net.octacomm.sample.domain.Statistics">
 		SELECT
-		substring(real_time_weight.createDate, 1,4) as theYear,
+		DATE_FORMAT(real_time_weight.createDate, '%Y') as theYear,
 		ROUND(avg(real_time_weight.value), 1) average
 		FROM
 		real_time_weight
