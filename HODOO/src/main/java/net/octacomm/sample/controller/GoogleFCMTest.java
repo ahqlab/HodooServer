@@ -359,7 +359,14 @@ public class GoogleFCMTest {
 			@RequestParam("fromUserEmail") String fromUserEmail
 			) {
 		int result = 0;
-		User toUser = mapper.getByUserEmail(toUserEmail);
+		User toUser = null;
+		try {
+			long snsId = Long.parseLong(toUserEmail);
+			toUser = mapper.getSnsUsetInfoForSnsId(snsId);
+		} catch ( NumberFormatException e ) {
+			toUser = mapper.getByUserEmail(toUserEmail);
+		}
+		
 		User fromUser = mapper.getByUserEmail(fromUserEmail);
 		
 		toUser.setGroupCode( mapper.getGroupCode(toUser.getUserIdx()) );
@@ -398,10 +405,6 @@ public class GoogleFCMTest {
 		}
 		
 		result = 1;
-		
-		int number = alarmMapper.getAlarm(toUser.getUserIdx());
-		if ( number != 1 && (number & (0x01 << HodooConstant.GROUP_ALARM)) == 0 )
-			return ALARM_DISABLE;
 		
 		new InvitationFCM(request, message).start(); 
 		
@@ -502,8 +505,13 @@ public class GoogleFCMTest {
 		public void run() {
 			// TODO Auto-generated method stub
 			super.run();
+			int number = alarmMapper.getAlarm(request.getToUserIdx());
+			int result = 0;
+			if ( number != 1 && (number & (0x01 << HodooConstant.GROUP_ALARM)) == 0 )
+				result = SUCESS;
+			else 
+				result = requestFCM(message);
 			
-			int result = requestFCM(message);
 			if ( result == SUCESS ) {
 				if ( firebaseMapper.getCount(request) > 0 ) {
 					request = firebaseMapper.getInvitationUserFrom(request);

@@ -36,7 +36,7 @@ public class BodyFatRiskChartController {
 		CommonResponce<List<BfiModel>> responce = new CommonResponce<List<BfiModel>>();
 		List<BfiModel> bfiModel = bfiMapper.getBfi(location, type);
 		for (int i = 0; i < bfiModel.size(); i++) {
-			bfiModel.get(i).setAnswers(bfiMapper.getBfiAnswer(bfiModel.get(i).getId()));
+			bfiModel.get(i).setAnswers(bfiMapper.getBfiAnswer(location, bfiModel.get(i).getId()));
 		}
 		if (bfiModel.size() > 0) {
 			responce.setStatus(HodooConstant.OK_RESPONSE);
