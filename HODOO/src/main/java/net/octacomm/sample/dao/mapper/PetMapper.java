@@ -96,17 +96,13 @@ public interface PetMapper extends CRUDMapper<Pet, DefaultParam, Integer> {
 	@Select("select "
 			+ "pet.*, "
 			+ "pet_basic_info.*, "
-			+ "pet_chronic_disease.*, "
 			+ "pet_physical_info.weight AS physicalWeignt , "
-			+ "pet_user_selection_question.* , "
 			+ "pet_weight_info.*  " + 
 			"from group_pet_mapping " + 
 			"join pet on group_pet_mapping.petGroupCode = pet.petGroupCode and pet.visible = 0 " + 
 			"join pet_basic_info on pet_basic_info.id = pet.basic " + 
-			"join pet_chronic_disease on pet_chronic_disease.id = pet.disease " + 
 			"join pet_physical_info on pet_physical_info.id = pet.physical " +
 			"left join pet_weight_info on pet_weight_info.id = pet.weight " + 
-			"left join pet_user_selection_question on pet_user_selection_question.questionIdx = pet.sltQst " + 
 			"where group_pet_mapping.groupCode = #{groupCode} ")
 	@Results({
 		@Result(column="petIdx", property="pet.petIdx"),
