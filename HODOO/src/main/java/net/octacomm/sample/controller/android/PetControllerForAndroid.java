@@ -200,7 +200,7 @@ public class PetControllerForAndroid {
 	
 	
 	public HodooIndex getWeightStd(PetAllInfos info, String location) {
-		System.err.println(info.getPetBasicInfo().getCurrentMonth());
+		//System.err.println(info.getPetBasicInfo().getCurrentMonth());
 		if(info.getPetBasicInfo().getCurrentMonth() < 12){
 			return weigtPuppy(info, location);
 		}else {

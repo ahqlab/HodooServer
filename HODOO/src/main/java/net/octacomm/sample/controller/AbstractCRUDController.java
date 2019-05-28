@@ -22,9 +22,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 /**
  * CRUD (Create, Retrieve, Update, Delete) 기능을 수행하는 추상 클래스.
  * 도메인 클래스에 대해 CRUD 기능을 하려면, 본 추상 클래스를 상속받아 사용한다. 
- * 
- * @author taeyo
- *
  * @param <M> CRUDMapper 를 상속받은 SQL Mapper 인터페이스
  * @param <D> Domain 을 상속받은 클래스
  * @param <P> DomainParam 을 상속받은 클래스 (검색에 사용할 클래스)

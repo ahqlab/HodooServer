@@ -21,6 +21,12 @@ public class MealTipController {
 	@Autowired
 	private MealTipMapper mealTipMapper; 
 	
+	
+	/**
+	 * language 에 맞는 식사 TIP 을 리턴한다.
+	 * @param mealTip 
+	 * @return MealTip
+	 */
 	@ResponseBody
 	@RequestMapping(value = "/get/county/message.do", method = RequestMethod.POST)
 	public MealTip getCountryMessage(@RequestBody MealTip mealTip) {

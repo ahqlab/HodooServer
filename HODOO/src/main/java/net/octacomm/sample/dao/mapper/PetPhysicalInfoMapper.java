@@ -43,7 +43,9 @@ public interface PetPhysicalInfoMapper extends CRUDMapper<PetPhysicalInfo, Defau
 	public PetPhysicalInfo get(Integer id);
 	
 	
-	@Select("SELECT pet_physical_info.* FROM pet " + 
+	@Select("SELECT "
+			+ "pet_physical_info.* "
+			+ "FROM pet " + 
 			"join group_pet_mapping on group_pet_mapping.petGroupCode = pet.petGroupCode " + 
 			"join pet_physical_info on pet.physical = pet_physical_info.id " + 
 			"WHERE group_pet_mapping.groupCode = #{groupCode} " + 

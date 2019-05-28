@@ -285,6 +285,12 @@ public class GoogleFCMTest {
 	@Autowired
 	AlarmObjectMapper alarmMapper;
 
+	
+	/**
+	 * 사용안함. 푸쉬 테스트용도
+	 * @return
+	 * @throws Exception
+	 */
 	@ResponseBody
 	@RequestMapping(value = "/mobile/send.do")
 	public String index() throws Exception {

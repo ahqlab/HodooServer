@@ -33,16 +33,6 @@ public class ExTestController {
 		return null;
 	}
 
-	/*@RequestMapping("/ex2") 
-	public String ex2() { // 전역 처리자 메소드 handleBaseException에 잡힐 것이다.
-		throw new CustomException1(); 
-	}
-	
-	@RequestMapping("/ex3") 
-	public String ex3() { // 전역 처리자 메소드handleBaseException에 잡힐 것이다. 
-		throw new CustomException2(); 
-	}*/
-
 	@RequestMapping("/ex4")
 	public String ex4() {
 		// 전역 처리자 메소드 handleBaseException에 잡힐 것이다.

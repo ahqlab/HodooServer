@@ -22,7 +22,10 @@ public class CountryController {
 	
 	@Autowired
 	CountryService service;
-	
+	/**
+	 * @param language
+	 * @return 언어별 국가리스트 
+	 */
 	@ResponseBody
 	@RequestMapping(value = "/{language}/getAllCountry.do", method = RequestMethod.GET)
 	public List<Country> getAllCountry (@PathVariable("language") int language) {
