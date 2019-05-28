@@ -45,7 +45,9 @@ public class MailController {
 	@Autowired 
 	private ResourceLoader resourceLoader;
 
-
+	/**
+	 * 사용안함.
+	 */
 	@RequestMapping(value = "/mail/mailSending.do")
 	public void mailSending() {
 		String tomail = "silverlight2017@ahqlab.com"; // 받는 사람 이메일
@@ -63,6 +65,13 @@ public class MailController {
 			System.out.println(e);
 		}
 	}
+	
+	/**
+	 * 회원가입 후 이메일 인증 수행 
+	 * @param request
+	 * @param toMailAddr
+	 * @return 0 실패, 1 성공
+	 */
 	@ResponseBody
 	@RequestMapping(value = "/user/certified.do", method = RequestMethod.POST)
 	public int userCertifiedMailSend(

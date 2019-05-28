@@ -34,7 +34,13 @@ public class PetWeightInfoController {
 	@Autowired
 	private BfiMapper bfiMapper;
 	
-	
+	/**
+	 * 무게 정보를 입력한다.
+	 * 입력 후 리턴 받은 idx를 pet 테이블에 저장한다.
+	 * @param petIdx
+	 * @param petWeightInfo
+	 * @return (int) 0 실패, 1 성공
+	 */
 	@ResponseBody
 	@RequestMapping(value = "/regist.do", method = RequestMethod.POST)
 	public int regist(@RequestParam("petIdx") int petIdx, @RequestBody PetWeightInfo petWeightInfo) {
@@ -42,12 +48,18 @@ public class PetWeightInfoController {
 		return petMapper.registWeight(petWeightInfo.getId(), petIdx);
 	}
 
-	
+	/**
+	 * 무게 상세정보를 확인한다.
+	 * @param groupCode
+	 * @param petIdx
+	 * @return PetWeightInfo
+	 */
 	@ResponseBody
 	@RequestMapping(value = "/get.do" , method = RequestMethod.POST)
 	public PetWeightInfo get(@RequestParam("groupCode") String groupCode, @RequestParam("petIdx") int petIdx) {
 		return petWeightInfoMapper.getPetWeightInformation(groupCode, petIdx);
 	}
+	
 	
 	@ResponseBody
 	@RequestMapping(value = "/bcs.do" , method = RequestMethod.POST)

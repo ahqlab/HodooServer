@@ -17,6 +17,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.google.appengine.api.appidentity.AppIdentityServicePb.AppIdentityServiceError.ErrorCode;
 
+/**
+ * 사용안함.
+ * @author silve
+ *
+ */
 @Controller
 public class LoginController {
 	

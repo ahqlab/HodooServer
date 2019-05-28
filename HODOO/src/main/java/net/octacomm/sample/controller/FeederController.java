@@ -13,7 +13,11 @@ import net.octacomm.sample.dao.mapper.MealHistoryMapper;
 import net.octacomm.sample.dao.mapper.UserMapper;
 import net.octacomm.sample.domain.FeedOrders;
 import net.octacomm.sample.domain.MealHistory;
-
+/**
+ * 자동급식기 관련 임시로 만들어놓은 클래스 현재 사용안함.
+ * @author silve
+ *
+ */
 @RequestMapping("/feeder")
 @Controller
 public class FeederController {

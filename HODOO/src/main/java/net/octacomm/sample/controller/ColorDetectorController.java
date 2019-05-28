@@ -17,7 +17,13 @@ public class ColorDetectorController {
 
 	@Autowired
 	private StandardHsvMapper standardHsvMapper;
-
+	
+	/**
+	 * 입력받은 SHV 값을 DB데이터 와 비교한다(근사치)
+	 * DB데이터는 소변 막대 타입의 HSV값을 저장함.
+	 * @param hsv
+	 * @return
+	 */
 	@ResponseBody
 	@RequestMapping(value = "/detector.do", method = RequestMethod.POST)
 	public HsvValue detector(@RequestBody HsvValue hsv) {
@@ -69,7 +75,13 @@ public class ColorDetectorController {
 		
 		return result;
 	}
-
+	
+	/**
+	 * 
+	 * @param HSV 컬러
+	 * @param value 소변스틱 항목
+	 * @return 색상간의 거리
+	 */
 	public Integer getFindNearH(StandardHsv HSV, String value) {
 		int colors[] = { strSpriterOfH(HSV.getLevel1()), strSpriterOfH(HSV.getLevel2()), strSpriterOfH(HSV.getLevel3()),
 				strSpriterOfH(HSV.getLevel4()), strSpriterOfH(HSV.getLevel5()), strSpriterOfH(HSV.getLevel6()),
@@ -78,6 +90,12 @@ public class ColorDetectorController {
 		return getIndexOf(sg, colors);
 	}
 	
+	/**
+	 * 
+	 * @param HSV 컬러
+	 * @param value 소변스틱 항목
+	 * @return 색상간의 거리
+	 */
 	public Integer getFindNearV(StandardHsv HSV, String value) {
 		int colors[] = { strSpriterOfV(HSV.getLevel1()), strSpriterOfV(HSV.getLevel2()), strSpriterOfV(HSV.getLevel3()),
 				strSpriterOfV(HSV.getLevel4()), strSpriterOfV(HSV.getLevel5()), strSpriterOfV(HSV.getLevel6()),
@@ -93,17 +111,35 @@ public class ColorDetectorController {
 		}
 		return i; // or return tab[i];
 	}
-
+	
+	/**
+	 * HSV 에서 H값 추출
+	 * @param str
+	 * @return H 값 (int)
+	 */
 	private Integer strSpriterOfH(String str) {
 		String[] array = str.split("/");
 		return Integer.parseInt(array[0]);
 	}
 	
+	
+	/**
+	 * HSV 에서 V값 추출
+	 * @param str
+	 * @return V 값 (int)
+	 */
 	private Integer strSpriterOfV(String str) {
 		String[] array = str.split("/");
 		return Integer.parseInt(array[2]);
 	}
-
+	
+	
+	/**
+	 * 
+	 * @param data
+	 * @param near 찾는 값
+	 * @return 가까운 데이터의 인덱스
+	 */
 	private int getNear(int[] data, int near) {
 		int min = Integer.MAX_VALUE; // 기준데이터 최소값 - Interger형의 최대값으로 값을 넣는다.
 		int nearData = 0; // 가까운 값을 저장할 변수

@@ -90,7 +90,8 @@ public class RealTimeWeightController {
 	
 	@ResponseBody
 	@RequestMapping(value = "/get/statistics/list/of/day.do")
-	public List<Statistics> getStatisticsOfDay(@RequestParam("groupCode") String groupCode, @RequestParam("type") int type,  @RequestParam("date") String date,  @RequestParam("petIdx") int petIdx) {
+	public List<Statistics> getStatisticsOfDay(@RequestParam("groupCode") String groupCode,
+			@RequestParam("type") int type,  @RequestParam("date") String date,  @RequestParam("petIdx") int petIdx) {
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		List<Device> deviceList = deviceMapper.myDeviceList(groupCode);
 		map.put("deviceList", deviceList);
@@ -114,7 +115,12 @@ public class RealTimeWeightController {
 	//using 주별 그래프
 	@ResponseBody
 	@RequestMapping(value = "/get/statistics/list/of/week.do")
-	public List<Statistics> getStatisticsOfWeek(@RequestParam("groupCode") String groupCode, @RequestParam("year") String year , @RequestParam("month") String month, @RequestParam("type") int type, @RequestParam("petIdx") int petIdx) throws ParseException {
+	public List<Statistics> getStatisticsOfWeek(
+			@RequestParam("groupCode") String groupCode,
+			@RequestParam("year") String year , 
+			@RequestParam("month") String month,
+			@RequestParam("type") int type,
+			@RequestParam("petIdx") int petIdx) throws ParseException {
 		//List<Statistics> list = new ArrayList<Statistics>();
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		List<Device> deviceList = deviceMapper.myDeviceList(groupCode);
@@ -131,6 +137,7 @@ public class RealTimeWeightController {
 	        cal.setTime(date);
 	        String week = String.valueOf(cal.get(Calendar.WEEK_OF_MONTH));
 	        statistics.setTheWeek(week);
+	        System.err.println("statistics : "  +  statistics);
 		}
 		return result;
 		/*Calendar calendar = Calendar.getInstance();
@@ -206,7 +213,12 @@ public class RealTimeWeightController {
 	
 	@ResponseBody
 	@RequestMapping(value = "/get/statistics/list/of/month.do")
-	public List<Statistics> getStatisticsOfMonth(@RequestParam("groupCode") String groupCode, @RequestParam("year") String year, @RequestParam("month") String month, @RequestParam("type") int type, @RequestParam("petIdx") int petIdx) {
+	public List<Statistics> getStatisticsOfMonth(
+			@RequestParam("groupCode") String groupCode, 
+			@RequestParam("year") String year,
+			@RequestParam("month") String month,
+			@RequestParam("type") int type,
+			@RequestParam("petIdx") int petIdx) {
 		List<Device> deviceList = deviceMapper.myDeviceList(groupCode);
 		return RealTimeWeightMapper.getStatisticsOfMonth(deviceList, year, (Integer.parseInt(month) > 6 ? "up" : "down"), type, petIdx);
 	}

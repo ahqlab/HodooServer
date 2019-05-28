@@ -37,30 +37,47 @@ public class PetController {
 	private PetBreedMapper breedMapper;
 	
 	
-	@ResponseBody
+	/*@ResponseBody
 	@RequestMapping(value = "/my/list.do", method = RequestMethod.POST)
 	public List<PetBasicInfo> myList(HttpServletRequest request, @RequestParam("groupId") int groupId) {
 		return  petBasicInfoMapper.getMyPetList(groupId);
-	}
+	}*/
 	
-	@ResponseBody
+	/*@ResponseBody
 	@RequestMapping(value = "/my/registered/list.do", method = RequestMethod.POST)
 	public List<PetBasicInfo> getMyRegisteredPetList(HttpServletRequest request, @RequestParam("groupId") String groupId) {
 		return  petBasicInfoMapper.getMyRegisteredPetList(groupId);
-	}
+	}*/
 	
+	/**
+	 * 기본정보 상세
+	 * @param request
+	 * @param id
+	 * @return PetBasicInfo
+	 */
 	@ResponseBody
 	@RequestMapping(value = "/basic/info/get.do", method = RequestMethod.POST)
 	public PetBasicInfo login(HttpServletRequest request, @RequestParam("id") int id) {
 		return petBasicInfoMapper.getBasicInfoForPetId(id);
 	}
 	
+	/**
+	 * 그룹코드에 해당하는 등록된 펫리스트 
+	 * @param groupCode
+	 * @return List<Pet>
+	 */
 	@ResponseBody
 	@RequestMapping(value = "/my/pet/list.do", method = RequestMethod.POST)
 	public List<Pet> myPetList(@RequestParam("groupCode") String groupCode){
 		return petMapper.myPetList(groupCode);
 	}
 	
+	
+	/**
+	 * 사용안함.
+	 * @param groupCode
+	 * @return
+	 */
 	@ResponseBody
 	@RequestMapping(value = "/my/pet/listResult.do", method = RequestMethod.POST)
 	public int[] myPetListResult(@RequestParam("groupCode") String groupCode){
@@ -99,12 +116,22 @@ public class PetController {
 		return result;
 	}
 	
+	/**
+	 * 펫 모든 정보 (기본, 무게, 피지컬, 질병 등등..)
+	 * @param petIdx
+	 * @return PetAllInfos
+	 */
 	@ResponseBody
 	@RequestMapping(value = "/all/infos.do", method = RequestMethod.POST)
 	public PetAllInfos petAllInfos(@RequestParam("petIdx") int petIdx){
 		return petMapper.allInfoOnThePet(petIdx);
 	}
 	
+	/**
+	 * 견종 리스트 
+	 * @param location
+	 * @return
+	 */
 	@ResponseBody
 	@RequestMapping(value = "/all/getBreed.do", method = RequestMethod.POST)
 	public List<PetBreed> getAllBreed( @RequestParam("location") String location ){
@@ -112,6 +139,11 @@ public class PetController {
 		return list;
 	}
 	
+	/**
+	 * 펫 타입을 가져온다. 
+	 * @param petIdx
+	 * @return
+	 */
 	@ResponseBody
 	@RequestMapping(value = "/get/type.do", method = RequestMethod.POST)
 	public int getPetType( @RequestParam("petIdx") int petIdx ){

@@ -44,7 +44,14 @@ public class PetBasicInfoController {
 	
 	@Autowired
 	PetBreedMapper breedMapper;
-
+	
+	
+	/**
+	 * PET 기본정보 등록
+	 * @param request
+	 * @param basicInfo
+	 * @return
+	 */
 	@ResponseBody
 	@RequestMapping(value = "/basic/regist.do", method = RequestMethod.POST)
 	public ResultMessageGroup regist(HttpServletRequest request, PetBasicInfo basicInfo) {
@@ -115,6 +122,13 @@ public class PetBasicInfoController {
 		return group;
 	}
 
+	
+	/**
+	 * 기본정보 수정
+	 * @param request
+	 * @param basicInfo
+	 * @return
+	 */
 	@ResponseBody
 	@RequestMapping(value = "/basic/update.do", method = RequestMethod.POST)
 	public ResultMessageGroup update(HttpServletRequest request, PetBasicInfo basicInfo) {
@@ -175,14 +189,28 @@ public class PetBasicInfoController {
 		}
 		return group;
 	}
-
+	
+	
+	/**
+	 * 기본정보 상세 
+	 * @param request
+	 * @param location
+	 * @param groupCode
+	 * @param petIdx
+	 * @return
+	 */
 	@ResponseBody
 	@RequestMapping(value = "/basic/get.do", method = RequestMethod.POST)
 	public PetBasicInfo getBasicInformation(HttpServletRequest request, @RequestParam("location") String location, @RequestParam("groupCode") String groupCode, @RequestParam("petIdx") int petIdx) {
-		PetBasicInfo info = petBasicInfoMapper.getBasicInformation(location, groupCode, petIdx);
+		//PetBasicInfo info = petBasicInfoMapper.getBasicInformation(location, groupCode, petIdx);
 		return petBasicInfoMapper.getBasicInformation(location, groupCode, petIdx);
 	}
 
+	/**
+	 * 등록된 나의 펫 리스트 (모든정보 포함)
+	 * @param groupCode
+	 * @return
+	 */
 	@ResponseBody
 	@RequestMapping(value = "/about/my/pet/list.do")
 	public List<PetAllInfos> aboutMyPetList(@RequestParam("groupCode") String groupCode) {
@@ -194,7 +222,7 @@ public class PetBasicInfoController {
 		return list;
 	}
 	
-	@ResponseBody
+	/*@ResponseBody
 	@RequestMapping(value = "/test/image/upload.do", method = RequestMethod.POST)
 	public CommonResponce<User> IosMultiPartTest(@RequestParam("profile") MultipartFile profile) {
 		System.err.println("profile : " + profile.getOriginalFilename());
@@ -202,7 +230,7 @@ public class PetBasicInfoController {
 		responce.setResultMessage(ResultMessage.SUCCESS);
 		return responce;
 	}
-	
+	*/
 	
 	
 }

@@ -34,16 +34,27 @@ public class RealTimeWeightControllerForAndroid {
 	@Autowired
 	private net.octacomm.sample.dao.mapper.RealTimeWeightMapper RealTimeWeightMapper;
 
+	
+	/**
+	 * 디바이스에서 실제 데이터를 보내는 URL 
+	 * @param realTimeWeight
+	 * @return
+	 */
 	@ResponseBody
 	@RequestMapping(value = "/realtime/get.do")
 	public String regist(RealTimeWeight realTimeWeight) {
 		RealTimeWeightMapper.insert(realTimeWeight);
+		//PUSH 를 보낸다.
 		RealTimeThred thred = new RealTimeThred(realTimeWeight);
 		thred.start();
 		return "HELLO";
 	}
 	
-	// getLatelyData
+	/**
+	 * 사용안함.
+	 * @param mac String
+	 * @return CommonResponce<Float>
+	 */
 	@ResponseBody
 	@RequestMapping(value = "/get/lately/data.do")
 	public CommonResponce<Float> getLatelyData(@RequestParam("mac") String mac) {
@@ -59,6 +70,11 @@ public class RealTimeWeightControllerForAndroid {
 		return response;
 	}
 
+	/**
+	 * 사용안함.
+	 * @param mac String
+	 * @return CommonResponce<List<Float>>
+	 */
 	@ResponseBody
 	@RequestMapping(value = "/get/list/of/group.do")
 	public CommonResponce<List<Float>> getRealTimeList(@RequestParam("mac") String mac) {
@@ -76,7 +92,16 @@ public class RealTimeWeightControllerForAndroid {
 		}
 		return response;
 	}
-
+	
+	
+	/**
+	 * 마지막 측정 데이터 ( 평균 )
+	 * @param date yyyy-MM-dd
+	 * @param groupCode String
+	 * @param type 0 ? 1
+	 * @param petIdx int
+	 * @return CommonResponce<RealTimeWeight>
+	 */
 	@ResponseBody
 	@RequestMapping(value = "/get/last/collection/data.do", method = RequestMethod.POST)
 	public CommonResponce<RealTimeWeight> getLastCollectionData(@RequestParam("date") String date, @RequestParam("groupCode") String groupCode, @RequestParam("type") int type, @RequestParam("petIdx") int petIdx) {
@@ -99,6 +124,16 @@ public class RealTimeWeightControllerForAndroid {
 		return response;
 	}
 
+	/**
+	 * 시간대별 평균데이터.	
+	 * 그래프에 사용
+	 * 현제 사용안함.
+	 * @param groupCode String
+	 * @param today  yyyy-MM-dd
+	 * @param type 0 ? 1
+	 * @param petIdx int
+	 * @return CommonResponce<List<Statistics>>
+	 */
 	@ResponseBody
 	@RequestMapping(value = "/get/statistics/list/of/time.do")
 	public CommonResponce<List<Statistics>> getStatisticsOfTime(@RequestParam("groupCode") String groupCode, @RequestParam("today") String today, @RequestParam("type") int type, @RequestParam("petIdx") int petIdx) {
@@ -126,12 +161,24 @@ public class RealTimeWeightControllerForAndroid {
 		return response;
 	}
 	
-	
+	/**
+	 * 일별 마지막 데이터.
+	 * 그래프에 사용
+	 * 
+	 * @param groupCode String
+	 * @param type 0 ? 1 
+	 * @param date yyyy-MM-dd
+	 * @param petIdx int
+	 * @return CommonResponce<List<Statistics>>
+	 */
 	@ResponseBody
 	@RequestMapping(value = "/get/statistics/list/of/day.do")
-	public CommonResponce<List<Statistics>> getStatisticsOfDay(@RequestParam("groupCode") String groupCode, @RequestParam("type") int type, @RequestParam("date") String date,  @RequestParam("petIdx") int petIdx) {
+	public CommonResponce<List<Statistics>> getStatisticsOfDay(
+			@RequestParam("groupCode") String groupCode, 
+			@RequestParam("type") int type,
+			@RequestParam("date") String date,
+			@RequestParam("petIdx") int petIdx) {
 		CommonResponce<List<Statistics>> response = new CommonResponce<List<Statistics>>();
-		System.err.println("123456789876");
 		List<Device> deviceList = deviceMapper.myDeviceList(groupCode);
 		if(deviceList.isEmpty()) {
 			response.setStatus(HodooConstant.NO_CONTENT_RESPONSE);
@@ -143,7 +190,8 @@ public class RealTimeWeightControllerForAndroid {
 			map.put("type", type);
 			map.put("petIdx", petIdx);
 			map.put("date", date);
-			test();
+			map.put("startDate", net.octacomm.sample.utils.DateUtil.getCurMonday(date));
+			map.put("endDate", net.octacomm.sample.utils.DateUtil.getCurSunday(net.octacomm.sample.utils.DateUtil.getCurMonday(date)));
 			List<Statistics> list =  RealTimeWeightMapper.getStatisticsOfDay(map);
 			if(list.size() > 0) {
 				response.setStatus(HodooConstant.OK_RESPONSE);
@@ -157,9 +205,26 @@ public class RealTimeWeightControllerForAndroid {
 	}
 	
 	
+	/**
+	 * 주별 평균 데이터
+	 * 그래프에 사용
+	 * 
+	 * @param groupCode
+	 * @param year yyyy
+	 * @param month mm
+	 * @param type 0 ? 1
+	 * @param petIdx int
+	 * @return CommonResponce<List<Statistics>>
+	 */
+	//using 주별 그래프
 	@ResponseBody
 	@RequestMapping(value = "/get/statistics/list/of/week.do")
-	public CommonResponce<List<Statistics>> getStatisticsOfWeek(@RequestParam("groupCode") String groupCode, @RequestParam("month") String month, @RequestParam("type") int type, @RequestParam("petIdx") int petIdx) {
+	public CommonResponce<List<Statistics>> getStatisticsOfWeek(
+			@RequestParam("groupCode") String groupCode,
+			@RequestParam("year") String year , 
+			@RequestParam("month") String month,
+			@RequestParam("type") int type,
+			@RequestParam("petIdx") int petIdx) {
 		CommonResponce<List<Statistics>> response = new CommonResponce<List<Statistics>>();
 		List<Device> deviceList = deviceMapper.myDeviceList(groupCode);
 		if(deviceList.isEmpty()) {
@@ -169,10 +234,10 @@ public class RealTimeWeightControllerForAndroid {
 		}else {
 			HashMap<String, Object> map = new HashMap<String, Object>();
 			map.put("deviceList", deviceList);
+			map.put("year", year);
 			map.put("month", month);
 			map.put("type", type);
 			map.put("petIdx", petIdx);
-			test();
 			List<Statistics> list = RealTimeWeightMapper.getStatisticsOfWeek(map);
 			if(list.size() > 0) {
 				response.setStatus(HodooConstant.OK_RESPONSE);
@@ -185,17 +250,25 @@ public class RealTimeWeightControllerForAndroid {
 		return response;
 	}
 	
-	public void test() {
-		Calendar calendar = Calendar.getInstance();
-		System.out.println("이 달의 현재 주 : "+calendar.get(Calendar.WEEK_OF_MONTH));
-		System.out.println("이 달의 마지막 날 : "+calendar.getActualMaximum(Calendar.DATE));
-		calendar.set(Calendar.YEAR, Calendar.MONTH+1, calendar.getActualMaximum(Calendar.DATE));
-		System.out.println("이 달의 마지막 주 : "+calendar.get(Calendar.WEEK_OF_MONTH));
-	}
-	
+	/**
+	 * 월별 평균 데이터
+	 * 그래프에 사용
+	 * 
+	 * @param groupCode
+	 * @param year yyyy
+	 * @param month mm 
+	 * @param type 0 ? 1
+	 * @param petIdx int
+	 * @return CommonResponce<List<Statistics>>
+	 */
 	@ResponseBody
 	@RequestMapping(value = "/get/statistics/list/of/month.do")
-	public CommonResponce<List<Statistics>> getStatisticsOfMonth(@RequestParam("groupCode") String groupCode, @RequestParam("year") String year , @RequestParam("month") String month, @RequestParam("type") int type, @RequestParam("petIdx") int petIdx) {
+	public CommonResponce<List<Statistics>> getStatisticsOfMonth(
+			@RequestParam("groupCode") String groupCode,
+			@RequestParam("year") String year , 
+			@RequestParam("month") String month, 
+			@RequestParam("type") int type, 
+			@RequestParam("petIdx") int petIdx) {
 		CommonResponce<List<Statistics>> response = new CommonResponce<List<Statistics>>();
 		List<Device> deviceList = deviceMapper.myDeviceList(groupCode);
 		if(deviceList.isEmpty()) {
@@ -203,7 +276,7 @@ public class RealTimeWeightControllerForAndroid {
 			response.setDomain(null);
 			response.setResultMessage(ResultMessage.NOT_FOUND_DEVICE);
 		}else {
-			List<Statistics> list = RealTimeWeightMapper.getStatisticsOfMonth(deviceList, year, month, type, petIdx);
+			List<Statistics> list = RealTimeWeightMapper.getStatisticsOfMonth(deviceList, year, (Integer.parseInt(month) > 6 ? "up" : "down"), type, petIdx);
 			if(list.size() > 0) {
 				response.setStatus(HodooConstant.OK_RESPONSE);
 				response.setDomain(list);
@@ -212,10 +285,20 @@ public class RealTimeWeightControllerForAndroid {
 				response.setDomain(null);
 			}
 		}
-		test();
 		return response;
 	}
 	
+	
+	/**
+	 * 연도별 평균데이터 
+	 * 그래프에 사용
+	 * 현재 사용안함.
+	 * 
+	 * @param groupCode
+	 * @param type
+	 * @param petIdx
+	 * @return CommonResponce<List<Statistics>>
+	 */
 	@ResponseBody
 	@RequestMapping(value = "/get/statistics/list/of/year.do")
 	public CommonResponce<List<Statistics>> getStatisticsOfYear(@RequestParam("groupCode") String groupCode, @RequestParam("type") int type, @RequestParam("petIdx") int petIdx) {
@@ -239,10 +322,11 @@ public class RealTimeWeightControllerForAndroid {
 				response.setDomain(null);
 			}
 		}
-		test();
 		return response;
 		
 	}
+	
+	//체중 측정 PUSH Thread
 	public class RealTimeThred extends Thread {
 		private RealTimeWeight realTimeWeight;
 		RealTimeThred ( RealTimeWeight realTimeWeight ) {

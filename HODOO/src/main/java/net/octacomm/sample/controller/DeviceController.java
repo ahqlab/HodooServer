@@ -32,18 +32,36 @@ public class DeviceController {
 	@Autowired
 	private UserGroupMappingMapper userGroupMappingMapper;
 
+	
+	/**
+	 * 등록 기기 리스트를 가져온다.
+	 * @param groupCode
+	 * @return List<Device>
+	 */
 	@ResponseBody
 	@RequestMapping(value = "/my/device/list.do", method = RequestMethod.POST)
 	public List<Device> myDeviceList(@RequestParam("groupCode") String groupCode) {
 		return deviceNapper.myDeviceList(groupCode);
 	}
 	
+	
+	/**
+	 * 기기 등록 카운트를 가져온다.
+	 * @param groupCode
+	 * @return 기기등록 수
+	 */
 	@ResponseBody
 	@RequestMapping(value = "/my/device/listResult.do", method = RequestMethod.POST)
 	public int myDeviceListResult(@RequestParam("groupCode") String groupCode) {
 		return deviceNapper.myDeviceListCount(groupCode);
 	}
 
+	/**
+	 * 	기기등록 상태 변경
+	 * @param deviceIdx
+	 * @param connect
+	 * @return 0 실패, 1 성공
+	 */
 	@ResponseBody
 	@RequestMapping(value = "/change/connect/status.do", method = RequestMethod.POST)
 	public int changeDeviceConnectStatus(@RequestParam("deviceIdx") int deviceIdx,
@@ -51,12 +69,31 @@ public class DeviceController {
 		return deviceNapper.changeDeviceConnectStatus(deviceIdx, connect);
 	}
 
+	/**
+	 * 디바이스 연결 상태를 변경한다.
+	 * @param groupCode
+	 * @param deviceIdx
+	 * @param isDel
+	 * @return 0 실패, 1 성공
+	 */
 	@ResponseBody
 	@RequestMapping(value = "/change/connection.do", method = RequestMethod.POST)
 	public int changeDeviceConnection(@RequestParam("groupCode") String groupCode, @RequestParam("deviceIdx") int deviceIdx, @RequestParam("isDel") Boolean isDel) {
 		return deviceNapper.changeDeviceConnection(groupCode, deviceIdx, isDel);
 	}
-
+	
+	
+	/**
+	 * 디바이스를 등록한다.
+	 * PetGroupMapping 에 등록된  DEVICE 가 없으면
+	 * PetGroupMapping 및 DEVICE 등록
+	 * PetGroupMapping 이 존재하면 DEVICE만 등록
+	 * 이미 DEVICE 가 등록되었을 경우 > 만약 디바이스의 isDel 이 DISCONNECTED 일시  CONNECTED 변경
+	 * 그 외 100 리턴 100 > 이미등록된 디바이스 입니다.(앱에서 처리)
+	 * 
+	 * @param device
+	 * @return 100 (이미등록된 디바이스 입니다.(앱에서 처리)) , 0 등록 실패, 1 성공
+	 */
 	@ResponseBody
 	@RequestMapping(value = "/insert/device.do", method = RequestMethod.POST)
 	public int insert(@RequestBody Device device) {
@@ -116,10 +153,5 @@ public class DeviceController {
 			return deviceNapper.insert(device);
 		}
 	}
-
-	@ResponseBody
-	@RequestMapping(value = "/insert/device2.do", method = RequestMethod.POST)
-	public Device insert2(@RequestBody Device device) {
-		return device;
-	}
+	
 }

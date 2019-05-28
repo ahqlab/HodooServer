@@ -50,23 +50,38 @@ public class MealHistoryController {
 	
 	@Autowired
 	AlarmObjectMapper alarmObjectMapper;
-
+	
+	
+	/**
+	 * 식사등록
+	 * @param mealHistory
+	 * @return 0 실패, 1성공
+	 */
 	@ResponseBody
 	@RequestMapping(value = "/insert.do", method = RequestMethod.POST)
 	public int insert(@RequestBody MealHistory mealHistory) {
-		
 		FCMThead thead = new FCMThead(mealHistory);
 		thead.start();
-	
 		return mealHistoryMapper.insert(mealHistory);
 	}
 	
+	/**
+	 * 식사 수정
+	 * @param mealHistory
+	 * @return 0 실패, 1성공
+	 */
 	@ResponseBody
 	@RequestMapping(value = "/update.do", method = RequestMethod.POST)
 	public int update(@RequestBody MealHistory mealHistory) {
 		return mealHistoryMapper.update(mealHistory);
 	}
 	
+	/**
+	 * 식사 리스트
+	 * @param date
+	 * @param petIdx
+	 * @return List<MealHistoryContent>
+	 */
 	@ResponseBody
 	@RequestMapping(value = "/get/list.do")
 	public List<MealHistoryContent> getList(@RequestParam("date") String date, @RequestParam("petIdx") int petIdx) {
@@ -82,20 +97,34 @@ public class MealHistoryController {
 		return contents;
 	}
 	
+	/**
+	 * 해당일의 총 섭취 칼로리
+	 * @param petIdx
+	 * @param date
+	 * @return MealHistory
+	 */
 	@ResponseBody
 	@RequestMapping(value = "/get/today/sum/calorie.do", method = RequestMethod.POST)
 	public MealHistory getTodatSumCalorie(@RequestParam("petIdx") int petIdx, @RequestParam("date") String date) {
 		return mealHistoryMapper.getTodatSumCalorie(petIdx, date);
 	}
 	
-	
+	/**
+	 * 식사 상세 정보
+	 * @param historyIdx
+	 * @return MealHistory
+	 */
 	@ResponseBody
 	@RequestMapping(value = "/get/this/history.do", method = RequestMethod.POST)
 	public MealHistory getThisHistory(@RequestParam("historyIdx") int historyIdx) {
 		return mealHistoryMapper.get(historyIdx);
 	}
 	
-	
+	/**
+	 * 식사 삭제
+	 * @param historyIdx
+	 * @return  0 실패, 1성공
+	 */
 	@ResponseBody
 	@RequestMapping(value = "/delete.do", method = RequestMethod.POST)
 	public int delete(@RequestParam("historyIdx") int historyIdx) {
