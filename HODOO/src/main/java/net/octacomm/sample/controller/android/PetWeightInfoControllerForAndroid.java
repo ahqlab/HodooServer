@@ -190,7 +190,7 @@ public class PetWeightInfoControllerForAndroid {
 			responce.setDomain( petWeightInfoMapper.getWeekRate(device.getSerialNumber()) );
 		} else {
 			responce.setStatus(HodooConstant.NO_CONTENT_RESPONSE);
-			responce.setDomain( null );
+			responce.setDomain( 0f );
 		}
 		
 		
