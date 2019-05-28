@@ -16,7 +16,7 @@ import net.octacomm.sample.domain.DefaultParam;
 
 public interface BfiMapper extends CRUDMapper<BfiModel, DefaultParam, Integer>{
 
-	@Select("SELECT q.id, q.${location }_question, ( SELECT GROUP_CONCAT(a.id SEPARATOR ',') FROM bfi_answer a WHERE q.id = a.question_id ) AS answer_ids, ba.id AS additional_id, ba.title, ba.info, ba.image FROM bfi_question q LEFT JOIN bfi_addition ba ON q.additional_id = ba.id WHERE q.type != 0  ORDER BY q.order_no ASC")
+	@Select("SELECT q.id, q.${location }_question as question, ( SELECT GROUP_CONCAT(a.id SEPARATOR ',') FROM bfi_answer a WHERE q.id = a.question_id ) AS answer_ids, ba.id AS additional_id, ba.title, ba.info, ba.image FROM bfi_question q LEFT JOIN bfi_addition ba ON q.additional_id = ba.id WHERE q.type != 0  ORDER BY q.order_no ASC")
 	public List<BfiModel> getBfi( @Param("location") String location, @Param("type") int type );
 	
 	@Select("SELECT id, question_id, lang, ${location}_answer as answer, order_no FROM bfi_answer WHERE question_id = #{questionId } order by order_no ASC")
