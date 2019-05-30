@@ -27,6 +27,11 @@ public class AlarmController {
 	@Autowired
 	private AlarmObjectMapper alarmObjectMapper;
 	
+	/**
+	 * 알람 리스트를 가져온다.
+	 * @param language
+	 * @return	CommonResponce<List<AlarmItem>>
+	 */
 	@ResponseBody
 	@RequestMapping(value = "/list.do", method = RequestMethod.POST)
 	public CommonResponce<List<AlarmItem>> searchList(@RequestParam("language") String language) {
@@ -41,6 +46,11 @@ public class AlarmController {
 		return responce;
 	}
 	
+	/**
+	 * 설정한 알람 리스트를 가져온다.
+	 * @param userIdx
+	 * @return	CommonResponce<Integer>
+	 */
 	@ResponseBody
 	@RequestMapping(value="/get/alarm.do", method = RequestMethod.POST)
 	public CommonResponce<Integer> getAlarm( @RequestParam("userIdx") int userIdx ) {
@@ -50,6 +60,11 @@ public class AlarmController {
 		response.setStatus(HodooConstant.OK_RESPONSE);
 		return response;
 	}
+	/**
+	 * 알람값을 서버에 저장한다.
+	 * @param item
+	 * @return
+	 */
 	@ResponseBody
 	@RequestMapping(value="/save/alarm.do", method = RequestMethod.POST)
 	public CommonResponce<Integer> saveAlarm( @RequestBody AlarmObject item ) {
