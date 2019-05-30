@@ -144,7 +144,11 @@ public class PetControllerForAndroid {
 		return responce;
 	}
 	
-	
+	/**
+	 * 펫의 품종을 가져온다
+	 * @param location
+	 * @return	CommonResponce<List<PetBreed>>
+	 */
 	@ResponseBody
 	@RequestMapping(value = "/all/getBreed.do", method = RequestMethod.POST)
 	public CommonResponce<List<PetBreed>> getAllBreed( @RequestParam("location") String location ){
@@ -160,7 +164,12 @@ public class PetControllerForAndroid {
 		return responce;
 	}
 	
-	
+	/**
+	 * 펫의 품종을 가져오는데 펫의 종류에 따라서 다르게 가져온다.
+	 * @param location
+	 * @param typeIdx
+	 * @return	CommonResponce<List<PetBreed>>
+	 */
 	@ResponseBody
 	@RequestMapping(value = "/get/breed/of/type.do", method = RequestMethod.POST)
 	public CommonResponce<List<PetBreed>> getAllBreedOfType( @RequestParam("location") String location, @RequestParam("typeIdx") int typeIdx ){

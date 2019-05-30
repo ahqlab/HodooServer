@@ -326,7 +326,13 @@ public class RealTimeWeightControllerForAndroid {
 		
 	}
 	
-	//체중 측정 PUSH Thread
+	/**
+	 * 
+	 * TODO			체중 측정 PUSH Thread
+	 *
+	 * @param		RealTimeThred
+	 * @return
+	 */
 	public class RealTimeThred extends Thread {
 		private RealTimeWeight realTimeWeight;
 		RealTimeThred ( RealTimeWeight realTimeWeight ) {

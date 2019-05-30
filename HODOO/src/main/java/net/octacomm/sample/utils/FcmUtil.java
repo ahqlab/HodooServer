@@ -18,6 +18,13 @@ public class FcmUtil {
 	public static int SUCESS = 1;
 	public static int EXISTENCE_USER = 2;
 	
+		/**
+		*	
+		*
+		*	@param	message	푸시 보낼 데이터
+		*	@return	int	
+		*	@description	
+		*/
 	public static int requestFCM ( Message message ) {
 		int result = 0;
 		try {

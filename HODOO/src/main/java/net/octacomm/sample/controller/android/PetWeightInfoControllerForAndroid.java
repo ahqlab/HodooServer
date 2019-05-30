@@ -180,6 +180,12 @@ public class PetWeightInfoControllerForAndroid {
 		}
 		return responce;
 	}
+		
+	/**
+	 * 전주 대비 감량 비율을 가져온다. 
+	 * @param 	groupCode
+	 * @return	CommonResponce<Float>
+	 */
 	@ResponseBody
 	@RequestMapping(value = "/getWeekRate.do", method = RequestMethod.POST)
 	public CommonResponce<Float> getWeekRate(@RequestParam("groupCode") String groupCode) {
