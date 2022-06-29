@@ -40,7 +40,7 @@
 		<jboss.netty.version>3.2.9.Final</jboss.netty.version>
 		
 		<lombok.version>1.12.4</lombok.version>
-		<poi.version>3.9</poi.version>
+		<poi.version>4.1.1</poi.version>
 		<javax.mail.version>1.4.7</javax.mail.version>
 	</properties>
 	
