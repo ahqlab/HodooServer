@@ -12,7 +12,7 @@
       <junit.version>4.11</junit.version>
 
       <!-- Spring : test, core, context, aop, jdbc -->
-      <springframework.version>4.3.13.RELEASE</springframework.version>
+      <springframework.version>5.2.20.RELEASE</springframework.version>
 
       <!-- Spring Security -->
       <spring.security-version>4.2.11.RELEASE</spring.security-version>
